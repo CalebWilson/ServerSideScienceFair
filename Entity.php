@@ -179,7 +179,12 @@ abstract class Entity
 
 		//count == 0
 		if (count($selected) === 0)
-			$msg = "Please select a " . $this->view . " to view/edit.";
+		{
+			$msg = "Please select a"
+				. (($this->view == "administrator") ? "n " : " ")
+				. $this->view . " to view/edit."
+			;
+		}
 
 		//count == 1
 		elseif (count($selected) === 1)

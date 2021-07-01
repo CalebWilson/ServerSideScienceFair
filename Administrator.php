@@ -228,9 +228,6 @@ class Administrator extends Entity
 				values        (        ?,          ?,        ?,     ?,        ?,        ?,              ?)
 		");
 
-			foreach ($this->fields as $k => $v)
-				print ($k . " => " . $v . "<br>");
-	
 		$query->execute (array_values($this->fields));
 
 	} //end function insert

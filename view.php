@@ -138,12 +138,16 @@
 	<form action="Admin.php?view=<?php print ($_GET['view']) ?>" method="post">
 		<div class="data-box">
 		
-<script>
-function isChecked(elem) {
-    elem.parentNode.style.background = (elem.checked) ? '#ffa500' : 'none';
+			<script>
 
+				function isChecked(elem)
+				{
+					elem.parentNode.style.background =
+						(elem.checked) ? '#ffa500' : 'none';
+				}
 
-}</script>
+			</script>
+
 			<?php
 			//show records
 			//e.g. <input type="checkbox" name="selected" value=1 checked>Caleb Wilson</input><br>

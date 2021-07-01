@@ -35,9 +35,12 @@
 
 				<img src="image.png" alt="i" class="img-nav">
 			<nav>
-				<span>
-					<a href="http://corsair.cs.iupui.edu:24601/home.php">Home</a>
-				</span>
+
+					<span>
+						<a href="http://corsair.cs.iupui.edu:24601/register.php">
+							Register
+						</a>
+					</span>
 
 					<?php
 
@@ -73,20 +76,12 @@
 
 					?>
 
-					<span>
-						<a href="http://corsair.cs.iupui.edu:24601/register.php">
-							Register
-						</a>
-					</span>
-
-					<span><a href="#">Contact</a></span>
-
 					<?php
 
 						if (isset($_SESSION ['Judge']) ||
 							isset($_SESSION ['Administrator']))
 						{ 
-							echo '<span><a href="logout.php">logout</a></span>';
+							echo '<span><a href="logout.php">Logout</a></span>';
 						}
 					?>
 			</nav>

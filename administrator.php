@@ -61,9 +61,7 @@
 
 			<!-- Confirm Password -->
 			<label for="pass_conf">Confirm
-			<?php if ($action == "Edit") print("New ") ?>
-				Password:
-			</label>
+			<?php if ($action == "Edit") print("New ") ?>Password:</label>
 
 			<input type="password" id="pass_conf" name="pass_conf"
 				<?php if (isset($this->fields['pass_conf']))
@@ -93,8 +91,12 @@
 				{
 					print
 					('
-						<button type="submit" name="action"
-							value="<?php print($action) ?>" class="btn">Submit</button>
+						<button
+							type="submit" name="action"
+							value="' . $action . '"
+							class="btn"
+						>' .  $action .
+						' </button>
 					');
 				}
 			?>
