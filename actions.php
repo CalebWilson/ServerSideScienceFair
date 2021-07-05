@@ -31,10 +31,17 @@
 					('
 						<form
 							name="' . $view . '"
-							action="Admin.php?view=' . $view . '"
-							method="post"
+							action="Admin.php"
+							method="get"
 						>
-							<button type="submit">Manage ' . $description . '</button>
+							<button
+								type="submit"
+								name="view"
+								value="' . $view . '"
+							>
+								Manage ' . $description .
+
+							'</button>
 
 						</form>
 					');

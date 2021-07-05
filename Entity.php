@@ -159,6 +159,8 @@ abstract class Entity
 		$action = "add";
 		include $this->view . ".php";
 
+		include "footer.php";
+
 		//I don't know if this will work correctly, but we'll see
 		exit();
 

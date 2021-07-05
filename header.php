@@ -33,7 +33,7 @@
 	<header>
 		<div class="width">
 
-				<img src="image.png" alt="i" class="img-nav">
+				<img src="image.png" alt="Image temporarily removed for debugging purposes :)" class="img-nav">
 			<nav>
 
 					<span>
