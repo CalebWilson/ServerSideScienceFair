@@ -1,17 +1,7 @@
 <!-- This file is to be included at the top of the page -->
 
-<?php
-	try
-	{
-		$connection = new PDO("mysql:host=localhost;dbname=casawils_db", "casawils", "casawils");
-	}
-	catch (PDOException $e)
-	{
-		print("<p>Error connecting to database</p><br>");
-	}
-
-	session_start();
-?>
+<!-- connect to database -->
+<?php require_once "db_connect.php" ?>
 
 <!doctype html>
 <html>
