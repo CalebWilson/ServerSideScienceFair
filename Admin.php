@@ -9,11 +9,15 @@
 
 <?php
 
-	require_once "header.php";
+
+	if (session_status() !== PHP_SESSION_ACTIVE)
+		session_start();
 
 	//check whether admin is logged in
 	if (isset ($_SESSION ['Administrator']))
 	{
+		require_once "header.php";
+
 		//display correct view
 		if (isset ($_GET ['view']))
 		{
@@ -38,7 +42,7 @@
 	else
 	{
 		$_SESSION ['user_type'] = "Administrator";
-		include "login1.php";
+		include "login.php";
 	}
 
 	require_once "footer.php";
