@@ -27,47 +27,60 @@
 
 ?>
 
-   <div class="wrapper">
-<div class="main-f">
-    <h1>Schedule</h1> 
+<div class="wrapper">
+	<div class="main-f">
+		<h1>Schedule</h1> 
 
-    <table border="5" cellspacing="0" align="center" class="the-table"> 
-              <tr> 
-            <td align="center" height="50" 
-                width="100"><br> 
-                <b>TIME</b></br> 
-            </td>
+		<table border="5" cellspacing="0" align="center" class="the-table"> 
+			<tr> 
+				<td align="center" height="50" width="100">
+					<br> 
+					<b>TIME</b>
+					<br> 
+				</td>
 
-            <td align="center" height="50">
-                <b>Date</b></td>
-				</tr>
-		<?php
+				<td align="center" height="50">
+					<b>Date</b>
+				</td>
 
-			foreach ($visits as $visit)
-			{
-				print
-				('
-        <tr> 
-            
-            <td align="center" height="50" width="400">
-                <b><br>' .
-				$visit['Start'] . ' - ' .
-				$visit['End'] . '</b></td>
+			</tr>
 
-            <td align="center"  height="50" width="400">
-					<form action="Judge.php?action=score" method="post">
-						<button type="submit" name="ProjectID"
-							value="' . $visit['ProjectID'] . '"> Project ' .
-							$visit['ProjectNum'] . ': "' .
-							$visit['Title'] . '" at Booth ' .
-							$visit['BoothNum'] .
-						'</button>
-					</form>
-			</td></tr>
-				');
-			}
-		?>
+			<?php
 
-    </table> 
-    </div>
-    </div>
+				foreach ($visits as $visit)
+				{
+					print
+					('
+						<tr> 
+
+							<td align="center" height="50" width="400">
+								<b><br>' .
+								$visit['Start'] . ' - ' .  $visit['End'] . '</b>
+							</td>
+
+							<td align="center"  height="50" width="400">
+
+								<form action="Judge.php?action=score" method="post">
+
+									<button
+										type="submit"
+										name="ProjectID"
+										value="' . $visit['ProjectID'] . '"
+									>
+										Project ' .
+										$visit['ProjectNum'] . ': "' .
+										$visit['Title'] . '" at Booth ' .
+										$visit['BoothNum'] .
+
+									'</button>
+
+								</form>
+							</td>
+						</tr>
+					');
+				}
+			?>
+
+		</table> 
+	</div>
+</div>

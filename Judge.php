@@ -1,10 +1,13 @@
 <?php
-	require_once "header.php";
-	require_once "footer.php";
+
+	if (session_status() !== PHP_SESSION_ACTIVE)
+		session_start();
 
 	//check whether judge is logged in
 	if (isset ($_SESSION ['Judge']))
 	{
+		require_once "header.php";
+
 		//display the file associated with the chosen action
 		include "schedule.php";
 	}
@@ -13,6 +16,8 @@
 	else
 	{
 		$_SESSION['user_type'] = "Judge";
-		include "login1.php";
+		include "login.php";
 	}
+
+	require_once "footer.php";
 ?>
