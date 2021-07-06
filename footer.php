@@ -5,8 +5,8 @@
 	<footer>
 	<div class="footer-bottom">
 
-		<br/>
-		<p>Made by Caleb, Cody, and Nour</p>
+		<p>Made by Caleb Wilson</p>
+		<p>Styled by Cody Carmony</p>
 
 	</div>
 	</footer>
