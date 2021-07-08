@@ -94,7 +94,7 @@ class Administrator extends Entity
 		if ($original == false)
 			$original = "NULL";
 
-		//assume input valid
+		//assume valid input 
 		$valid = true;
 
 		//first

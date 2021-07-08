@@ -1,49 +1,49 @@
-<?php
+<!--
 
-	include "admin_check.php";
+	county.php
 
-	$county = array();
-	if ($_POST['action'] == "Edit")
-	{
-		$record_set = $connection->query
-		("
-			select CountyName
-			from County
-			where CountyID = " . $_POST['selected'][0]
-		);
-		$county = $record_set->fetch (PDO::FETCH_ASSOC);
-	}
-	elseif ($_POST['action'] == "Add")
-	{
-		$county = array ("CountyName" => "");
-	}
+	This file will be included in County->add ($post) or County->edit ($post),
+	where $post is a copy array of $_POST.
 
-?>
+-->
 
-<title><?php print($_POST['action'] . " ") ?>County</title>
-<div class="wrapper">
+<?php require_once "header.php" ?>
+
+<title><?php print (ucfirst($action)) ?> County</title>
 
 <div class="wrapper">
-<div class="main-f">
-	<h1><strong><?php print($_POST['action'] . " ") ?>County</strong></h1>
-	<div class="form-s">
-		<form action="Administrator.php?view=county" method="post">
+	<div class="main-f">
+		<h1><strong><?php print (ucfirst($action)) ?> County</strong></h1>
+		<div class="form-s">
+			<form action="Admin.php?view=county" method="post">
 
-			<label for="county">County Name:</label>
-			<input
-				type="text"
-				name="county"
-				value="<?php print($county["CountyName"]) ?>"
-			><br>
+				<?php print ($msg) ?>
 
-			<button type="submit"class="btn">Submit</button>
+				<!-- CountyName -->
+				<label for="CountyName">County Name:</label>
+				<input
+					type="text"
+					name="CountyName"
+					value="<?php print($this->fields['CountyName']) ?>"
+				><br>
 
+				<?php if (isset ($msgs['CountyName'])) print ($msgs['CountyName']) ?>
+
+				<!-- Submit -->
+				<button
+					type="submit"
+					name="action"
+					value="<?php print ($action) ?>"
+					class="btn"
+				>Submit</button>
+
+			</form>
+
+		</div>
+
+		<form action="Admin.php?view=county" method="post" class="back-btn">
+			<button type="submit">Back</button>
 		</form>
+					
 	</div>
-
-	<form action="Administrator.php?view=county" method="post">
-		<button type="submit" class="back-btn">Back</button>
-	</form>
-            
-</div>
 </div>

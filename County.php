@@ -47,7 +47,6 @@ class County extends Entity
 
 	//check whether data has been submitted
 	protected function submitted ($post)
-
 	{		
 		return isset ($post["CountyName"]);
 	}
@@ -58,7 +57,7 @@ class County extends Entity
 		//validity
 		if ($this->fields ['CountyName'] == "")
 		{
-			$msgs['CountyName'] = "County cannot be empty.";
+			$msgs['CountyName'] = "County name cannot be blank.";
 
 			return false;
 		}
@@ -86,6 +85,7 @@ class County extends Entity
 				
 				return false;
 			}
+
 		} //end uniqueness
 
 		return true;
