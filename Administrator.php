@@ -101,7 +101,7 @@ class Administrator extends Entity
 		if ($this->fields['FirstName'] == "")
 		{
 			$valid = false;
-			$msgs['FirstName'] = "First name cannot be empty.";
+			$msgs['FirstName'] = "First name cannot be blank.";
 		}
 
 		//no one cares about middle name
@@ -110,14 +110,14 @@ class Administrator extends Entity
 		if ($this->fields['LastName'] == "")
 		{
 			$valid = false;
-			$msgs['LastName'] = "Last name cannot be empty.";
+			$msgs['LastName'] = "Last name cannot be blank.";
 		}
 
 		//email validity
 		if ($this->fields['Email'] == "")
 		{
 			$valid = false;
-			$msgs['Email'] = "Email cannot be empty.";
+			$msgs['Email'] = "Email cannot be blank.";
 		}
 			
 		elseif (filter_input (INPUT_POST, "Email", FILTER_VALIDATE_EMAIL) == false)
@@ -153,7 +153,7 @@ class Administrator extends Entity
 		if ($this->fields['Username'] == "")
 		{
 			$valid = false;
-			$msgs['Username'] = "Username cannot be empty.";
+			$msgs['Username'] = "Username cannot be blank.";
 		}
 
 		//username uniqueness
@@ -187,7 +187,7 @@ class Administrator extends Entity
 			if ($this->fields['Password'] == "")
 			{
 				$valid = false;
-				$msgs['Password'] = "Password cannot be empty.";
+				$msgs['Password'] = "Password cannot be blank.";
 			}
 /*
 			//password confirmation doesn't match

@@ -19,6 +19,7 @@
 
 			<?php print($msg) ?>
 
+			<!-- SchoolName -->
 			<div class="label">
 				<label for="SchoolName">School Name:</label>
 				<input
@@ -29,8 +30,14 @@
 			</div>
 			<?php if (isset ($msgs['SchoolName'])) print ($msgs['SchoolName']) ?>
 
+			<!-- CountyID -->
 			<label for="CountyID">County: </label>
 			<select name="CountyID" id="#">
+
+				<!-- blank option -->
+				<option value=""></option>
+
+				<!-- actual options -->
 				<?php
 					foreach ($options as $county)
 					{
@@ -40,14 +47,19 @@
 						print (">" . $county["CountyName"] . "</option>");
 					}
 				?>
+
 			</select><br>
 
+			<?php if (isset ($msgs['CountyID'])) print ($msgs['CountyID']) ?>
+
+			<!-- clear selected -->
 			<?php
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .
 						$post['selected'][0] . '">'); 
 			?>
 
+			<!-- Submit -->
 			<button type="submit" name="action"
 				value="<?php print($action) ?>" class="btn">Submit</button>
 

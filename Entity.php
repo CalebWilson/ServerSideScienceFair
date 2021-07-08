@@ -304,15 +304,19 @@ abstract class Entity
 			//remove empty elements from $not_deleted
 			$not_deleted = array_diff($not_deleted, array(""));
 
-			//get feedback from database
-			$msg = $deleted . " ";
+			//add successful deletions to message
+			if ($deleted > 0)
+			{
+				$msg = $deleted . " ";
 
-			if ($deleted === 1)
-				$msg .= $this->view;
-			else
-				$msg .= strtolower($this->title);
+				//pluralize
+				if ($deleted === 1)
+					$msg .= $this->view;
+				else
+					$msg .= strtolower($this->title);
 
-			$msg = '<font color="green">' . $msg .  " deleted.</font><br>";
+				$msg = '<font color="green">' . $msg .  " deleted.</font><br>";
+			}
 
 			//compose the rest of the error message
 			//e.g. "Marion County could not be deleted because there is at least one school that depends on it.<br>"

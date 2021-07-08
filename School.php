@@ -57,20 +57,31 @@ class School extends Entity
 	//validate field entries and update msgs array
 	protected function validate (&$msgs, $original)
 	{
-		//validity
-		if ($this->fields ['SchoolName'] == "")
-		{
-			$msgs['SchoolName'] = "School Name cannot be empty.";
+		//set empty original to NULL if adding
+		if ($original == false)
+			$original = "NULL";
 
-			return false;
+		//assume valid input 
+		$valid = true;
+
+		//county
+		if ($this->fields ['CountyID'] == "")
+		{
+			$valid = false;
+			$msgs['CountyID'] = "County cannot be blank.";
 		}
 
-		//uniqueness
+		//school validity
+		if ($this->fields ['SchoolName'] == "")
+		{
+			$msgs['SchoolName'] = "School Name cannot be blank.";
+
+			$valid = false;
+		}
+
+		//school uniqueness
 		else
 		{
-			if ($original == false)
-				$original = "NULL";
-
 			$query = $this->connection->prepare
 			(
 				"select count(*) as 'count'
@@ -88,11 +99,11 @@ class School extends Entity
 				$msgs['SchoolName'] =
 					"There is already a school with this name in the selected county.";
 				
-				return false;
+				$valid = false;
 			}
 		} //end uniqueness
 
-		return true;
+		return $valid;
 
 	} //end function validate()
 
