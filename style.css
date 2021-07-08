@@ -136,7 +136,8 @@ nav ul li.selected a {
   text-align: center;
   box-shadow: 0 0 20px #3d3d3d;
   padding-bottom: 70px;
-  margin: 6% 0;
+  margin-top: 6%;
+  margin-bottom: 6%;
 }
 a {
   text-decoration: none;
@@ -466,6 +467,7 @@ article .article-info a {
   }
   .main-f {
     margin-top: 11%;
+    margin-bottom: 11%;
   }
 }
 @media screen and (max-width: 540px) {
@@ -506,6 +508,7 @@ article .article-info a {
   }
   .main-f {
     margin-top: 14%;
+    margin-bottom: 14%;
   }
 }
 
@@ -516,6 +519,11 @@ article .article-info a {
 }
 /* The footer*/
 
+.footer-spacer {
+  height: 4em;
+  background: white;
+}
+	
 .footer-bottom {
   position: absolute;
   bottom: 0;
@@ -524,6 +532,7 @@ article .article-info a {
   background: #222;
   color: white;
   text-align: center;
+
   display: flex;
   flex-direction: row;
   justify-content: space-around;

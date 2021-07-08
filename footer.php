@@ -2,6 +2,8 @@
 
 <!-- body and container div opened in header.php -->
 
+	<div class="footer-spacer"></div>
+
 	<footer>
 	<div class="footer-bottom">
 
