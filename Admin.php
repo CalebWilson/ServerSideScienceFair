@@ -9,9 +9,11 @@
 
 <?php
 
-
 	if (session_status() !== PHP_SESSION_ACTIVE)
 		session_start();
+
+	//log out of judge account
+	unset ($_SESSION ['Judge']);
 
 	//check whether admin is logged in
 	if (isset ($_SESSION ['Administrator']))

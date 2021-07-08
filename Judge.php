@@ -3,6 +3,9 @@
 	if (session_status() !== PHP_SESSION_ACTIVE)
 		session_start();
 
+	//log out of admin account
+	unset ($_SESSION ['Administrator']);
+
 	//check whether judge is logged in
 	if (isset ($_SESSION ['Judge']))
 	{
