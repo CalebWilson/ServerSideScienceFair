@@ -76,11 +76,18 @@ class Student extends Entity
 		//assume input valid
 		$valid = true;
 
+		//school
+		if ($this->fields ['SchoolID'] == "")
+		{
+			$valid = false;
+			$msgs['SchoolID'] = "School cannot be blank.";
+		}
+
 		//first
 		if ($this->fields['FirstName'] == "")
 		{
 			$valid = false;
-			$msgs['FirstName'] = "First name cannot be empty.";
+			$msgs['FirstName'] = "First name cannot be blank.";
 		}
 
 		//no one cares about middle name
@@ -90,6 +97,27 @@ class Student extends Entity
 		{
 			$valid = false;
 			$msgs['LastName'] = "Last name cannot be empty.";
+		}
+
+		//gender
+		if ($this->fields['Gender'] == "")
+		{
+			$valid = false;
+			$msgs['Gender'] = "Gender cannot be empty.";
+		}
+
+		//project
+		if ($this->fields['ProjectID'] == "")
+		{
+			$valid = false;
+			$msgs['ProjectID'] = "ProjectID cannot be empty.";
+		}
+
+		//grade
+		if ($this->fields['GradeID'] == "")
+		{
+			$valid = false;
+			$msgs['GradeID'] = "GradeID cannot be empty.";
 		}
 
 		return $valid;
@@ -157,7 +185,7 @@ class Student extends Entity
 	protected function confirm_add()
 	{
 		$msg =
-			$this->fields['FirstName'] .
+			$this->fields['FirstName'] . " " .
 			$this->fields['LastName'] .
 			' added as student.'
 		;

@@ -37,8 +37,9 @@
 				<!-- blank option -->
 				<option value=""></option>
 
-				<!-- actual options -->
+				<!-- valid options -->
 				<?php
+
 					foreach ($options as $county)
 					{
 						print ("<option value=" . $county["CountyID"]);

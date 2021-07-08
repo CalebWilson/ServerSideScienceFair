@@ -1,7 +1,20 @@
-<?php include "admin_check.php" ?>
+<!--
+
+	student.php
+
+	This file will be included in Student->add ($post) or Student->edit ($post),
+	where $post is a copy array of $_POST.
+
+-->
+
+<?php
+
+	include "admin_check.php";
+	require_once "header.php";
+?>
 
 <div class = "wrapper">
-<title><?php print($action . " ") ?>School</title>
+<title><?php print(ucfirst($action)) ?> Student</title>
 
 <div class="main-f">
 	<h1><strong><?php print($action . " ") ?>Student</strong></h1>
@@ -10,8 +23,14 @@
 		
 			<?php print($msg) ?>
 
+			<!-- SchoolID -->
 			<label for="SchoolID">School:</label>
 			<select name="SchoolID" id="SchoolID" class="drop-down">
+
+				<!-- blank option -->
+				<option value=""></option>
+
+				<!-- actual options -->
 				<?php
 					foreach ($options['schools'] as $school)
 					{
@@ -23,6 +42,9 @@
 				?>
 			</select><br>
 
+			<?php if (isset ($msgs['SchoolID'])) print ($msgs['SchoolID']) ?>
+
+			<!-- FirstName -->
 			<label for="FirstName">First Name:</label>
 			<input
 				type="text"
@@ -32,6 +54,7 @@
 			><br>
 			<?php if (isset ($msgs['FirstName'])) print ($msgs['FirstName']) ?>
 
+			<!-- MiddleName -->
 			<label for="MiddleName">Middle Name:</label>
 			<input
 				type="text"
@@ -40,14 +63,20 @@
 				value="<?php print($this->fields["MiddleName"]) ?>"
 			><br>
 
+			<!-- LastName -->
 			<label for="LastName">Last Name:</label>
 			<input type="text" id="LastName" name="LastName"
 				value="<?php print($this->fields["LastName"]) ?>"
 			><br>
 			<?php if (isset ($msgs['LastName'])) print ($msgs['LastName']) ?>
 
+			<!-- Gender -->
 			<label for="Gender">Gender:</label>
 			<select name="Gender" id="Gender" class="drop-down">
+	
+				<!-- blank option -->
+				<option value=""></option>
+
 				<option value="Male"
 					<?php if ($this->fields['Gender'] == "Male") print (" selected") ?>
 				>Male</option>
@@ -61,8 +90,16 @@
 				>Other</option>
 			</select><br>
 
+			<?php if (isset ($msgs['LastName'])) print ($msgs['LastName']) ?>
+
+			<!-- ProjectID -->
 			<label for="ProjectID">Project:</label>
 			<select name="ProjectID" id="ProjectID" class="drop-down">
+
+				<!-- blank option -->
+				<option value=""></option>
+
+				<!-- valid options -->
 				<?php
 					foreach ($options['projects'] as $project)
 					{
@@ -72,27 +109,41 @@
 						print (">" . $project["Title"] . "</option>");
 					}
 				?>
+
 			</select><br>
 
-			<label for="Grade" >Grade:</label>
-			<select name="Grade" id="Grade" class="drop-down">
+			<?php if (isset ($msgs['ProjectID'])) print ($msgs['ProjectID']) ?>
+
+			<!-- GradeID -->
+			<label for="GradeID" >Grade:</label>
+			<select name="GradeID" id="GradeID" class="drop-down">
+
+				<!-- blank option -->
+				<option value=""></option>
+
+				<!-- valid options -->
 				<?php
-					foreach ($options['grades'] as $grade)
+					foreach ($options ['grades'] as $grade)
 					{
-						print ("<option value=" . $grade["GradeID"]);
-						if ($grade['GradeID'] === $this->fields['GradeID'])
+						print ("<option value=" . $grade ['GradeID']);
+						if ($grade ['GradeID'] === $this->fields ['GradeID'])
 							print (" selected");
 						print (">" . $grade["GradeNum"] . "</option>");
 					}
 				?>
+
 			</select> <br>
 
+			<?php if (isset ($msgs['GradeID'])) print ($msgs['GradeID']) ?>
+
+			<!-- clear selected -->
 			<?php
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .
 						$post['selected'][0] . '">'); 
 			?>
 
+			<!-- Submit -->
 			<button type="submit" name="action"
 				value="<?php print($action) ?>" class="btn">Submit</button>
          
