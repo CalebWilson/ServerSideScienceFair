@@ -7,11 +7,7 @@
 
 -->
 
-<?php
-
-	include "admin_check.php";
-	require_once "header.php";
-?>
+<?php include "admin_check.php" ?>
 
 <div class = "wrapper">
 <title><?php print(ucfirst($action)) ?> Student</title>

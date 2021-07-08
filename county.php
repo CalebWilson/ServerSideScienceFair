@@ -7,7 +7,7 @@
 
 -->
 
-<?php require_once "header.php" ?>
+<?php include "admin_check.php" ?>
 
 <title><?php print (ucfirst($action)) ?> County</title>
 
