@@ -104,7 +104,7 @@
 
 				<!-- AuthorityLevel -->
 				<label for="AuthorityLevel">Authority Level:</label>
-				<select name="AuthorityLevel" id="AuthorityLevel" class="drop-down">
+				<select name="AuthorityLevel" id="AuthorityLevel" >
 
 					<option value=2
 						<?php if ($this->fields["AuthorityLevel"] == "2")

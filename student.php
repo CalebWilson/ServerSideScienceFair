@@ -21,7 +21,7 @@
 
 			<!-- SchoolID -->
 			<label for="SchoolID">School:</label>
-			<select name="SchoolID" id="SchoolID" class="drop-down">
+			<select name="SchoolID" id="SchoolID" >
 
 				<!-- blank option -->
 				<option value=""></option>
@@ -68,7 +68,7 @@
 
 			<!-- Gender -->
 			<label for="Gender">Gender:</label>
-			<select name="Gender" id="Gender" class="drop-down">
+			<select name="Gender" id="Gender" >
 	
 				<!-- blank option -->
 				<option value=""></option>
@@ -90,7 +90,7 @@
 
 			<!-- ProjectID -->
 			<label for="ProjectID">Project:</label>
-			<select name="ProjectID" id="ProjectID" class="drop-down">
+			<select name="ProjectID" id="ProjectID" >
 
 				<!-- blank option -->
 				<option value=""></option>
@@ -112,7 +112,7 @@
 
 			<!-- GradeID -->
 			<label for="GradeID" >Grade:</label>
-			<select name="GradeID" id="GradeID" class="drop-down">
+			<select name="GradeID" id="GradeID" >
 
 				<!-- blank option -->
 				<option value=""></option>
