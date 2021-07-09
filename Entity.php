@@ -276,7 +276,7 @@ abstract class Entity
 		if (isset ($post['selected']))
 			$selected = $post['selected'];
 
-			//at least 1 record selected
+		//at least 1 record selected
 		if (count($selected) > 0)
 		{
 			//how many records were actually deleted
@@ -297,7 +297,9 @@ abstract class Entity
 					$deleted ++;
 				}
 				else
+				{
 					array_push ($not_deleted, $this->connection->errorInfo()[2]); 
+				}
 
 			} //end deletion
 
