@@ -39,8 +39,8 @@ begin
 
 	declare dependents int;
 
-	select count(*) into  dependents
-	from    Student  where Student.SchoolID = old.SchoolID;
+	select count(*) into dependents
+	from Student where Student.SchoolID = old.SchoolID;
 
 	if dependents > 0
 	then

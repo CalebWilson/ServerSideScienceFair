@@ -1,18 +1,35 @@
+<!--
+
+	project.php
+
+	This file will be included in Project->add ($post) or Project->edit ($post),
+	where $post is a copy array of $_POST.
+
+-->
+
 <?php include "admin_check.php" ?>
 
-<title><?php print($action . " ") ?>Project</title>
+<title><?php print(ucfirst($action)) ?> Project</title>
+
 <div class="wrapper">
-
-
 <div class="main-f">
+
 	<h1><strong><?php print($action . " ") ?>Project</strong></h1>
+
 	<div class="form-s">
+
 		<form action="Admin.php?view=project" method="post">
 
 			<?php print($msg) ?>
 
-			<label for="Booth">Booth Number:</label>
-			<select name="Booth" id="Booth">
+			<!-- BoothID-->
+			<label for="BoothID">Booth Number:</label>
+			<select name="BoothID" id="BoothID">
+
+				<!-- blank option -->
+				<option value=""></option>
+
+				<!-- valid options -->
 				<?php
 					foreach ($options['booths'] as $booth)
 					{
@@ -22,10 +39,19 @@
 						print (">" .  $booth["BoothNum"] .  "</option>");
 					}
 				?>
+
 			</select><br>
 
-			<label for="Category">Category:</label>
-			<select name="Category" id="#">
+			<?php if (isset ($msgs['BoothID'])) print ($msgs['BoothID']) ?>
+
+			<!-- CategoryID -->
+			<label for="CategoryID">Category:</label>
+			<select name="CategoryID" id="#">
+	
+				<!-- blank option -->
+				<option value=""></option>
+
+				<!-- valid options -->
 				<?php
 					foreach ($options['categories'] as $category)
 					{
@@ -37,6 +63,9 @@
 				?>
 			</select><br>
 
+			<?php if (isset ($msgs['CategoryID'])) print ($msgs['CategoryID']) ?>
+
+			<!-- ProjectNum -->
 			<label for="ProjectNum">Project Number:</label>
 			<input
 				type="number"
@@ -46,7 +75,8 @@
 			<?php if (isset ($msgs['ProjectNum'])) print ($msgs['ProjectNum']) ?>
 			Leave this field blank to auto-generate a new project number.<br>
 
-			<label for="Title">Enter Project Title:</label>
+			<!-- Title -->
+			<label for="Title">Project Title:</label>
 			<input
 				type="text"
 				name="Title"
@@ -54,6 +84,7 @@
 			><br>
 			<?php if (isset ($msgs['Title'])) print ($msgs['Title']) ?>
 
+			<!-- Abstract -->
 			<label for="Abstract">Abstract:</label>
 			<textarea
 				placeholder="Enter project description"
@@ -62,6 +93,7 @@
 					print ($this->fields['Abstract'])
 			?></textarea>
 
+			<!-- clear selected -->
 			<?php
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .

@@ -19,6 +19,9 @@ class Project extends Entity
 		//initialize $table, $title, $view, and $connection
 		parent::__construct ($connection);
 
+		//entity dependent on Project
+		$this->dependent = "student";
+
 		//empty fields
 		$this->fields = array
 		(
@@ -65,6 +68,20 @@ class Project extends Entity
 
 		//assume input valid
 		$valid = true;
+
+		//booth
+		if ($this->fields['BoothID'] == "")
+		{
+			$valid = false;
+			$msgs['BoothID'] = "Project must be assigned to a booth.";
+		}
+
+		//category
+		if ($this->fields['CategoryID'] == "")
+		{
+			$valid = false;
+			$msgs['CategoryID'] = "Project must be assigned to a category.";
+		}
 
 		//title validity
 		if ($this->fields['Title'] == "")
@@ -144,9 +161,6 @@ class Project extends Entity
 	protected function insert()
 	{
 		$this->autofill_ProjectNum();
-
-		foreach ($this->fields as $field)
-			print ($field . "/<br>");
 
 		$query = $this->connection->prepare
 		("

@@ -10,11 +10,14 @@
 <?php include "admin_check.php" ?>
 
 <title><?php print(ucfirst($action)) ?> School</title>
-<div class="wrapper">
 
+<div class="wrapper">
 <div class="main-f">
+
 	<h1><strong><?php print(ucfirst($action)) ?> School</strong></h1>
+
 	<div class="form-s">
+
 		<form action="Admin.php?view=school" method="post">
 
 			<?php print($msg) ?>

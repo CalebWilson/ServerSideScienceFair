@@ -52,3 +52,28 @@ begin
 end;
 //
 delimiter ;
+
+
+-- deletion
+drop trigger if exists ProjectDelete;
+
+delimiter //
+
+create trigger ProjectDelete before delete on Project
+for each row
+begin
+
+	declare dependents int;
+
+	select count(*) into dependents
+	from Student where Student.ProjectID = old.ProjectID;
+
+	if dependents > 0
+	then
+		signal sqlstate '45000'
+		set message_text = old.Title;
+	end if;
+
+end;
+//
+delimiter ;
