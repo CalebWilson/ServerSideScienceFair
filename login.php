@@ -107,7 +107,7 @@
 
 			<input type="hidden" name = "<?php print($_SESSION['user_type']) ?>" value = true>
 
-			<input type="submit" value="Submit"/><br>
+			<input type="submit" class="btn" value="Submit"/><br>
 
 		</form>
 	</div>
