@@ -29,6 +29,14 @@
 
 				<?php if (isset ($msgs['CountyName'])) print ($msgs['CountyName']) ?>
 
+				<?php
+
+					//preserve selected
+					if (isset($post['selected'][0]))
+						print ('<input type="hidden" name="selected[]" value="' .
+							$post['selected'][0] . '">'); 
+				?>
+
 				<!-- Submit -->
 				<button
 					type="submit"

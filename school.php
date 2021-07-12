@@ -56,7 +56,7 @@
 
 			<?php if (isset ($msgs['CountyID'])) print ($msgs['CountyID']) ?>
 
-			<!-- clear selected -->
+			<!-- preserve selected -->
 			<?php
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .

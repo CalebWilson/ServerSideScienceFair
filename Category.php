@@ -70,19 +70,9 @@ class Category extends Entity
 			if ($original == false)
 				$original = "NULL";
 
-			$query = $this->connection->prepare
-			(
-				"select count(*) as 'count'
-                from Category
-                where CategoryName = ? AND 
-                not CategoryID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array_values($this->fields));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-			if ($count !== "0")
+			if ($this->is_not_unique ("CategoryName", $original))
 			{
-				$msgs['CategoryName'] = "Category already exists.";
+				$msgs['CategoryName'] = "There is already a Category with this name.";
 				
 				return false;
 			}

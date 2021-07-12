@@ -120,7 +120,7 @@
 
 				<?php
 
-					//clear selected
+					//preserve selected
 					if (isset($post['selected'][0]))
 						print ('<input type="hidden" name="selected[]" value="' .
 							$post['selected'][0] . '">'); 

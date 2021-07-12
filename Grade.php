@@ -69,17 +69,7 @@ class Grade extends Entity
 			if ($original == false)
 				$original = "NULL";
 
-			$query = $this->connection->prepare
-			(
-				"select count(*) as 'count'
-					from Grade
-					where GradeNum = ? AND
-					not GradeID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array_values($this->fields));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-			if ($count !== "0")
+			if ($this->is_not_unique ("GradeNum", $original))
 			{
 				$msgs['GradeNum'] = "Grade Level already exists.";
 

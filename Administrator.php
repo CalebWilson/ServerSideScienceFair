@@ -120,34 +120,25 @@ class Administrator extends Entity
 			$msgs['Email'] = "Email cannot be blank.";
 		}
 			
-		elseif (filter_input (INPUT_POST, "Email", FILTER_VALIDATE_EMAIL) == false)
+		else
 		{
-			$valid = false;
-			$msgs['Email'] = "Email is invalid.";
-		}
-
-		//email uniqueness
-		if ($this->fields['Email'] != "")
-		{
-			$query = $this->connection->prepare
-			("
-				select count(*) as 'count'
-				from Administrator
-				where Email = ? AND
-				NOT AdministratorID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array($this->fields['Email']));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-			//if email taken
-			if ($count !== "0")
+			if (filter_input (INPUT_POST, "Email", FILTER_VALIDATE_EMAIL) == false)
 			{
 				$valid = false;
-				$msgs['Email'] = "Another administrator already has this email.";
+				$msgs['Email'] = "Email is invalid.";
 
-			} //end if email taken
+			}
 
-		} //end email uniqueness
+			//email uniqueness
+			elseif ($this->is_not_unique ("Email", $original))
+			{
+				$valid = false;
+
+				$msgs['Email'] =
+					"Another administrator is already using this email.";
+			}
+
+		} //end email validity
 
 		//username validity
 		if ($this->fields['Username'] == "")
@@ -157,28 +148,13 @@ class Administrator extends Entity
 		}
 
 		//username uniqueness
-		elseif ($this->fields['Username'] != "")
+		elseif ($this->is_not_unique ("Username", $original))
 		{
-			$query = $this->connection->prepare
-			("
-				select count(*) as 'count'
-				from Administrator
-				where Username = ? AND
-				NOT AdministratorID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array($this->fields['Username']));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
+			$valid = false;
 
-			//if username taken
-			if ($count !== "0")
-			{
-				$valid = false;
-				$msgs['Username'] =
-					"There is already an administrator with this username."
-				;
-			} //end if username taken
-
-		} //end username uniqueness check
+			$msgs['Username'] =
+				"Another administrator is already using this username.";
+		}
 
 		//if adding, require password
 		if ($original == "NULL")

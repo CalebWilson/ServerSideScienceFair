@@ -370,6 +370,36 @@ abstract class Entity
 
 	} //end function delete()
 
+	/*
+		Check whether a value is unique for a field.
+
+		$field: the field whose uniqueness is to be checked
+
+		$original: the ID of the record being edited, or NULL if adding new record
+
+		$condition: additional condition for when a field only needs to be unique
+		when another field is not; e.g. Schools must have different names if they
+		are in the same County
+	*/
+	protected function is_not_unique ($field, $original, $condition = "1")
+	{
+		$query = $this->connection->prepare
+		("
+			select count(*) as 'count'
+			from " . $this->table . "
+			where
+				" . $field . " = ? AND
+				" . $condition . " AND
+				NOT " . $this->table . "ID <=> " . $original //NULL-safe equals
+		);
+		
+		$query->execute (array ($this->fields[$field]));
+		$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
+
+		return $count !== "0";
+
+	} //end function is_not_unique()
+
 	//check whether data has been submitted
 	abstract protected function submitted ($post);
 

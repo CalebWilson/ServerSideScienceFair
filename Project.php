@@ -91,27 +91,11 @@ class Project extends Entity
 		}
 
 		//title uniqueness
-		else
+		elseif ($this->is_not_unique ("Title", $original, "Year = YEAR(CURDATE())"))
 		{
-			$query = $this->connection->prepare
-			("
-				select count(*) as 'count'
-				from Project
-				where
-					Title = ? AND
-					Year  = YEAR(CURDATE()) AND
-					NOT ProjectID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array($this->fields['Title']));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-			if ($count !== "0")
-			{
-				$valid = false;
-				$msgs['Title'] =
-					"There is already a project with that title this year.";
-			}
-		} //end title uniqueness check
+			$valid = false;
+			$msgs['Title'] = "There is already a project with that title this year.";
+		}
 
 		//Project Number
 		if ($this->fields['ProjectNum'] != "")

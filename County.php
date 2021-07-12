@@ -17,8 +17,8 @@ class County extends Entity
 	function __construct ($connection)
 	{
 		//initialize $table, $title, $view, and $connection
-        parent::__construct ($connection);
-        $this->title = "Counties";
+		parent::__construct ($connection);
+		$this->title = "Counties";
 
 		//entity dependent on County
 		$this->dependent = "school";
@@ -68,20 +68,9 @@ class County extends Entity
 			if ($original == false)
 				$original = "NULL";
 
-			$query = $this->connection->prepare
-			(
-				"select count(*) as 'count'
-                from County
-                where CountyName = ? AND 
-                not CountyID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array_values($this->fields));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-			if ($count !== "0")
+			if ($this->is_not_unique ("CountyName", $original))
 			{
-				$msgs['CountyName'] =
-					"There is a County with same ID ";
+				$msgs['CountyName'] = "There is already a County with this name.";
 				
 				return false;
 			}

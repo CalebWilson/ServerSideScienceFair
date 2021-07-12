@@ -132,7 +132,7 @@
 
 			<?php if (isset ($msgs['GradeID'])) print ($msgs['GradeID']) ?>
 
-			<!-- clear selected -->
+			<!-- preserve selected -->
 			<?php
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .

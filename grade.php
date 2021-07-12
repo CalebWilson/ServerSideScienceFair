@@ -1,113 +1,4 @@
-<?php
-
-	include "admin_check.php";
-
-/*
-	//initialize grade
-	$grade = array();
-
-	//make an array to keep track of potential error messages
-	$msgs = array();
-	$msg  = "";
-
-	//if data has been submitted, prefill with that data
-	if (isset($_POST['GradeNum']))
-	{
-		//copy POST data
-		$grade = array('GradeNum' => $_POST['GradeNum']);
-
-		$msgs = array('GradeNum' => "");
-
-		/* GradeNum Uniqueness */
-
-/*
-		$unique_check = "";
-		if ($_POST['action'] == "Edit")
-			$unique_check = " AND GradeID != " . $_POST['selected'][0];
-
-		$query = $connection->prepare
-		("
-			select count(*) as 'count'
-			from Grade
-			where GradeNum = ?" .
-			$unique_check
-		);
-		$query->execute(array($grade['GradeNum']));
-		$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-		if ($count !== "0")
-		{
-			$msgs['GradeNum'] =
-				'<font color="red">Grade ' .  $grade['GradeNum'] . " already exists.";
-		}
-
-		//if good input
-		if ($msgs['GradeNum'] == "")
-		{
-			if ($_POST['action'] == "Add")
-			{
-				$query = $connection->prepare
-				("
-					insert into
-						Grade (GradeNum)
-						values (?)
-				");
-			}
-
-			elseif ($_POST['action'] == "Edit")
-			{
-				//append ID to grade
-				$grade["ID"] = $_POST['selected'][0];
-				$query = $connection->prepare
-				("
-					update Grade
-					set GradeNum = ?
-					where GradeID = ?
-				");
-			}
-
-			//execute the sql statement
-			$query->execute(array_values($grade));
-
-			//confirmation message
-			$msg = '<font color="green">Successfully ';
-			
-			if ($_POST['action'] == "Add")
-				$msg = $msg . "added ";
-			elseif ($_POST['action'] == "Edit")
-				$msg = $msg . "modified ";
-
-			$msg = $msg . "Grade " . $grade['GradeNum'] . ".</font><br>";
-
-			//clear fields for next entry
-			if ($_POST['action'] == "Add")
-				$grade = array_fill_keys (array_keys($grade), "");
-
-		}//end if good input
-
-		//if bad input
-		else $msg = "";
-
-	} //end if data submitted 
-
-	elseif ($_POST['action'] == "Edit")
-	{
-		$record_set = $connection->query
-		("
-			select GradeNum 
-			from Grade
-			where GradeID = " . $_POST['selected'][0]
-		);
-		$grade = $record_set->fetch (PDO::FETCH_ASSOC);
-	}
-	elseif ($_POST['action'] == "Add")
-	{
-		$grade = array ("GradeNum" => "");
-	}
-
-*/
-
-?>
+<?php include "admin_check.php" ?>
 
 <title><?php print(ucfirst($action)) ?> Grade</title>
 <div class="wrapper">
@@ -133,7 +24,7 @@
 
 			<?php
 				
-				//clear selected
+				//preserve selected
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .
 						$post['selected'][0] . '">'); 

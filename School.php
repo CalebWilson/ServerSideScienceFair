@@ -80,28 +80,18 @@ class School extends Entity
 		}
 
 		//school uniqueness
-		else
-		{
-			$query = $this->connection->prepare
-			(
-				"select count(*) as 'count'
-				from School
-				where
-					SchoolName = ? AND
-					CountyID = ? AND
-					NOT SchoolID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array_values($this->fields));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-			if ($count !== "0")
-			{
-				$msgs['SchoolName'] =
-					"There is already a school with this name in the selected county.";
-				
-				$valid = false;
-			}
-		} //end uniqueness
+		elseif (
+			$this->is_not_unique (
+				"SchoolName",
+				$original,
+				"CountyID = " . $this->fields["CountyID"]
+			)
+		){
+			$msgs['SchoolName'] =
+				"There is already a school with this name in the selected county.";
+			
+			$valid = false;
+		}
 
 		return $valid;
 

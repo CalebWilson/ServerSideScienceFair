@@ -93,7 +93,7 @@
 					print ($this->fields['Abstract'])
 			?></textarea>
 
-			<!-- clear selected -->
+			<!-- preserve selected -->
 			<?php
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .
