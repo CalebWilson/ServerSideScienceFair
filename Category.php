@@ -38,13 +38,14 @@ class Category extends Entity
 		("
 			select CategoryID as ID, CategoryName as selection from Category
 		");
+
 		$records = $record_set->fetchAll();
 		$record_set->closeCursor();
 
 		//return records
 		return $records;
 
-	} //end function display_data();
+	} //end function display_data()
 
 	//check whether data has been submitted
 	protected function submitted ($post)
@@ -58,7 +59,7 @@ class Category extends Entity
 		//validity
 		if ($this->fields ['CategoryName'] == "")
 		{
-			$msgs['CategoryName'] = "Category cannot be empty.";
+			$msgs['CategoryName'] = "Category name cannot be blank.";
 
 			return false;
 		}
@@ -81,11 +82,11 @@ class Category extends Entity
 
 			if ($count !== "0")
 			{
-				$msgs['CategoryName'] =
-					"Catagory already exsits ";
+				$msgs['CategoryName'] = "Category already exists.";
 				
 				return false;
 			}
+
 		} //end uniqueness
 
 		return true;
@@ -122,7 +123,7 @@ class Category extends Entity
         update Category
         set CategoryName = ?
         where CategoryID = ?
-        ");
+	  ");
 
 		$query->execute (array_values($this->fields));
 
@@ -169,4 +170,3 @@ class Category extends Entity
 	} //end function prefill()
 
 } //end class Student
-

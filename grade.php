@@ -2,6 +2,7 @@
 
 	include "admin_check.php";
 
+/*
 	//initialize grade
 	$grade = array();
 
@@ -18,6 +19,8 @@
 		$msgs = array('GradeNum' => "");
 
 		/* GradeNum Uniqueness */
+
+/*
 		$unique_check = "";
 		if ($_POST['action'] == "Edit")
 			$unique_check = " AND GradeID != " . $_POST['selected'][0];
@@ -102,43 +105,49 @@
 		$grade = array ("GradeNum" => "");
 	}
 
+*/
+
 ?>
 
-<title><?php print($_POST['action'] . " ") ?>Grade</title>
+<title><?php print(ucfirst($action)) ?> Grade</title>
 <div class="wrapper">
 <div class="main-f">
-	<h1><strong><?php print($_POST['action'] . " ") ?>Grade</strong></h1>
+
+	<h1><strong><?php print(ucfirst($action)) ?> Grade</strong></h1>
 	<div class="form-s">
-		<form action="Administrator.php?view=grade" method="post" >
+		<form action="Admin.php?view=grade" method="post" >
 
 			<?php print($msg) ?>
 
+			<!-- GradeNum-->
 			<label for="GradeNum">Grade Level: </label>
 			<input
 				type="number"
 				min="0"
 				id="GradeNum"
 				name="GradeNum"
-				value="<?php print($grade["GradeNum"]) ?>"
+				value="<?php print($this->fields ["GradeNum"]) ?>"
 			><br>
 
-			<?php
-				if (isset ($msgs['GradeNum']))
-					print($msgs['GradeNum']);
+			<?php if (isset ($msgs['GradeNum'])) print($msgs['GradeNum']) ?>
 
-				if (isset($_POST['selected'][0]))
+			<?php
+				
+				//clear selected
+				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .
-						$_POST['selected'][0] . '">'); 
+						$post['selected'][0] . '">'); 
 			?>
 
+			<!-- Submit -->
 			<button type="submit" name="action"
-				value="<?php print($_POST['action']) ?>" class="btn">Submit</button>
+				value="<?php print($action) ?>" class="btn">Submit</button>
 
 		</form>
 
 	</div>
 
-	<form action="Administrator.php?view=grade" method="post" class="back-btn">
+	<form action="Admin.php?view=grade" method="post" class="back-btn">
 		<button type="submit">Back</button>
 	</form>
 
