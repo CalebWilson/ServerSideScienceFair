@@ -52,10 +52,10 @@ class County extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original)
 	{
 		//invalidate blank county name
-		if ($this->invalidate_blanks (array ("CountyName" => "County name"), $msgs))
+		if ($this->invalidate_blanks (array ("CountyName" => "County name")))
 
 		//uniqueness
 		{
@@ -64,8 +64,9 @@ class County extends Entity
 
 			if ($this->is_not_unique ("CountyName", $original))
 			{
-				$msgs['CountyName'] = "There is already a County with this name.";
-				
+				$this->msgs['CountyName'] =
+					"There is already a County with this name.";
+
 				return false;
 			}
 
@@ -81,7 +82,11 @@ class County extends Entity
 	protected function get_options()
 	{
 		//get counties from database
-		$record_set = $this->connection->query("select CountyID, CountyName from County");
+		$record_set = $this->connection->query
+		(
+			"select CountyID, CountyName from County"
+		);
+
 		return $record_set->fetchAll();
 	}
 
@@ -89,11 +94,9 @@ class County extends Entity
 	protected function insert()
 	{
 		$query = $this->connection->prepare
-		("
-            insert into
-            County (CountyName)
-            values (?)
-        ");
+		(
+			"insert into County (CountyName) values (?)"
+		);
 
 		$query->execute (array_values($this->fields));
 
@@ -103,11 +106,9 @@ class County extends Entity
 	protected function update()
 	{
 		$query = $this->connection->prepare
-		("
-        update County
-        set CountyName = ?
-        where CountyID = ?
-        ");
+		(
+			"update County set CountyName = ? where CountyID = ?"
+		);
 
 		$query->execute (array_values($this->fields));
 

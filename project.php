@@ -42,7 +42,7 @@
 
 			</select><br>
 
-			<?php if (isset ($msgs['BoothID'])) print ($msgs['BoothID']) ?>
+			<?php if (isset ($this->msgs['BoothID'])) print ($this->msgs['BoothID']) ?>
 
 			<!-- CategoryID -->
 			<label for="CategoryID">Category:</label>
@@ -63,7 +63,10 @@
 				?>
 			</select><br>
 
-			<?php if (isset ($msgs['CategoryID'])) print ($msgs['CategoryID']) ?>
+			<?php
+				if (isset ($this->msgs['CategoryID']))
+					print ($this->msgs['CategoryID'])
+			?>
 
 			<!-- ProjectNum -->
 			<label for="ProjectNum">Project Number:</label>
@@ -72,7 +75,11 @@
 				name="ProjectNum"
 				value="<?php print ($this->fields["ProjectNum"]) ?>"
 			><br>
-			<?php if (isset ($msgs['ProjectNum'])) print ($msgs['ProjectNum']) ?>
+
+			<?php
+				if (isset ($this->msgs['ProjectNum']))
+					print ($this->msgs['ProjectNum'])
+			?>
 			Leave this field blank to auto-generate a new project number.<br>
 
 			<!-- Title -->
@@ -82,7 +89,8 @@
 				name="Title"
 				value="<?php print ($this->fields["Title"]) ?>"
 			><br>
-			<?php if (isset ($msgs['Title'])) print ($msgs['Title']) ?>
+
+			<?php if (isset ($this->msgs['Title'])) print ($this->msgs['Title']) ?>
 
 			<!-- Abstract -->
 			<label for="Abstract">Abstract:</label>

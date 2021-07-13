@@ -31,7 +31,11 @@
 					value="<?php print ($this->fields["SchoolName"]) ?>"
 				><br>
 			</div>
-			<?php if (isset ($msgs['SchoolName'])) print ($msgs['SchoolName']) ?>
+
+			<?php
+				if (isset ($this->msgs['SchoolName']))
+					print ($this->msgs['SchoolName'])
+			?>
 
 			<!-- CountyID -->
 			<label for="CountyID">County: </label>
@@ -54,7 +58,10 @@
 
 			</select><br>
 
-			<?php if (isset ($msgs['CountyID'])) print ($msgs['CountyID']) ?>
+			<?php
+				if (isset ($this->msgs['CountyID']))
+					print ($this->msgs['CountyID'])
+			?>
 
 			<!-- preserve selected -->
 			<?php

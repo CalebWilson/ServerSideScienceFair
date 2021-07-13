@@ -20,7 +20,10 @@
 				value="<?php print($this->fields ["GradeNum"]) ?>"
 			><br>
 
-			<?php if (isset ($msgs['GradeNum'])) print($msgs['GradeNum']) ?>
+			<?php
+				if (isset ($this->msgs['GradeNum']))
+					print($this->msgs['GradeNum'])
+			?>
 
 			<?php
 				

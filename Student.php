@@ -67,21 +67,19 @@ class Student extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original)
 	{
 		return $this->invalidate_blanks
 		(
 			array
 			(
-				"SchoolID" => "School",
+				"SchoolID"  => "School",
 				"FirstName" => "First name",
-				"LastName" => "Last name",
-				"Gender" => "Gender",
+				"LastName"  => "Last name",
+				"Gender"    => "Gender",
 				"ProjectID" => "Project",
-				"GradeID" => "Grade"
-			),
-
-			$msgs
+				"GradeID"   => "Grade"
+			)
 		);
 
 	} //end function validate()
@@ -97,11 +95,17 @@ class Student extends Entity
 		$options['schools'] = $record_set->fetchAll();
 
 		//Project
-		$record_set = $this->connection->query ("select ProjectID, Title from Project");
+		$record_set = $this->connection->query
+		(
+			"select ProjectID, Title from Project"
+		);
 		$options['projects'] = $record_set->fetchAll();
 
 		//Grade
-		$record_set = $this->connection->query ("select GradeID, GradeNum from Grade");
+		$record_set = $this->connection->query
+		(
+			"select GradeID, GradeNum from Grade"
+		);
 		$options['grades'] = $record_set->fetchAll();
 
 		return $options;

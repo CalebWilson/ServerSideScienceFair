@@ -88,7 +88,7 @@ class Administrator extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original)
 	{
 		$labels = array
 		(
@@ -107,7 +107,7 @@ class Administrator extends Entity
 		}
 
 		//invalidate blank fields
-		$valid = $this->invalidate_blanks ($labels, $msgs);
+		$valid = $this->invalidate_blanks ($labels);
 
 		//email validity
 		if ($this->fields['Email'] != "")
@@ -115,7 +115,7 @@ class Administrator extends Entity
 			if (filter_input (INPUT_POST, "Email", FILTER_VALIDATE_EMAIL) == false)
 			{
 				$valid = false;
-				$msgs['Email'] = "Email is invalid.";
+				$this->msgs['Email'] = "Email is invalid.";
 
 			}
 
@@ -124,7 +124,7 @@ class Administrator extends Entity
 			{
 				$valid = false;
 
-				$msgs['Email'] =
+				$this->msgs['Email'] =
 					"Another administrator is already using this email.";
 			}
 
@@ -134,7 +134,7 @@ class Administrator extends Entity
 		if ($this->fields['pass_conf'] != $this->fields['Password'])
 		{
 			$valid = false;
-			$msgs['pass_conf'] = "Passwords don't match.";
+			$this->msgs['pass_conf'] = "Passwords don't match.";
 		}
 
 		return $valid;

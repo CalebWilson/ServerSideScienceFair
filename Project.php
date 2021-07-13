@@ -60,64 +60,39 @@ class Project extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original)
 	{
 		//set empty original to NULL if adding
 		if ($original == false)
 			$original = "NULL";
 
-		//assume input valid
-		$valid = true;
+		$valid = $this->invalidate_blanks
+		(
+			array
+			(
+				"BoothID"    => "Booth",
+				"CategoryID" => "Category",
+				"Title"      => "Title"
+			)
+		);
 
-		//booth
-		if ($this->fields['BoothID'] == "")
+		/* uniqueness */
+		$year_condition = "Year = YEAR(CURDATE())";
+		if ($this->is_not_unique ("Title", $original, $year_condition))
 		{
 			$valid = false;
-			$msgs['BoothID'] = "Project must be assigned to a booth.";
-		}
-
-		//category
-		if ($this->fields['CategoryID'] == "")
-		{
-			$valid = false;
-			$msgs['CategoryID'] = "Project must be assigned to a category.";
-		}
-
-		//title validity
-		if ($this->fields['Title'] == "")
-		{
-			$valid = false;
-			$msgs['Title'] = "Project Title cannot be empty.";
-		}
-
-		//title uniqueness
-		elseif ($this->is_not_unique ("Title", $original, "Year = YEAR(CURDATE())"))
-		{
-			$valid = false;
-			$msgs['Title'] = "There is already a project with that title this year.";
+			$this->msgs['Title'] =
+				"There is already a project with that title this year.";
 		}
 
 		//Project Number
-		if ($this->fields['ProjectNum'] != "")
+		if ($this->is_not_unique ("ProjectNum", $original, $year_condition))
 		{
-			$query = $this->connection->prepare
-			("
-				select count(*) as 'count'
-				from Project
-				where
-					ProjectNum = ? AND
-					Year  = YEAR(CURDATE()) AND
-					NOT ProjectID <=> " . $original //NULL-safe equals operator
-			);
-			$query->execute(array($this->fields['ProjectNum']));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
+			$valid = false;
 
-			if ($count !== "0")
-			{
-				$valid = false;
-				$msgs['ProjectNum'] = "There is already a project with this number this year.";
-			}
-		} //end Project Number uniqueness check
+			$this->msgs['ProjectNum'] =
+				"There is already a project with this number this year.";
+		}
 
 		return $valid;
 
@@ -193,12 +168,13 @@ class Project extends Entity
 			$this->fields['ProjectNum'] =
 				$record_set->fetch(PDO::FETCH_ASSOC)['NewNum'];
 		}
+
 	} //end function autofill_ProjectNum()
 
 	//confirm an add operation
 	protected function confirm_add()
 	{
-		$msg = 'Successfully added project ' . $this->fields['Title'];
+		$msg = 'Successfully added project ' . $this->fields['Title'] . '.';
 		return '<font color="green">' . $msg . '</font><br>';
 
 	} //end function confirm_add()
@@ -206,7 +182,7 @@ class Project extends Entity
 	//confirm an edit operation
 	protected function confirm_edit()
 	{
-		$msg = 'Successfully modified project ' . $this->fields['Title'];
+		$msg = 'Successfully modified project ' . $this->fields['Title'] . '.';
 		return '<font color="green">' . $msg . '</font><br>';
 
 	} //end function confirm_edit()

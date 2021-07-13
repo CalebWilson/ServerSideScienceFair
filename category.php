@@ -30,7 +30,10 @@
 				><br>
 			</div>
 
-			<?php if (isset ($msgs['CategoryName'])) print($msgs['CategoryName']) ?>
+			<?php
+				if (isset ($this->msgs['CategoryName']))
+					print($this->msgs['CategoryName'])
+			?>
 
 			<?php
 

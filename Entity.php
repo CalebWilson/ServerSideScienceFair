@@ -25,6 +25,9 @@ abstract class Entity
 
 	//associative array of fields and values
 	protected $fields;
+	
+	//associative array of fields and error messages
+	protected $msgs;
 
 	//constructor
 	protected function __construct ($connection)
@@ -98,25 +101,19 @@ abstract class Entity
 	//display the page for adding a new record to the table
 	public function add ($post)
 	{
-		//error messages
-		$msgs = array();
-
 		//main message
 		$msg  = "";
 
 		//if data has been submitted, prefill
 		if ($this->submitted($post))
 		{
-			//initialize error message array
-			$msgs = $this->fields;
-
 			//copy POST data
 			$this->fields = $post;
 			unset ($this->fields['action']);
 			unset ($this->fields['selected']);
 
 			//validate input in add mode
-			if ($this->validate ($msgs, false))
+			if ($this->validate (false))
 			{
 				//update database
 				$this->insert();
@@ -133,7 +130,7 @@ abstract class Entity
 			else
 			{
 				//color error messages red
-				foreach ($msgs as &$error)
+				foreach ($this->msgs as &$error)
 				{
 					if ($error != "")
 						$error = '<font color="red">' . $error . '</font><br>';
@@ -191,17 +188,11 @@ abstract class Entity
 		//count == 1
 		elseif (count($selected) === 1)
 		{
-			//error messages
-			$msgs = array();
-
-			//main message
-			$msg  = "";
-
 			//if data has been submitted, prefill
 			if ($this->submitted($post))
 			{
 				//initialize error message array
-				$msgs = array_fill_keys(array_keys($this->fields), "");
+				$this->msgs = array_fill_keys(array_keys($this->fields), "");
 
 				//copy POST data
 				$this->fields = $post;
@@ -209,7 +200,7 @@ abstract class Entity
 				unset ($this->fields['selected']);
 
 				//validate input in edit mode
-				if ($this->validate ($msgs, $post['selected'][0]))
+				if ($this->validate ($post['selected'][0]))
 				{
 					//append ID to admin
 					$this->fields["ID"] = $post['selected'][0];
@@ -233,7 +224,7 @@ abstract class Entity
 					;
 
 					//color error messages red
-					foreach ($msgs as &$error)
+					foreach ($this->msgs as &$error)
 						$error = '<font color="red">' . $error . '</font><br>';
 
 					unset ($error);
@@ -407,7 +398,7 @@ abstract class Entity
 
 	//set the error message for any blank field in the $labels array
 	//return false if any of the fields are blank; return true otherwise
-	protected function invalidate_blanks ($labels, &$msgs)
+	protected function invalidate_blanks ($labels)
 	{
 		$valid = true;
 
@@ -416,7 +407,7 @@ abstract class Entity
 			if ($this->fields[$field] == "")
 			{
 				$valid = false;
-				$msgs[$field] = $label . " cannot be blank.";
+				$this->msgs[$field] = $label . " cannot be blank.";
 			}
 		}
 
@@ -433,7 +424,7 @@ abstract class Entity
 		When validating an edit, $original should be the ID of the record being
 		edited, and the boolean value false otherwise.
 	*/
-	abstract protected function validate (&$msgs, $original);
+	abstract protected function validate ($original);
 
 	//return an array of option arrays for the form to use
 	abstract protected function get_options();

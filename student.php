@@ -38,7 +38,10 @@
 				?>
 			</select><br>
 
-			<?php if (isset ($msgs['SchoolID'])) print ($msgs['SchoolID']) ?>
+			<?php
+				if (isset ($this->msgs['SchoolID']))
+					print ($this->msgs['SchoolID'])
+			?>
 
 			<!-- FirstName -->
 			<label for="FirstName">First Name:</label>
@@ -48,7 +51,11 @@
 				name="FirstName"
 				value="<?php print($this->fields["FirstName"]) ?>"
 			><br>
-			<?php if (isset ($msgs['FirstName'])) print ($msgs['FirstName']) ?>
+
+			<?php
+				if (isset ($this->msgs['FirstName']))
+					print ($this->msgs['FirstName'])
+			?>
 
 			<!-- MiddleName -->
 			<label for="MiddleName">Middle Name:</label>
@@ -64,7 +71,11 @@
 			<input type="text" id="LastName" name="LastName"
 				value="<?php print($this->fields["LastName"]) ?>"
 			><br>
-			<?php if (isset ($msgs['LastName'])) print ($msgs['LastName']) ?>
+
+			<?php
+				if (isset ($this->msgs['LastName']))
+					print ($this->msgs['LastName'])
+			?>
 
 			<!-- Gender -->
 			<label for="Gender">Gender:</label>
@@ -78,7 +89,9 @@
 				>Male</option>
 
 				<option value="Female"
-					<?php if ($this->fields['Gender'] == "Female") print (" selected") ?>
+					<?php
+						if ($this->fields['Gender'] == "Female") print (" selected")
+					?>
 				>Female</option>
 
 				<option value="Other"
@@ -86,7 +99,7 @@
 				>Other</option>
 			</select><br>
 
-			<?php if (isset ($msgs['Gender'])) print ($msgs['Gender']) ?>
+			<?php if (isset ($this->msgs['Gender'])) print ($this->msgs['Gender']) ?>
 
 			<!-- ProjectID -->
 			<label for="ProjectID">Project:</label>
@@ -108,7 +121,10 @@
 
 			</select><br>
 
-			<?php if (isset ($msgs['ProjectID'])) print ($msgs['ProjectID']) ?>
+			<?php
+				if (isset ($this->msgs['ProjectID']))
+					print ($this->msgs['ProjectID'])
+			?>
 
 			<!-- GradeID -->
 			<label for="GradeID" >Grade:</label>
@@ -130,7 +146,10 @@
 
 			</select> <br>
 
-			<?php if (isset ($msgs['GradeID'])) print ($msgs['GradeID']) ?>
+			<?php
+				if (isset ($this->msgs['GradeID']))
+					print ($this->msgs['GradeID'])
+			?>
 
 			<!-- preserve selected -->
 			<?php

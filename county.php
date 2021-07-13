@@ -27,7 +27,10 @@
 					value="<?php print($this->fields['CountyName']) ?>"
 				><br>
 
-				<?php if (isset ($msgs['CountyName'])) print ($msgs['CountyName']) ?>
+				<?php
+					if (isset ($this->msgs['CountyName']))
+						print ($this->msgs['CountyName'])
+				?>
 
 				<?php
 

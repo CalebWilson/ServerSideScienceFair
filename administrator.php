@@ -28,7 +28,7 @@
 					value=<?php print($this->fields["FirstName"]) ?>
 				><br>
 
-				<?php if (isset ($msgs['FirstName'])) print ($msgs['FirstName']) ?>
+				<?php if (isset ($this->msgs['FirstName'])) print ($this->msgs['FirstName']) ?>
 
 				<!-- MiddleName -->
 				<label for="MiddleName">Middle Name:</label>
@@ -48,7 +48,10 @@
 					value=<?php print($this->fields["LastName"]) ?>
 				><br>
 
-				<?php if (isset ($msgs['LastName'])) print ($msgs['LastName']) ?>
+				<?php
+					if (isset ($this->msgs['LastName']))
+						print ($this->msgs['LastName'])
+				?>
 			
 				<!-- Email -->
 				<label for="Email">Email:</label>
@@ -59,7 +62,10 @@
 					value=<?php print($this->fields["Email"]) ?>
 				><br>
 
-				<?php if (isset ($msgs['Email'])) print ($msgs['Email']) ?>
+				<?php
+					if (isset ($this->msgs['Email']))
+						print ($this->msgs['Email'])
+				?>
 
 				<!-- Username -->
 				<label for="Username">Username:</label>
@@ -70,7 +76,10 @@
 					value=<?php print($this->fields["Username"]) ?>
 				><br>
 
-				<?php if (isset ($msgs['Username'])) print ($msgs['Username']) ?>
+				<?php
+					if (isset ($this->msgs['Username']))
+						print ($this->msgs['Username'])
+				?>
 				
 				<!-- Password -->
 				<label for="Password">
@@ -86,7 +95,10 @@
 					?>
 				><br>
 
-				<?php if (isset ($msgs['Password'])) print ($msgs['Password']) ?>
+				<?php
+					if (isset ($this->msgs['Password']))
+						print ($this->msgs['Password'])
+				?>
 
 				<!-- Confirm Password -->
 				<label for="pass_conf">Confirm
@@ -100,7 +112,10 @@
 						print(' value="' . $this->fields['pass_conf'] . '"')?>
 				><br>
 
-				<?php if (isset ($msgs['pass_conf'])) print ($msgs['pass_conf']) ?>
+				<?php
+					if (isset ($this->msgs['pass_conf']))
+						print ($this->msgs['pass_conf'])
+				?>
 
 				<!-- AuthorityLevel -->
 				<label for="AuthorityLevel">Authority Level:</label>

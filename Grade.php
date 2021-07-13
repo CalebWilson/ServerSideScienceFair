@@ -52,10 +52,10 @@ class Grade extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original)
 	{
 		//invalidate blank GradeNum
-		if ($this->invalidate_blanks (array ("GradeNum" => "Grade Level"), $msgs))
+		if ($this->invalidate_blanks (array ("GradeNum" => "Grade Level")))
 		{
 			//set empty original to NULL if adding
 			if ($original == false)
@@ -63,7 +63,7 @@ class Grade extends Entity
 
 			if ($this->is_not_unique ("GradeNum", $original))
 			{
-				$msgs['GradeNum'] = "This grade level has already been added.";
+				$this->msgs['GradeNum'] = "This grade level has already been added.";
 
 				return false;
 			}

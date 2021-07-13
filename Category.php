@@ -54,23 +54,10 @@ class Category extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original)
 	{
-		/*
-		if ($this->fields ['CategoryName'] == "")
-		{
-			$msgs['CategoryName'] = "Category name cannot be blank.";
-
-			return false;
-		}
-
-		//uniqueness
-		else
-		*/
 		//invalidate blank category name
-		if ($this->invalidate_blanks (
-			array ("CategoryName" => "Category name"), $msgs
-		))
+		if ($this->invalidate_blanks (array ("CategoryName" => "Category name")))
 		{
 			if ($original == false)
 				$original = "NULL";
@@ -78,8 +65,9 @@ class Category extends Entity
 			//category name uniqnuess
 			if ($this->is_not_unique ("CategoryName", $original))
 			{
-				$msgs['CategoryName'] = "There is already a Category with this name.";
-				
+				$this->msgs['CategoryName'] =
+					"There is already a Category with this name.";
+
 				return false;
 			}
 
@@ -94,7 +82,11 @@ class Category extends Entity
 	protected function get_options()
 	{
 		//get counties from database
-		$record_set = $this->connection->query("select CategoryID, CategoryName from Category");
+		$record_set = $this->connection->query
+		(
+			"select CategoryID, CategoryName from Category"
+		);
+
 		return $record_set->fetchAll();
 	}
 

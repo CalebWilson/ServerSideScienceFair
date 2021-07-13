@@ -55,11 +55,11 @@ class School extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original)
 	{
 		//invalidate blank fields
 		$labels = array ("CountyID" => "County", "SchoolName" => "School name");
-		if ($this->invalidate_blanks ($labels, $msgs))
+		if ($this->invalidate_blanks ($labels))
 		{
 			//set empty original to NULL if adding
 			if ($original == false)
@@ -69,7 +69,7 @@ class School extends Entity
 			if ($this->is_not_unique ("SchoolName", $original,
 				"CountyID = " . $this->fields["CountyID"])
 			){
-				$msgs['SchoolName'] =
+				$this->msgs['SchoolName'] =
 					"There is already a school with this name in the selected county.";
 				
 				//if not unique
@@ -89,7 +89,11 @@ class School extends Entity
 	protected function get_options()
 	{
 		//get counties from database
-		$record_set = $this->connection->query("select CountyID, CountyName from County");
+		$record_set = $this->connection->query
+		(
+			"select CountyID, CountyName from County"
+		);
+
 		return $record_set->fetchAll();
 	}
 
