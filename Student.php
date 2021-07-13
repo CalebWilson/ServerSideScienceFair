@@ -69,59 +69,21 @@ class Student extends Entity
 	//validate field entries and update msgs array
 	protected function validate (&$msgs, $original)
 	{
-		//set empty original to NULL if adding
-		if ($original == false)
-			$original = "NULL";
+		return $this->invalidate_blanks
+		(
+			array
+			(
+				"SchoolID" => "School",
+				"FirstName" => "First name",
+				"LastName" => "Last name",
+				"Gender" => "Gender",
+				"ProjectID" => "Project",
+				"GradeID" => "Grade"
+			),
 
-		//assume input valid
-		$valid = true;
+			$msgs
+		);
 
-		//school
-		if ($this->fields ['SchoolID'] == "")
-		{
-			$valid = false;
-			$msgs['SchoolID'] = "School cannot be blank.";
-		}
-
-		//first
-		if ($this->fields['FirstName'] == "")
-		{
-			$valid = false;
-			$msgs['FirstName'] = "First name cannot be blank.";
-		}
-
-		//no one cares about middle name
-
-		//last
-		if ($this->fields['LastName'] == "")
-		{
-			$valid = false;
-			$msgs['LastName'] = "Last name cannot be empty.";
-		}
-
-		//gender
-		if ($this->fields['Gender'] == "")
-		{
-			$valid = false;
-			$msgs['Gender'] = "Gender cannot be empty.";
-		}
-
-		//project
-		if ($this->fields['ProjectID'] == "")
-		{
-			$valid = false;
-			$msgs['ProjectID'] = "ProjectID cannot be empty.";
-		}
-
-		//grade
-		if ($this->fields['GradeID'] == "")
-		{
-			$valid = false;
-			$msgs['GradeID'] = "GradeID cannot be empty.";
-		}
-
-		return $valid;
-	
 	} //end function validate()
 
 	//get options from database

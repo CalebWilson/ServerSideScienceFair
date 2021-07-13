@@ -57,43 +57,31 @@ class School extends Entity
 	//validate field entries and update msgs array
 	protected function validate (&$msgs, $original)
 	{
-		//set empty original to NULL if adding
-		if ($original == false)
-			$original = "NULL";
-
-		//assume valid input 
-		$valid = true;
-
-		//county
-		if ($this->fields ['CountyID'] == "")
+		//invalidate blank fields
+		$labels = array ("CountyID" => "County", "SchoolName" => "School name");
+		if ($this->invalidate_blanks ($labels, $msgs))
 		{
-			$valid = false;
-			$msgs['CountyID'] = "County cannot be blank.";
+			//set empty original to NULL if adding
+			if ($original == false)
+				$original = "NULL";
+
+			//school uniqueness
+			if ($this->is_not_unique ("SchoolName", $original,
+				"CountyID = " . $this->fields["CountyID"])
+			){
+				$msgs['SchoolName'] =
+					"There is already a school with this name in the selected county.";
+				
+				//if not unique
+				return false;
+			}
+
+			//if non-blank and unique
+			return true;
 		}
 
-		//school validity
-		if ($this->fields ['SchoolName'] == "")
-		{
-			$msgs['SchoolName'] = "School Name cannot be blank.";
-
-			$valid = false;
-		}
-
-		//school uniqueness
-		elseif (
-			$this->is_not_unique (
-				"SchoolName",
-				$original,
-				"CountyID = " . $this->fields["CountyID"]
-			)
-		){
-			$msgs['SchoolName'] =
-				"There is already a school with this name in the selected county.";
-			
-			$valid = false;
-		}
-
-		return $valid;
+		//if blank
+		return false;
 
 	} //end function validate()
 

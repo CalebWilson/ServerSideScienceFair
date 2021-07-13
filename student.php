@@ -86,7 +86,7 @@
 				>Other</option>
 			</select><br>
 
-			<?php if (isset ($msgs['LastName'])) print ($msgs['LastName']) ?>
+			<?php if (isset ($msgs['Gender'])) print ($msgs['Gender']) ?>
 
 			<!-- ProjectID -->
 			<label for="ProjectID">Project:</label>

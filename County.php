@@ -54,16 +54,10 @@ class County extends Entity
 	//validate field entries and update msgs array
 	protected function validate (&$msgs, $original)
 	{
-		//validity
-		if ($this->fields ['CountyName'] == "")
-		{
-			$msgs['CountyName'] = "County name cannot be blank.";
-
-			return false;
-		}
+		//invalidate blank county name
+		if ($this->invalidate_blanks (array ("CountyName" => "County name"), $msgs))
 
 		//uniqueness
-		else
 		{
 			if ($original == false)
 				$original = "NULL";
@@ -76,6 +70,8 @@ class County extends Entity
 			}
 
 		} //end uniqueness
+
+		else return false;
 
 		return true;
 

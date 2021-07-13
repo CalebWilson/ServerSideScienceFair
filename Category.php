@@ -56,7 +56,7 @@ class Category extends Entity
 	//validate field entries and update msgs array
 	protected function validate (&$msgs, $original)
 	{
-		//validity
+		/*
 		if ($this->fields ['CategoryName'] == "")
 		{
 			$msgs['CategoryName'] = "Category name cannot be blank.";
@@ -66,10 +66,16 @@ class Category extends Entity
 
 		//uniqueness
 		else
+		*/
+		//invalidate blank category name
+		if ($this->invalidate_blanks (
+			array ("CategoryName" => "Category name"), $msgs
+		))
 		{
 			if ($original == false)
 				$original = "NULL";
 
+			//category name uniqnuess
 			if ($this->is_not_unique ("CategoryName", $original))
 			{
 				$msgs['CategoryName'] = "There is already a Category with this name.";
@@ -77,9 +83,10 @@ class Category extends Entity
 				return false;
 			}
 
-		} //end uniqueness
+			return true;
+		}
 
-		return true;
+		return false;
 
 	} //end function validate()
 

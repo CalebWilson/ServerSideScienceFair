@@ -371,7 +371,9 @@ abstract class Entity
 	} //end function delete()
 
 	/*
-		Check whether a value is unique for a field.
+		Returns false if there exists a record other than $original with the same
+		value for $field where $condition, or if $this->fields[$field] is blank, and
+		returns true otherwise
 
 		$field: the field whose uniqueness is to be checked
 
@@ -383,6 +385,9 @@ abstract class Entity
 	*/
 	protected function is_not_unique ($field, $original, $condition = "1")
 	{
+		if ($this->fields[$field] == "")
+			return false;
+
 		$query = $this->connection->prepare
 		("
 			select count(*) as 'count'
@@ -399,6 +404,25 @@ abstract class Entity
 		return $count !== "0";
 
 	} //end function is_not_unique()
+
+	//set the error message for any blank field in the $labels array
+	//return false if any of the fields are blank; return true otherwise
+	protected function invalidate_blanks ($labels, &$msgs)
+	{
+		$valid = true;
+
+		foreach ($labels as $field => $label)
+		{
+			if ($this->fields[$field] == "")
+			{
+				$valid = false;
+				$msgs[$field] = $label . " cannot be blank.";
+			}
+		}
+
+		return $valid;
+
+	} //end function invalidate_blanks()
 
 	//check whether data has been submitted
 	abstract protected function submitted ($post);

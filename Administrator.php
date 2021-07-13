@@ -90,37 +90,27 @@ class Administrator extends Entity
 	//validate field entries and update msgs array
 	protected function validate (&$msgs, $original)
 	{
+		$labels = array
+		(
+			"FirstName"      => "First name",
+			"LastName"       => "Last name",
+			"Email"          => "Email",
+			"Username"       => "Username"
+		);
+
 		//set empty original to NULL if adding
 		if ($original == false)
+		{
 			$original = "NULL";
 
-		//assume valid input 
-		$valid = true;
-
-		//first
-		if ($this->fields['FirstName'] == "")
-		{
-			$valid = false;
-			$msgs['FirstName'] = "First name cannot be blank.";
+			$labels['Password'] = "Password";
 		}
 
-		//no one cares about middle name
-
-		//last
-		if ($this->fields['LastName'] == "")
-		{
-			$valid = false;
-			$msgs['LastName'] = "Last name cannot be blank.";
-		}
+		//invalidate blank fields
+		$valid = $this->invalidate_blanks ($labels, $msgs);
 
 		//email validity
-		if ($this->fields['Email'] == "")
-		{
-			$valid = false;
-			$msgs['Email'] = "Email cannot be blank.";
-		}
-			
-		else
+		if ($this->fields['Email'] != "")
 		{
 			if (filter_input (INPUT_POST, "Email", FILTER_VALIDATE_EMAIL) == false)
 			{
@@ -139,42 +129,6 @@ class Administrator extends Entity
 			}
 
 		} //end email validity
-
-		//username validity
-		if ($this->fields['Username'] == "")
-		{
-			$valid = false;
-			$msgs['Username'] = "Username cannot be blank.";
-		}
-
-		//username uniqueness
-		elseif ($this->is_not_unique ("Username", $original))
-		{
-			$valid = false;
-
-			$msgs['Username'] =
-				"Another administrator is already using this username.";
-		}
-
-		//if adding, require password
-		if ($original == "NULL")
-		{
-			//password
-			if ($this->fields['Password'] == "")
-			{
-				$valid = false;
-				$msgs['Password'] = "Password cannot be blank.";
-			}
-/*
-			//password confirmation doesn't match
-			if ($this->fields['pass_conf'] != $this->fields['Password'])
-			{
-				$valid = false;
-				$msgs['pass_conf'] = "Passwords don't match.";
-			}
-*/
-
-		} //end if adding
 
 		//password confirmation
 		if ($this->fields['pass_conf'] != $this->fields['Password'])
