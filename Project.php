@@ -13,6 +13,9 @@ include "Entity.php";
 
 class Project extends Entity
 {
+	//id of project for use in autofill_ProjectNum
+	private $project_id;
+
 	//constructor
 	function __construct ($connection)
 	{
@@ -33,6 +36,57 @@ class Project extends Entity
 		);
 
 	} //end constructor
+
+	//autofill ProjectNum, used by insert() and update()
+	private function autofill_ProjectNum()
+	{
+		if ($this->fields['ProjectNum'] == "")
+		{
+			$query_string = "";
+
+			//if project already has a ProjectNum, get it
+			if (isset ($this->project_id))
+			{
+				$query =
+				"
+					select ProjectNum
+					from Project
+					where ProjectID = " . $this->project_id
+				;
+			}
+
+			//otherwise, generate a new one
+			else
+			{
+				$query = 
+				"
+					select MAX(ProjectNum) + 1 as ProjectNum
+					from Project
+					where Year = YEAR(CURDATE())
+				";
+			}
+
+			$record_set = $this->connection->query($query);
+
+			$this->fields['ProjectNum'] =
+				$record_set->fetch(PDO::FETCH_ASSOC)['ProjectNum'];
+		}
+
+	} //end function autofill_ProjectNum()
+
+	//override Entity::edit to save ID for autofill_ProjectNum
+	public function edit ($post)
+	{
+		//capture ID
+		if (isset ($post['selected']) && count($post['selected']) === 1)
+		{
+			$this->project_id = $post['selected'][0];
+		}
+
+		//continue with normal edit
+		parent::edit ($post);
+
+	} //end function edit()
 
 	/* Override abstract methods */
 	//select identifying data from records
@@ -152,24 +206,6 @@ class Project extends Entity
 		$query->execute (array_values($this->fields));
 
 	} //end function update()
-
-	//autofill ProjectNum, used by insert() and update()
-	private function autofill_ProjectNum()
-	{
-		if ($this->fields['ProjectNum'] == "")
-		{
-			$record_set = $this->connection->query
-			("
-				select MAX(ProjectNum) + 1 as NewNum
-				from Project
-				where Year = YEAR(CURDATE())
-			");
-
-			$this->fields['ProjectNum'] =
-				$record_set->fetch(PDO::FETCH_ASSOC)['NewNum'];
-		}
-
-	} //end function autofill_ProjectNum()
 
 	//confirm an add operation
 	protected function confirm_add()
