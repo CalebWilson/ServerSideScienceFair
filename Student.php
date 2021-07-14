@@ -67,7 +67,7 @@ class Student extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate ($original)
+	protected function validate ($original = "NULL")
 	{
 		return $this->invalidate_blanks
 		(

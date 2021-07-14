@@ -88,7 +88,7 @@ class Administrator extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate ($original)
+	protected function validate ($original = "NULL")
 	{
 		$labels = array
 		(
@@ -98,20 +98,18 @@ class Administrator extends Entity
 			"Username"       => "Username"
 		);
 
-		//set empty original to NULL if adding
-		if ($original == false)
+		//require password if adding
+		if ($original == "NULL")
 		{
-			$original = "NULL";
-
 			$labels['Password'] = "Password";
 		}
 
 		//invalidate blank fields
 		$valid = $this->invalidate_blanks ($labels);
 
-		//email validity
 		if ($this->fields['Email'] != "")
 		{
+			//email validity
 			if (filter_input (INPUT_POST, "Email", FILTER_VALIDATE_EMAIL) == false)
 			{
 				$valid = false;
@@ -128,7 +126,15 @@ class Administrator extends Entity
 					"Another administrator is already using this email.";
 			}
 
-		} //end email validity
+		}
+
+		if ($this->is_not_unique ("Username", $original))
+		{
+			$valid = false;
+
+			$this->msgs['Username'] =
+				"Another administrator is already using this username.";
+		}
 
 		//password confirmation
 		if ($this->fields['pass_conf'] != $this->fields['Password'])

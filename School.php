@@ -55,15 +55,17 @@ class School extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate ($original)
+	protected function validate ($original = "NULL")
 	{
 		//invalidate blank fields
 		$labels = array ("CountyID" => "County", "SchoolName" => "School name");
 		if ($this->invalidate_blanks ($labels))
 		{
+/*
 			//set empty original to NULL if adding
 			if ($original == false)
 				$original = "NULL";
+*/
 
 			//school uniqueness
 			if ($this->is_not_unique ("SchoolName", $original,

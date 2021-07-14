@@ -114,12 +114,8 @@ class Project extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate ($original)
+	protected function validate ($original = "NULL")
 	{
-		//set empty original to NULL if adding
-		if ($original == false)
-			$original = "NULL";
-
 		$valid = $this->invalidate_blanks
 		(
 			array

@@ -54,14 +54,11 @@ class Category extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate ($original)
+	protected function validate ($original = "NULL")
 	{
 		//invalidate blank category name
 		if ($this->invalidate_blanks (array ("CategoryName" => "Category name")))
 		{
-			if ($original == false)
-				$original = "NULL";
-
 			//category name uniqnuess
 			if ($this->is_not_unique ("CategoryName", $original))
 			{

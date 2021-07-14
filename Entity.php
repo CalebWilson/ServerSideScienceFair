@@ -45,17 +45,6 @@ abstract class Entity
 
 	} //end function __construct()
 
-	/*
-		select identifying data from records
-
-		Must return an associative array of length 2 mapping column => value, with
-		the first column being the primary key of the concrete Entity's table,
-		selected as 'ID', and the second column being an identifying string to
-		display, selected as 'selection'. The code in view.php depends upon this
-		format.
-	*/
-	abstract public function display_data();
-
 	//show upload buttons if necessary
 	public function upload_button()
 	{
@@ -113,7 +102,7 @@ abstract class Entity
 			unset ($this->fields['selected']);
 
 			//validate input in add mode
-			if ($this->validate (false))
+			if ($this->validate ())
 			{
 				//update database
 				$this->insert();
@@ -414,6 +403,17 @@ abstract class Entity
 		return $valid;
 
 	} //end function invalidate_blanks()
+
+	/*
+		select identifying data from records
+
+		Must return an associative array of length 2 mapping column => value, with
+		the first column being the primary key of the concrete Entity's table,
+		selected as 'ID', and the second column being a representative string to
+		display, selected as 'selection'. The code in view.php depends upon this
+		format.
+	*/
+	abstract public function display_data();
 
 	//check whether data has been submitted
 	abstract protected function submitted ($post);

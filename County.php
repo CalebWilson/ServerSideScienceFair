@@ -52,29 +52,29 @@ class County extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate ($original)
+	protected function validate ($original = "NULL")
 	{
 		//invalidate blank county name
 		if ($this->invalidate_blanks (array ("CountyName" => "County name")))
 
-		//uniqueness
+		//if not blank, check uniqueness
 		{
-			if ($original == false)
-				$original = "NULL";
-
 			if ($this->is_not_unique ("CountyName", $original))
 			{
 				$this->msgs['CountyName'] =
 					"There is already a County with this name.";
 
+				//not unique
 				return false;
 			}
 
+			//valid
+			return true;
+
 		} //end uniqueness
 
-		else return false;
-
-		return true;
+		//blank
+		return false;
 
 	} //end function validate()
 
