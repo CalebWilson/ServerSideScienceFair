@@ -16,6 +16,7 @@
 
 			<?php print($msg) ?>
 			
+			<!-- BoothNum -->
 			<label for="BoothNum">Booth Number:</label>
 			<input
 				type="number"
@@ -25,14 +26,16 @@
 			><br>
 
 			<?php
-				if (isset ($msgs['BoothNum']))
-					print($msgs['BoothNum']);
+				if (isset ($this->msgs['BoothNum']))
+					print($this->msgs['BoothNum']);
 
+				//preserve selected
 				if (isset($post['selected'][0]))
 					print ('<input type="hidden" name="selected[]" value="' .
 						$post['selected'][0] . '">'); 
 			?>
 
+			<!-- Submit -->
 			<button type="submit" name="action"
 				value="<?php print($action) ?>" class="btn">Submit</button>
 

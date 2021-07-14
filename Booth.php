@@ -52,8 +52,9 @@ class Booth extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original = "NULL")
 	{
+/*
 		//validity
 		if ($this->fields['BoothNum'] == "")
 		{
@@ -64,10 +65,12 @@ class Booth extends Entity
 
 		//uniqueness
 		else
-		{
-			if ($original == false)
-				$original = "NULL";
+*/
 
+		if ($this->invalidate_blanks (array ("BoothNum" => "Booth number")))
+		{
+			if ($this->is_not_unique ("BoothNum", $original))
+			/*
 			//test if there is another Booth with this BoothNum
 			$query = $this->connection->prepare
 			("
@@ -81,15 +84,22 @@ class Booth extends Entity
 			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
 
 			if ($count !== "0")
+			*/
 			{
-				$msgs['BoothNum'] = "There is already a booth with this number.";
+				$this->msgs['BoothNum'] =
+					"There is already a booth with this number.";
 
+				//not unique
 				return false;
 			}
 
+			//not blank and unique
+			return true;
+
 		} //end uniqueness
 
-		return true;
+		//blank
+		return false;
 
 	} //end validate()
 
@@ -131,7 +141,7 @@ class Booth extends Entity
 	protected function confirm_add()
 	{
 		$msg = 'Successfully added Booth ' . $this->fields['BoothNum'];
-		return '<font color = green>' . $msg . '</font><br>';
+		return '<font color = green>' . $msg . '.</font><br>';
 
 	} //end function confirm_add()
 
@@ -139,7 +149,7 @@ class Booth extends Entity
 	protected function confirm_edit()
 	{
 		$msg = 'Successfully modified Booth ' . $this->fields['BoothNum'];
-		return '<font color = green>' . $msg . '</font><br>';
+		return '<font color = green>' . $msg . '.</font><br>';
 
 	} //end function confirm_edit()
 
