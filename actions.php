@@ -18,7 +18,7 @@
 					"student"       => "Students",
 					"project"       => "Projects",
 					"category"      => "Project Categories",
-					"grade"         => "Project Grades",
+					"grade"         => "Grade Levels",
 					"booth"         => "Booths",
 					"judge"         => "Judges",
 					"session"       => "Judge Sessions",
