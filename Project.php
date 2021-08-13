@@ -9,9 +9,9 @@
 
 <?php
 
-include "Entity.php";
+include "AutofillNumberEntity.php";
 
-class Project extends Entity
+class Project extends AutofillNumberEntity
 {
 	//id of project for use in autofill_ProjectNum
 	private $project_id;
@@ -36,57 +36,6 @@ class Project extends Entity
 		);
 
 	} //end constructor
-
-	//autofill ProjectNum, used by insert() and update()
-	private function autofill_ProjectNum()
-	{
-		if ($this->fields['ProjectNum'] == "")
-		{
-			$query_string = "";
-
-			//if project already has a ProjectNum, get it
-			if (isset ($this->project_id))
-			{
-				$query =
-				"
-					select ProjectNum
-					from Project
-					where ProjectID = " . $this->project_id
-				;
-			}
-
-			//otherwise, generate a new one
-			else
-			{
-				$query = 
-				"
-					select MAX(ProjectNum) + 1 as ProjectNum
-					from Project
-					where Year = YEAR(CURDATE())
-				";
-			}
-
-			$record_set = $this->connection->query($query);
-
-			$this->fields['ProjectNum'] =
-				$record_set->fetch(PDO::FETCH_ASSOC)['ProjectNum'];
-		}
-
-	} //end function autofill_ProjectNum()
-
-	//override Entity::edit to save ID for autofill_ProjectNum
-	public function edit ($post)
-	{
-		//capture ID
-		if (isset ($post['selected']) && count($post['selected']) === 1)
-		{
-			$this->project_id = $post['selected'][0];
-		}
-
-		//continue with normal edit
-		parent::edit ($post);
-
-	} //end function edit()
 
 	/* Override abstract methods */
 	//select identifying data from records
@@ -169,13 +118,15 @@ class Project extends Entity
 	//insert data from fields array into database
 	protected function insert()
 	{
-		$this->autofill_ProjectNum();
+		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
+
+		$this->print_fields();
 
 		$query = $this->connection->prepare
 		("
 			insert into
-				Project (BoothID, CategoryID, ProjectNum, Title, Abstract)
-				values  (      ?,        ?,          ?,     ?,        ?)
+				Project (Title, CategoryID, ProjectNum, BoothID, Abstract)
+				values  (      ?,          ?,          ?,     ?,        ?)
 		");
 
 		$query->execute (array_values($this->fields));
@@ -185,16 +136,16 @@ class Project extends Entity
 	//update database with data from fields array
 	protected function update()
 	{
-		$this->autofill_ProjectNum();
+		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
 
 		$query = $this->connection->prepare(
 		"
 			update Project
 			set
-				BoothID    = ?,
+				Title      = ?,
 				CategoryID = ?,
 				ProjectNum = ?,
-				Title      = ?,
+				BoothID    = ?,
 				Abstract   = ?
 			where ProjectID = ?
 		");

@@ -2,16 +2,16 @@
 
 	Session.php
 
-	Session is a class that inherits from Entity, overriding abstract methods to
-	achieve polymorphic behavior.
+	Session is a class that inherits from AutofillNumberEntity, overriding abstract
+	methods from Entity to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "Entity.php";
+include "AutofillNumberEntity.php";
 
-class Session extends Entity
+class Session extends AutofillNumberEntity
 {
 	//constructor
 	function __construct ($connection)
@@ -57,36 +57,30 @@ class Session extends Entity
 	}
 
 	//validate field entries and update msgs array
-	protected function validate (&$msgs, $original)
+	protected function validate ($original = "NULL")
 	{
-		$valid = true;
-
-		//start time not empty
-		if ($this->fields['StartTime'] == "")
-		{
-			$valid = false;
-			$msgs['StartTime'] = "Start Time cannot be empty.";
-		}
+		$valid = $this->invalidate_blanks (
+			array ("StartTime" => "Start Time", "EndTime" => "End Time")
+		);
 
 		//start time valid format
-		elseif ($this->valid_datetime ($this->fields['StartTime']) == false)
+		if ($this->fields['StartTime'] !== "")
 		{
-			$valid = false;
-			$msgs['StartTime'] = "Invalid datetime format.";
-		}
-
-		//end time not empty
-		if ($this->fields['EndTime'] == "")
-		{
-			$valid = false;
-			$msgs['EndTime'] = "End Time cannot be empty.";
+			if ($this->valid_datetime ($this->fields['StartTime']) == false)
+			{
+				$valid = false;
+				$this->msgs['StartTime'] = "Invalid datetime format.";
+			}
 		}
 
 		//end time valid format
-		elseif ($this->valid_datetime ($this->fields['EndTime']) == false)
+		if ($this->fields['EndTime'] !== "")
 		{
-			$valid = false;
-			$msgs['EndTime'] = "Invalid datetime format.";
+			if ($this->valid_datetime ($this->fields['EndTime']) == false)
+			{
+				$valid = false;
+				$this->msgs['EndTime'] = "Invalid datetime format.";
+			}
 		}
 
 		//SessionNum
@@ -109,7 +103,7 @@ class Session extends Entity
 			if ($count !== "0")
 			{
 				$valid = false;
-				$msgs['SessionNum'] = "There is already a session with this number.";
+				$this->msgs['SessionNum'] = "There is already a session with this number.";
 			}
 
 		} //end SessionNum uniqueness check
@@ -171,7 +165,7 @@ class Session extends Entity
 	//insert data from fields array into database
 	protected function insert()
 	{
-		$this->autofill_SessionNum();
+		$this->autofill_number ("SessionNum");
 
 		$query = $this->connection->prepare
 		("
@@ -187,7 +181,7 @@ class Session extends Entity
 	//update database with data from fields array
 	protected function update()
 	{
-		$this->autofill_SessionNum();
+		$this->autofill_number ("SessionNum");
 
 		$query = $this->connection->prepare
 		("

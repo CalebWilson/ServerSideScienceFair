@@ -45,6 +45,14 @@ abstract class Entity
 
 	} //end function __construct()
 
+	protected function print_fields()
+	{
+		foreach ($this->fields as $field => $value)
+		{
+			print ($field . " => " . $value . "<br>");
+		}
+	}
+
 	//show upload buttons if necessary
 	public function upload_button()
 	{
@@ -422,9 +430,9 @@ abstract class Entity
 		validate field entries and update msgs array
 
 		When validating an edit, $original should be the ID of the record being
-		edited, and the boolean value false otherwise.
+		edited, and omitted when validating an add.
 	*/
-	abstract protected function validate ($original);
+	abstract protected function validate ($original = "NULL");
 
 	//return an array of option arrays for the form to use
 	abstract protected function get_options();
