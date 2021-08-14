@@ -47,6 +47,14 @@ class Category extends Entity
 
 	} //end function display_data()
 
+	//display the body of the form for adding or editing a Category
+	protected function display_form_body ($action)
+	{
+		//Category Name
+		$this->display_input ("text", "CategoryName", "Category Name");
+
+	} //end function display_form_body()
+
 	//check whether data has been submitted
 	protected function submitted ($post)
 	{

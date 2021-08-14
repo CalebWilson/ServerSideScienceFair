@@ -58,6 +58,42 @@ class Administrator extends Entity
 
 	} //end function display_data();
 
+	//display the body of the form for adding or editing an Administrator
+	protected function display_form_body ($action)
+	{
+		//Name
+		$this->display_input ("text", "FirstName", "First Name");
+		$this->display_input ("text", "MiddleName", "Middle Name");
+		$this->display_input ("text", "LastName", "Last Name");
+
+		//Email
+		$this->display_input ("text", "Email", "Email");
+
+		//Username
+		$this->display_input ("text", "Username", "Username");
+
+		//Password
+		$password_label = "Password";
+		if ($action == "edit")
+			$password_label = "New Password";
+
+		$this->display_input ("password", "Password", $password_label);
+		$this->display_input ("password", "pass_conf", "Confirm " . $password_label);
+
+		//AuthorityLevel
+		$this->display_dropdown
+		(
+			"AuthorityLevel",
+			"Authority Level",
+			[
+				["name" => "Normal Admin", "AuthorityLevel" => 2],
+				["name" =>  "Super Admin", "AuthorityLevel" => 1]
+			],
+			"name"
+		);
+
+	} //end function display_form_body
+
 	//only show action buttons if the administrator has sufficient authority
 	public function buttons()
 	{

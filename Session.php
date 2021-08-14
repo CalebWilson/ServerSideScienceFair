@@ -50,6 +50,21 @@ class Session extends AutofillNumberEntity
 
 	} //end function display_data();
 
+	//display the body of the form for adding or editing a Session
+	protected function display_form_body ($action)
+	{
+		//SessionNum
+		$this->display_input ("number", "SessionNum", "Session Number");
+		print
+		("
+			If this field is left blank, a session number will be auto-generated.<br>
+		");
+
+		$this->display_input ("datetime-local", "StartTime", "Session Start Time");
+		$this->display_input ("datetime-local", "EndTime", "Session EndTime");
+
+	} //end function display_form_body()
+
 	//check whether data has been submitted
 	protected function submitted ($post)
 	{

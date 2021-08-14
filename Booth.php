@@ -45,6 +45,14 @@ class Booth extends Entity
 
 	} //end function display_data();
 
+	//display the body of the form for adding or editing a Booth
+	protected function display_form_body ($action)
+	{
+		//BoothNum
+		$this->display_input ("number", "BoothNum", "Booth Number");
+
+	} //end function display_form_body()
+
 	//check whether data has been submitted
 	protected function submitted ($post)
 	{
@@ -54,37 +62,9 @@ class Booth extends Entity
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
-/*
-		//validity
-		if ($this->fields['BoothNum'] == "")
-		{
-			$msgs['BoothNum'] = "Booth Number cannot be empty.";
-
-			return false;
-		}
-
-		//uniqueness
-		else
-*/
-
 		if ($this->invalidate_blanks (array ("BoothNum" => "Booth number")))
 		{
 			if ($this->is_not_unique ("BoothNum", $original))
-			/*
-			//test if there is another Booth with this BoothNum
-			$query = $this->connection->prepare
-			("
-				select count(*) as 'count'
-				from Booth
-				where BoothNum = ? AND
-				NOT BoothID <=> " . $original //NULL-safe equals operator
-			);
-
-			$query->execute(array($this->fields['BoothNum']));
-			$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-			if ($count !== "0")
-			*/
 			{
 				$this->msgs['BoothNum'] =
 					"There is already a booth with this number.";

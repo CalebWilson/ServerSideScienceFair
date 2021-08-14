@@ -48,6 +48,24 @@ class School extends Entity
 
 	} //end function display_data();
 
+	//display the body of the form for adding or editing a School
+	protected function display_form_body ($action)
+	{
+		//School Name
+		$this->display_input ("text", "SchoolName", "School Name");
+
+		//County
+		$this->display_dropdown
+		(
+			"CountyID",
+			"County",
+			$this->get_options(),
+			"CountyName"
+		);
+
+	} //end function display_form_body()
+
+
 	//check whether data has been submitted
 	protected function submitted ($post)
 	{

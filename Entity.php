@@ -45,9 +45,9 @@ abstract class Entity
 
 	} //end function __construct()
 
-	protected function print_fields()
+	protected function print_assoc ($arr)
 	{
-		foreach ($this->fields as $field => $value)
+		foreach ($arr as $field => $value)
 		{
 			print ($field . " => " . $value . "<br>");
 		}
@@ -95,6 +95,156 @@ abstract class Entity
 		return $admin['AuthorityLevel'];
 	}
 
+	//display the beginning of the form
+	protected function display_form_header ($action)
+	{
+		include "admin_check.php";
+
+		$this->print_assoc ($this->fields);
+
+		print
+		('
+			<div class = "wrapper">
+			<title>' . ucfirst($action) . ' ' . $this->table . '</title>
+
+			<div class="main-f">
+				<h1><strong>' . $action . ' ' . $this->table . '</strong></h1>
+				<div class="form-s">
+					<form action="Admin.php?view=' . $this->view . '" method="post" >
+		');
+
+	} //end function display_form_header()
+
+	//display_form_body declared with other abstract methods
+
+	//display the end of the form
+	protected function display_form_footer ($action, $post)
+	{
+		//preserve selected
+		if (isset($post['selected'][0]))
+		{
+			print ('<input type="hidden" name="selected[]" value="' .
+				$post['selected'][0] . '">'); 
+		}
+
+		//submit button and end of form
+		print
+		('
+						<button type="submit" name="action"
+							value="' . $action . '" class="btn">Submit</button>
+
+					</form>
+				</div>
+
+				<form action="Admin.php?view=' . $this->view . '" method="post" class="back-btn">
+					<button type="submit">Back</button>
+				</form>
+
+			</div>
+			</div>
+		');
+
+	} //end function display_form_footer()
+
+	//display the form in its entirety
+	protected function display_form ($action, $msg, $post)
+	{
+		$this->print_assoc ($post);
+
+		$this->display_form_header ($action);
+
+		print($msg);
+
+		$this->display_form_body ($action);
+
+		$this->display_form_footer ($action, $post);
+
+	} //end function display_form()
+
+	//display the error message for a field
+	private function display_input_error ($field)
+	{
+		if (isset ($this->msgs[$field]))
+			print ($this->msgs[$field]);
+
+	} //end display_input_error()
+
+	/*
+		display a dropdown menu
+
+		$field: the name of the identifier that the dropdown will give its value to
+		$label: the user-facing label for $field
+		$options: an array of dropdown options
+		$option_label: the index of the user-facing label for dropdown options
+	*/
+	protected function display_dropdown ($field, $label, $options, $option_label)
+	{
+		//begin dropdown
+		print
+		('
+			<label for="' . $field . '">' . $label . ':</label>
+			<select name="' . $field . '" id="' . $field . '">
+		');
+
+		//blank option
+		print ('<option value=""</option>');
+
+		//actual options
+		foreach ($options as $option)
+		{
+			print ("<option value=" . $option[$field]);
+
+				//maintain selection
+				if ($option[$field] === $this->fields[$field])
+					print (" selected");
+
+			print(">" . $option[$option_label] . "</option>");
+		}
+
+		//end dropdown
+		print('</select><br>');
+
+		//error message
+		$this->display_input_error ($field);
+
+	} //end function display_dropdown
+
+	//display a text input
+	protected function display_text_input ($field, $label)
+	{
+		print
+		('
+			<label for="' . $field . '">' . $label . ':</label>
+			<input
+				type="text"
+				name="' . $field . '"
+				value="' . $this->fields[$field] . '"
+			><br>
+		');
+
+		//error message
+		$this->display_input_error ($field);
+
+	} //end function display_text_input()
+
+	//display a password input
+	protected function display_password_input ($field, $label)
+	{
+		print
+		('
+			<label for="' . $field . '">' . $label . ':</label>
+			<input
+				type="password"
+				name="' . $field . '"
+				value="' . $this->fields[$field] . '"
+			><br>
+		');
+
+		//error message
+		$this->display_input_error ($field);
+
+	} //end function display_password_input()
+
 	//display the page for adding a new record to the table
 	public function add ($post)
 	{
@@ -110,7 +260,7 @@ abstract class Entity
 			unset ($this->fields['selected']);
 
 			//validate input in add mode
-			if ($this->validate ())
+			if ($this->validate())
 			{
 				//update database
 				$this->insert();
@@ -145,13 +295,16 @@ abstract class Entity
 			} //end if invalid input
 
 		} //end if data submitted
-
+/*
 		//get necessary options from database
 		$options = $this->get_options();
 
 		//print form
 		$action = "add";
 		include $this->view . ".php";
+*/
+
+		$this->display_form ("add", $msg, $post);
 
 		include "footer.php";
 
@@ -422,6 +575,8 @@ abstract class Entity
 		format.
 	*/
 	abstract public function display_data();
+	
+	abstract protected function display_form_body ($action);
 
 	//check whether data has been submitted
 	abstract protected function submitted ($post);

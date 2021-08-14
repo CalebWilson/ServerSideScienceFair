@@ -60,6 +60,55 @@ class Student extends Entity
 
 	} //end function display_data();
 
+	//display the body of the form for adding or editing a Student
+	protected function display_form_body ($action)
+	{
+		//get dropdown options from the database
+		$options = $this->get_options();
+
+		//School
+		$this->display_dropdown
+		(
+			"SchoolID",
+			"School",
+			$options['schools'],
+			"SchoolName"
+		);
+
+		//Name
+		$this->display_input ("text", "FirstName", "First Name");
+		$this->display_input ("text", "MiddleName", "Middle Name");
+		$this->display_input ("text", "LastName", "Last Name");
+
+		//Gender
+		$this->display_dropdown
+		(
+			"Gender",
+			"Gender",
+			[["Gender" => "Male"], ["Gender" => "Female"], ["Gender" => "Other"]],
+			"Gender"
+		);
+
+		//Project
+		$this->display_dropdown
+		(
+			"ProjectID",
+			"Project",
+			$options['projects'],
+			"Title"
+		);
+
+		//Grade
+		$this->display_dropdown
+		(
+			"GradeID",
+			"Grade",
+			$options['grades'],
+			"GradeNum"
+		);
+
+	} //end function display_form_body()
+
 	//check whether data has been submitted
 	protected function submitted ($post)
 	{

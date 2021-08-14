@@ -45,6 +45,14 @@ class Grade extends Entity
 
 	} //end function display_data();
 
+	//display the body of the form for adding or editing a Grade
+	protected function display_form_body ($action)
+	{
+		//Grade Level
+		$this->display_input ("number", "GradeNum", "Grade Level");
+
+	} //end function display_form_body()
+
 	//check whether data has been submitted
 	protected function submitted ($post)
 	{

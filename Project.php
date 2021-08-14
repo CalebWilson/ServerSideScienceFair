@@ -55,6 +55,49 @@ class Project extends AutofillNumberEntity
 		return $records;
 
 	} //end function display_data();
+
+	//display the body of the form for adding or editing a Project
+	protected function display_form_body ($action)
+	{
+		$options = $this->get_options();
+
+		//Project Title
+		$this->display_input ("text", "Title", "Title");
+
+		//Category
+		$this->display_dropdown
+		(
+			"CategoryID",
+			"Category",
+			$options['categories'],
+			"CategoryName"
+		);
+
+		//ProjectNum
+		$this->display_input ("number", "ProjectNum", "Project Number");
+		print ("Leave this field blank to auto-generate a new project number.<br>");
+
+		//Booth
+		$this->display_dropdown
+		(
+			"BoothID",
+			"Booth",
+			$options['booths'],
+			"BoothNum"
+		);
+
+		//Abstract
+		print
+		('
+			<label for="Abstract">Abstract:</label>
+			<textarea
+				placeholder="Enter project description"
+				name="Abstract"
+				class="p-desc">' . $this->fields['Abstract'] . '
+			</textarea>
+		');
+
+	} //end function display_form_body()
 	
 	//check whether data has been submitted
 	protected function submitted ($post)
