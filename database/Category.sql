@@ -1,4 +1,4 @@
-use casawils_db;
+use ScienceFair;
 
 drop table if exists Category;
 

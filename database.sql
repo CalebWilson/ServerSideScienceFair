@@ -1,4 +1,4 @@
-use casawils_db;
+use ;
 
 drop table if exists Administrator;
 

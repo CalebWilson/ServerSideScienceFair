@@ -4,7 +4,7 @@
 
 	try
 	{
-		$connection = new PDO("mysql:host=localhost;dbname=casawils_db", "casawils", "casawils");
+		$connection = new PDO("mysql:host=localhost;dbname=ScienceFair", "casawils", "casawils");
 	}
 	catch (PDOException $e)
 	{

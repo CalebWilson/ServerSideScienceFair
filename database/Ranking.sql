@@ -1,4 +1,4 @@
-use casawils_db;
+use ScienceFair;
 
 create or replace view Ranking
 as

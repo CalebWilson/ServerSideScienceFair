@@ -1,4 +1,5 @@
-use casawils_db;
+create database if not exists ScienceFair;
+use ScienceFair;
 
 drop table if exists Administrator;
 
