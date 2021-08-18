@@ -13,7 +13,7 @@ create table Schedule (
 
 	-- Score out of 100
 	Score decimal (5, 2),
-		CHECK (Score >= 0),--  AND Score <= 100.00),
+		CHECK (Score >= 0), --  AND Score <= 100.00),
 	
 	Rank int,
 
