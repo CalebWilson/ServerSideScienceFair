@@ -23,7 +23,9 @@
 	<header>
 		<div class="width">
 
+				<!--
 				<img src="image.png" alt="Image temporarily removed for debugging purposes :)" class="img-nav">
+				-->
 			<nav>
 
 					<span>

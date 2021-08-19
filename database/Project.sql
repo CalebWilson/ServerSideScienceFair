@@ -31,8 +31,8 @@ show warnings;
 
 -- test
 insert into
-	Project (BoothID, CategoryID, ProjectNum,  Title, Abstract, AverageRanking, Year)
-	values  (      1,          2,          1, "Test", "Test",                1, 2020)
+	Project (BoothID, CategoryID, ProjectNum,  Title, Abstract, AverageRanking,            Year)
+	values  (      1,          2,          1, "Test", "Test",                1, YEAR(CURDATE()))
 ;
 
 select * from Project;
