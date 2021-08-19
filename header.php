@@ -27,7 +27,7 @@
 			<nav>
 
 					<span>
-						<a href="http://corsair.cs.iupui.edu:24601/register.php">
+						<a href="http://127.0.0.1:8000/register.php">
 							Register
 						</a>
 					</span>
@@ -38,7 +38,7 @@
 						{
 							echo
 							'<span>
-								<a href="http://corsair.cs.iupui.edu:24601/schedule.php">
+								<a href="http://127.0.0.1:8000/schedule.php">
 									Schedule
 								</a>
 							</span>';
@@ -48,7 +48,7 @@
 						{ 
 							echo
 							'<span>
-								<a href="http://corsair.cs.iupui.edu:24601/Judge.php">
+								<a href="http://127.0.0.1:8000/Judge.php">
 									Judge Login
 								</a>
 							</span>';
@@ -58,7 +58,7 @@
 						{ 
 							echo
 							'<span>
-								<a href="http://corsair.cs.iupui.edu:24601/Admin.php">
+								<a href="http://127.0.0.1:8000/Admin.php">
 									Admin Login
 								</a>
 							</span>';
