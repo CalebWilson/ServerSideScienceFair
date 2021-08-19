@@ -2,17 +2,37 @@
 
 	$project_records = $connection->query
 	("
-		select Title, BoothNum
+		select distinct Title, BoothNum
 		from Schedule, Project, Booth
 		where
 			Schedule.ProjectID = Project.ProjectID and
 			Project.BoothID    = Booth.BoothID
+		order by BoothNum
 	");
 	$projects = $project_records->fetchAll (PDO::FETCH_ASSOC);
 
-	$sess
+	$judging_records = $connection->query
+	("
+		select
+			Schedule.SessionID as SessionID, StartTime, EndTime,
+			Booth.BoothNum as BoothNum,
+			Judge.Title as Title, FirstName, LastName
+		from Schedule, Session, Judge, Project, Booth
+		where
+			Schedule.SessionID = Session.SessionID and
+			Schedule.JudgeID   = Judge.JudgeID     and
+			Schedule.ProjectID = Project.ProjectID and
+			Project.BoothID    = Booth.BoothID
+		order by StartTime, BoothNum
+	");
+
+	$judgings = $judging_records->fetchAll (PDO::FETCH_ASSOC);
+
+	$cur_session = $judgings[0]['SessionID'];
+	$cur_booth   = $judgings[0]['BoothNum'];
 
 ?>
+
 <div class="wrapper">
 <div class="full-schedule">
 
@@ -20,8 +40,8 @@
 
 <table class="schedule-table">
 
-	<th>
-		<td class="schedule-cell"></td>
+	<thead>
+		<th class="schedule-cell"></th>
 
 		<?php
 
@@ -29,20 +49,49 @@
 			{
 				print
 				(
-					'<td class="schedule-cell">Booth ' . $project['BoothNum'] .
+					'<th class="schedule-cell">Booth ' . $project['BoothNum'] .
 						':<br>' .  $project['Title'] .
-					'</td>'
+					'</th>'
 				);
 			}
 		?>
 
 	</th>
+	</thead>
 
-	<?php
+	<tbody>
 
-		//foreach ($
+		<tr>
+			<td class="schedule-cell">
 
-	?>
+			<?php
+
+				foreach ($judgings as $judging)
+				{
+					//if row over
+					if ($judging['SessionID'] != $cur_session)
+					{
+						//end cell, update current booth
+						//end row, update current session
+						//begin new row
+						//begin new cell
+					}
+
+					//if cell over
+					else if ($judging['BoothNum'] != $cur_booth)
+					{
+						//end cell, update current booth
+						//begin new cell
+					}
+
+					//print judge name
+				}
+
+
+			?>
+
+			</td>
+		</tr>
 	
 
 </table>
