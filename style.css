@@ -159,11 +159,17 @@ a {
 
 label {
   display: inline-block;
-  padding: 10px 0px;
-  padding-right: 58%;
   font-size: 20px;
+  padding: 10px 0px;
+  /*
+  padding-right: 58%;
   width: 200px;
-  margin: 5px;
+  */
+  width: 100%;
+}
+
+.field {
+	margin: 50px;
 }
 
 .form-s {

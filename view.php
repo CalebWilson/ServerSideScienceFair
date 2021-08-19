@@ -14,7 +14,8 @@
 	if (isset($_POST['action']))
 	{
 		//do the desired action on the desired records of the entity
-		$msg = $entity->$_POST['action']($_POST);
+		$action = $_POST['action'];
+		$msg = $entity->$action($_POST);
 
 		switch ($_POST['action'])
 		{
