@@ -163,13 +163,11 @@ class Project extends AutofillNumberEntity
 	{
 		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
 
-		$this->print_fields();
-
 		$query = $this->connection->prepare
 		("
 			insert into
 				Project (Title, CategoryID, ProjectNum, BoothID, Abstract)
-				values  (      ?,          ?,          ?,     ?,        ?)
+				values  (    ?,          ?,          ?,       ?,        ?)
 		");
 
 		$query->execute (array_values($this->fields));

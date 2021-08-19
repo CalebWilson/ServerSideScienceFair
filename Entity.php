@@ -100,8 +100,6 @@ abstract class Entity
 	{
 		include "admin_check.php";
 
-		$this->print_assoc ($this->fields);
-
 		print
 		('
 			<div class = "wrapper">
@@ -149,8 +147,6 @@ abstract class Entity
 	//display the form in its entirety
 	protected function display_form ($action, $msg, $post)
 	{
-		$this->print_assoc ($post);
-
 		$this->display_form_header ($action);
 
 		print($msg);
@@ -244,6 +240,8 @@ abstract class Entity
 			//validate input in add mode
 			if ($this->validate())
 			{
+				$this->print_assoc ($this->fields);
+
 				//update database
 				$this->insert();
 
@@ -277,14 +275,6 @@ abstract class Entity
 			} //end if invalid input
 
 		} //end if data submitted
-/*
-		//get necessary options from database
-		$options = $this->get_options();
-
-		//print form
-		$action = "add";
-		include $this->view . ".php";
-*/
 
 		$this->display_form ("add", $msg, $post);
 
