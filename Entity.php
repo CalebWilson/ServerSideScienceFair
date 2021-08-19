@@ -240,8 +240,6 @@ abstract class Entity
 			//validate input in add mode
 			if ($this->validate())
 			{
-				$this->print_assoc ($this->fields);
-
 				//update database
 				$this->insert();
 
@@ -362,8 +360,7 @@ abstract class Entity
 			$options = $this->get_options();
 
 			//display form
-			$action = "edit";
-			include $this->view . ".php";
+			$this->display_form ("edit", $msg, $post);
 
 			exit();
 

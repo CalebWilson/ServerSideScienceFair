@@ -1,7 +1,5 @@
 <?php
 
-	print($_SESSION['Judge']);
-
 	$records = $connection->query
 	("
 		select

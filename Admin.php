@@ -27,6 +27,8 @@
 				include "actions.php";
 			elseif ($_GET ['view'] == "checkin")
 				include "checkin.php";
+			elseif ($_GET ['view'] == "schedule")
+				include "full_schedule.php";
 			else
 				include "view.php";
 		}

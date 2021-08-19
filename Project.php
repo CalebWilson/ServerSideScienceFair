@@ -163,6 +163,8 @@ class Project extends AutofillNumberEntity
 	{
 		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
 
+		$this->print_assoc ($this->fields);
+
 		$query = $this->connection->prepare
 		("
 			insert into
@@ -178,6 +180,8 @@ class Project extends AutofillNumberEntity
 	protected function update()
 	{
 		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
+
+		$this->print_assoc ($this->fields);
 
 		$query = $this->connection->prepare(
 		"

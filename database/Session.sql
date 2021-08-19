@@ -12,7 +12,7 @@ create table Session (
 	SessionNum int      NOT NULL, -- user-friendly Session number
 	StartTime  datetime NOT NULL,
 	EndTime    datetime,
-	Active     bool     NOT NULL, -- whether the timeslot includes the current time
+	Active     bool     default false, -- whether the timeslot includes the current time
 
 	UNIQUE (SessionNum),
 

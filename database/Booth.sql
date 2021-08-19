@@ -9,7 +9,6 @@ show warnings;
 create table Booth (
 	BoothID     int  NOT NULL AUTO_INCREMENT,
 	BoothNum    int  NOT NULL, #user-friendly Booth number
-	Active      bool NOT NULL,
 
 	UNIQUE (BoothNum),
 
@@ -20,8 +19,8 @@ show warnings;
 
 #test
 insert into
-	Booth  (BoothNum, Active)
-	values (          1,  false)
+	Booth  (BoothNum)
+	values (       1)
 ;
 
 select * from Booth;
