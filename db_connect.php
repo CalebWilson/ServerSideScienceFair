@@ -4,11 +4,11 @@
 
 	try
 	{
-		$connection = new PDO("mysql:host=localhost;dbname=ScienceFair", "casawils", "casawils");
+		$connection = new PDO("mysql:host=localhost;dbname=ScienceFair", "server", "server");
 	}
 	catch (PDOException $e)
 	{
-		print("<p>Error connecting to database</p><br>");
+		print("<p>Error connecting to database: " . $e->__toString() . "</p><br>");
 	}
 
 ?>

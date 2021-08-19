@@ -15,7 +15,7 @@ create table Schedule (
 	Score decimal (5, 2),
 		CHECK (Score >= 0), --  AND Score <= 100.00),
 	
-	Rank int,
+	Ranking int,
 
 	UNIQUE (SessionID, JudgeID),   -- a judge cannot judge multiple projects at the same time
 	UNIQUE (ProjectID, JudgeID),   -- a judge cannot judge the same project more than once
@@ -45,7 +45,7 @@ create procedure ScoreProject(in newProjectID int, in newJudgeID int, in newScor
 begin
 
 	declare better int;
-	declare newRank int;
+	declare newRanking int;
 	declare oldScore decimal(4, 2);
 
 	declare exit handler for 1442 begin end;
@@ -62,14 +62,14 @@ begin
 	-- demote projects with scores worse than new score
 	then
 		update Schedule
-		set Rank = Rank + 1
+		set Ranking = Ranking + 1
 		where Score < newScore and
 		JudgeID = newJudgeID;
 
 	else
 	-- demote projects with scores worse than new score, but better than old score
 		update Schedule
-		set Rank = Rank + 1
+		set Ranking = Ranking + 1
 		where
 			Score < newScore and
 			Score > oldScore and
@@ -77,7 +77,7 @@ begin
 
 	-- promote projects with scores better than new score, but worse than old score
 		update Schedule
-		set Rank = Rank - 1
+		set Ranking = Ranking - 1
 		where
 			Score > newScore and
 			Score < oldScore and
@@ -93,13 +93,13 @@ begin
 		JudgeID = newJudgeID;
 
 	if better = 0 then
-		set newRank = 1;
+		set newRanking = 1;
 
 	-- else replace best project below it
 	else
 		-- get the rank of the worst project above it
-		select max(Rank) + 1
-		into newRank
+		select max(Ranking) + 1
+		into newRanking
 		from Schedule
 		where
 			Score > newScore and
@@ -110,7 +110,7 @@ begin
 	update Schedule
 	set
 		Score = newScore,
-		Rank  = newRank
+		Ranking  = newRanking
 	where
 		JudgeID   = newJudgeID and
 		ProjectID = newProjectID;

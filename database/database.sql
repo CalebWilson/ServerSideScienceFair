@@ -49,7 +49,7 @@ show warnings;
 source Schedule.sql;
 show warnings;
 
-source Ranking.sql
+source Ranking_vw.sql
 show warnings;
 
 source Administrator.sql;

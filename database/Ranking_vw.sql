@@ -1,12 +1,12 @@
 use ScienceFair;
 
-create or replace view Ranking
+create or replace view Ranking_vw
 as
 	select
 		ProjectNum as RankingID,
 		ProjectNum,
 		Title,
-		AVG(Rank) as AvgRank
+		AVG(Ranking) as AvgRank
 	from
 		Schedule,
 		Project
