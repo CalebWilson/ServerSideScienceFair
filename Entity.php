@@ -210,13 +210,13 @@ abstract class Entity
 	} //end function display_dropdown
 
 	//display a text input
-	protected function display_text_input ($field, $label)
+	protected function display_input ($type, $field, $label)
 	{
 		print
 		('
 			<label for="' . $field . '">' . $label . ':</label>
 			<input
-				type="text"
+				type="' . $type . '"
 				name="' . $field . '"
 				value="' . $this->fields[$field] . '"
 			><br>
@@ -226,24 +226,6 @@ abstract class Entity
 		$this->display_input_error ($field);
 
 	} //end function display_text_input()
-
-	//display a password input
-	protected function display_password_input ($field, $label)
-	{
-		print
-		('
-			<label for="' . $field . '">' . $label . ':</label>
-			<input
-				type="password"
-				name="' . $field . '"
-				value="' . $this->fields[$field] . '"
-			><br>
-		');
-
-		//error message
-		$this->display_input_error ($field);
-
-	} //end function display_password_input()
 
 	//display the page for adding a new record to the table
 	public function add ($post)
