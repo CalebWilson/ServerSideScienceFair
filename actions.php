@@ -22,6 +22,7 @@
 					"booth"         => "Booths",
 					"judge"         => "Judges",
 					"session"       => "Judge Sessions",
+					"schedule"      => "Schedule",
 					"ranking"       => "Project Rankings"
 				);
 

@@ -80,5 +80,10 @@
 			?>
 
 		</table> 
+
+		<form action="Admin.php?view=actions" method="get" class="back-btn">
+			<button type="submit">Back</button>
+		</form>
+
 	</div>
 </div>
