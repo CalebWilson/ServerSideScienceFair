@@ -36,6 +36,7 @@ source Grade.sql;
 show warnings;
 
 source Student.sql;
+show warnings;
 
 source Degree.sql;
 show warnings;
@@ -49,7 +50,13 @@ show warnings;
 source Schedule.sql;
 show warnings;
 
+source FullSchedule_vw.sql;
+show warnings;
+
 source Ranking_vw.sql
+show warnings;
+
+source ScoreProject_proc.sql;
 show warnings;
 
 source Administrator.sql;

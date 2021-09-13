@@ -3,14 +3,13 @@
 	$project_records = $connection->query
 	("
 		select distinct Title, BoothNum
-		from Schedule, Project, Booth
-		where
-			Schedule.ProjectID = Project.ProjectID and
-			Project.BoothID    = Booth.BoothID
+		from Project, Booth
+		where Project.BoothID    = Booth.BoothID
 		order by BoothNum
 	");
 	$projects = $project_records->fetchAll (PDO::FETCH_ASSOC);
 
+/*
 	$judging_records = $connection->query
 	("
 		select
@@ -25,7 +24,9 @@
 			Project.BoothID    = Booth.BoothID
 		order by StartTime, BoothNum
 	");
+*/
 
+	$judging_records = $connection->query ("select * from FullSchedule_vw");
 	$judgings = $judging_records->fetchAll (PDO::FETCH_ASSOC);
 
 	$cur_session = $judgings[0]['SessionID'];
@@ -62,29 +63,65 @@
 	<tbody>
 
 		<tr>
-			<td class="schedule-cell">
+			<td class="schedule-cell"> <?php
+				print($judgings[0]['StartTime'] .  " - " .  $judgings[0]['EndTime']);
+			?> </td>
+			
+			<td class="schedule-cell"> <?php
+				print
+				(
+					$judgings[0]['Title']     . " " .
+					$judgings[0]['FirstName'] . " " .
+					$judgings[0]['LastName']  .
+					"<br/>"
+				);
+				
+			?> </td>
 
 			<?php
 
-				foreach ($judgings as $judging)
+				foreach (array_slice ($judgings, 1) as $judging)
 				{
-					//if row over
+					//if new row
 					if ($judging['SessionID'] != $cur_session)
 					{
-						//end cell, update current booth
-						//end row, update current session
-						//begin new row
-						//begin new cell
+						//end previous row and begin new row
+						print
+						('
+								</td>
+							</tr>
+
+							<tr>
+								<td class="schedule-cell">' .
+									$judging['StartTime'] . ' - ' . $judging['EndTime'] . '
+								</td>
+
+								<td class="schedule-cell">
+						');
+
+						//update booth and session
+						$cur_booth = $judging['BoothNum'];
+						$cur_session = $judging['SessionID'];
 					}
 
-					//if cell over
+					//if new cell
 					else if ($judging['BoothNum'] != $cur_booth)
 					{
-						//end cell, update current booth
-						//begin new cell
+						//end previous cell and begin new cell
+						print('</td><td class="schedule-cell">');
+
+						//update booth
+						$cur_booth = $judging['BoothNum'];
 					}
 
-					//print judge name
+					//print judge
+					print
+					(
+						$judging['Title']     . " " .
+						$judging['FirstName'] . " " .
+						$judging['LastName']  .
+						"<br/>"
+					);
 				}
 
 
