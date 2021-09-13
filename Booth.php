@@ -1,4 +1,3 @@
-
 <!--
 
 	Booth.php
@@ -98,7 +97,7 @@ class Booth extends Entity
 				values (?)
 		");
 
-		$query->execute(array_values($this->fields))
+		$query->execute(array_values($this->fields));
 
 	} //end function insert()
 

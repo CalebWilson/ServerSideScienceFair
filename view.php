@@ -124,7 +124,7 @@
 */
 ?>
 
-<title><?php print ($entity->title) ?></title>
+<title>Hello</title>
 <div class="wrapper">
 
 <div class="main-f">
