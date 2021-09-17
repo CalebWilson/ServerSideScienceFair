@@ -20,6 +20,7 @@ create table Project (
 
 	UNIQUE (ProjectNum, year),
 	UNIQUE (Title, year),
+	UNIQUE (BoothID, year),
 
 	PRIMARY KEY (ProjectID),
 	FOREIGN KEY (BoothID)    REFERENCES Booth (BoothID)
@@ -37,7 +38,6 @@ insert into
 
 select * from Project;
 
-
 -- year insertion
 drop trigger if exists ProjectYear;
 
@@ -53,6 +53,36 @@ end;
 //
 delimiter ;
 
+-- booth modification
+drop procedure if exists UpdateProjectBooth;
+
+delimiter //
+
+create procedure UpdateProjectBooth (in oldProjectID int, in newBoothID int)
+begin
+
+	declare oldBoothID int;
+	
+	select max(BoothID)
+		into oldBoothID
+		from Project
+		where ProjectID = oldProjectID;
+
+	update Project
+	set BoothID = null
+	where ProjectID = oldProjectID;
+
+	update Project
+	set BoothID = oldBoothID
+	where BoothID = newBoothID;
+
+	update Project
+	set BoothID = newBoothID
+	where ProjectID = oldProjectID;
+
+end;
+//
+delimiter ;
 
 -- deletion
 drop trigger if exists ProjectDelete;

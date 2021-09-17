@@ -78,6 +78,17 @@ class Project extends AutofillNumberEntity
 		print ("Leave this field blank to auto-generate a new project number.<br>");
 
 		//Booth
+		foreach ($options['booths'] as &$booth)
+		{
+			if ($booth['HasProject'])
+			{
+				$booth['BoothNum'] =
+					'<font color="red">' . $booth['BoothNum'] . '</font><br>';
+			}
+
+			unset ($booth['HasProject']);
+		}
+
 		$this->display_dropdown
 		(
 			"BoothID",
@@ -85,6 +96,7 @@ class Project extends AutofillNumberEntity
 			$options['booths'],
 			"BoothNum"
 		);
+		print ("Selecting a Booth already in use will cause the Project using it to swap Booths with this Project.<br>");
 
 		//Abstract
 		print
@@ -120,11 +132,26 @@ class Project extends AutofillNumberEntity
 
 		/* uniqueness */
 		$year_condition = "Year = YEAR(CURDATE())";
+
+		//Title
 		if ($this->is_not_unique ("Title", $original, $year_condition))
 		{
 			$valid = false;
+
 			$this->msgs['Title'] =
 				"There is already a project with that title this year.";
+		}
+
+		//Booth
+		if (!isset ($this->id))
+		{
+			if ($this->is_not_unique ("BoothID", $original, $year_condition))
+			{
+				$valid = false;
+
+				$this->msgs['BoothID'] =
+					"There is already a project at that booth this year.";
+			}
 		}
 
 		//Project Number
@@ -146,7 +173,15 @@ class Project extends AutofillNumberEntity
 		$options = array();
 
 		//BoothNums
-		$record_set = $this->connection->query ("select BoothID, BoothNum from Booth");
+		$record_set = $this->connection->query
+		("
+			select
+				Booth.BoothID, Booth.BoothNum,
+				ProjectID is not null as HasProject
+				from
+					Booth left join
+					Project on Project.BoothID = Booth.BoothID
+		");
 		$options['booths'] = $record_set->fetchAll();
 
 		//Categories
@@ -183,19 +218,26 @@ class Project extends AutofillNumberEntity
 
 		$this->print_assoc ($this->fields);
 
-		$query = $this->connection->prepare(
-		"
+		$query = $this->connection->prepare ("call UpdateProjectBooth (?, ?)");
+		$query->execute ([$this->fields['ID'], $this->fields['BoothID']]);
+
+		$booth = $this->fields['BoothID'];
+		unset ($this->fields['BoothID']);
+
+		$query = $this->connection->prepare
+		("
 			update Project
 			set
 				Title      = ?,
 				CategoryID = ?,
 				ProjectNum = ?,
-				BoothID    = ?,
 				Abstract   = ?
 			where ProjectID = ?
 		");
 
 		$query->execute (array_values($this->fields));
+
+		$this->fields['BoothID'] = $booth;
 
 	} //end function update()
 
