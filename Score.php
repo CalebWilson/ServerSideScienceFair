@@ -1,9 +1,11 @@
 <?php
 
+include "Entity.php";
+
 class Score extends Entity
 {
 	//constructor
-	protected function __construct ($connection)
+	function __construct ($connection)
 	{
 		parent::__construct ($connection);
 
@@ -22,7 +24,7 @@ class Score extends Entity
 	public function display_data()
 	{
 		//get projects from the current year
-		$this->connection->prepare
+		$record_set = $this->connection->query
 		("
 			select Judging.JudgingID as ID,
 			concat ('Booth ', Booth.BoothNum, ': ', Project.Title) as selection
@@ -30,7 +32,7 @@ class Score extends Entity
 			where
 				Judging.ProjectID = Project.ProjectID         and
 				Project.BoothID   = Booth.BoothID             and
-				Judging.JudgingID = " . $SESSION['Judge'] . " and
+				Judging.JudgingID = " . $_SESSION['Judge'] . " and
 				Year = YEAR(CURDATE())
 		");
 
@@ -85,11 +87,18 @@ class Score extends Entity
 	//validate score
 	protected function validate ($original = "NULL")
 	{
-		$this->invalidate_blanks ("ProjectID" => "Project", "Score" => "Score");
+		$this->invalidate_blanks
+		(
+			array
+			(
+				"ProjectID" => "Project",
+				"Score" => "Score"
+			)
+		);
 
 		if ($this->fields['Score'] < 0 || 100 < $this->fields['Score'])
 		{
-			$this->msgs['Score'] = "Score must be between 0 and 100."
+			$this->msgs['Score'] = "Score must be between 0 and 100.";
 		}
 
 	} //end function validate
@@ -117,7 +126,7 @@ class Score extends Entity
 		");
 		$query_params = 
 
-		$query->execute (array ($SESSION['Judge'], $this->fields['ProjectID']));
+		$query->execute (array ($_SESSION['Judge'], $this->fields['ProjectID']));
 		$scored = $query->fetch (PDO::FETCH_ASSOC)['count'] > 0;
 
 		//query to be executed
@@ -153,7 +162,7 @@ class Score extends Entity
 			array
 			(
 				$this->fields['Score'],
-				$SESSION['Judge'],
+				$_SESSION['Judge'],
 				$this->fields['ProjectID']
 			)
 		);

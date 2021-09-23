@@ -1,6 +1,9 @@
 <?php
 
-	include "admin_check.php";
+	if ($_SESSION['user_type'] == "Judge")
+		include "judge_check.php";
+
+	else include "admin_check.php";
 
 	//initialize concrete Entity
 	$classname = ucfirst($_GET['view']);
@@ -17,114 +20,13 @@
 		$action = $_POST['action'];
 		$msg = $entity->$action($_POST);
 
-		switch ($_POST['action'])
-		{
-			case "Checkin":
-				if (count($_POST['selected']) === 0)
-					$msg = '<font color="red">Please select a judge to check in.</font>';
-				else
-				{
-					$updated = 0;
-					foreach ($_POST['selected'] as $id)
-					{
-						if ($connection->exec
-						("
-							update Judge
-							set Active = 1
-							where JudgeID = " . $id
-						))
-						{
-							$updated ++;
-						}
-					}
-					$s = "";
-					if (count($_POST['selected']) > 1)
-						$s = "s";
-
-					$msg = '<font color="green">' . $updated . ' judge' . $s . ' checked in.</font><br>';
-				}
-				break;
-
-			case "Checkout":
-				if (count($_POST['selected']) === 0)
-				{
-					$msg =
-						'<font color="red"
-							>Please select a judge to check out.<
-						/font>'
-					;
-				}
-				else
-				{
-					$updated = 0;
-					foreach ($_POST['selected'] as $id)
-					{
-						if ($connection->exec
-						("
-							update Judge
-							set Active = 0
-							where JudgeID = " . $id
-						))
-						{
-							$updated ++;
-						}
-					}
-					$s = "";
-					if (count($_POST['selected']) > 1)
-						$s = "s";
-
-					$msg = '<font color="green">' . $updated . ' judge' . $s . ' checked out.</font><br>';
-				}
-				break;
-
-		} //end switch on action
-
 	} //end if submitted
-
-	//get the selection to display
-	$selection = "";
-	$show_buttons = true; //whether add, edit, and delete are shown
-	switch ($_GET['view'])
-	{
-		case "category":
-			$selection = "CategoryName";
-			break;
-		case "county":
-			$selection = "CountyName";
-			break;
-		case "grade":
-			$selection = "GradeNum";
-			break;
-		case "ranking":
-			$selection = 'CONCAT
-			(
-				RPAD (ProjectNum, 3, " "), " ",
-				RPAD (LEFT (Title, 15), 16, " "),
-				AvgRank
-			)'; 
-			$show_buttons = false;
-			break;
-		case "judge":
-			$selection = 'CONCAT (Title, " ", FirstName, " ", LastName, " ", Active)';
-			break;
-	} //end switch on view
 
 	//get records
 	$records = $entity->display_data();
-/*
-	$record_set = $connection->query
-	("
-		select " .
-			$table . "ID as ID," .
-			$selection . " as selection
-		from " . $table
-	);
-	$records = $record_set->fetchAll();
-	$record_set->closeCursor();
-*/
+
 ?>
 
-<title>Hello</title>
 <div class="wrapper">
 
 <div class="main-f">

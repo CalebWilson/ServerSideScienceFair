@@ -11,8 +11,8 @@
 	{
 		require_once "header.php";
 
-		//display the file associated with the chosen action
-		include "score.php";
+		$_GET ['view'] = "score";
+		include "view.php";
 	}
 
 	//if the judge is not logged in yet, make them log in
