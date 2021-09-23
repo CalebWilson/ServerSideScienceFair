@@ -4,8 +4,8 @@ drop table if exists County;
 
 show warnings;
 
-#counties in which schools are located
-#referenced by School
+-- counties in which schools are located
+-- referenced by School
 create table County (
 	CountyID           int NOT NULL AUTO_INCREMENT,
 	CountyName varchar(50) NOT NULL,
@@ -17,7 +17,7 @@ create table County (
 
 show warnings;
 
-#test
+-- test
 insert into
 	County (CountyName)
 	values

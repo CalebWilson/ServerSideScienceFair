@@ -13,10 +13,8 @@ create table Project (
 	ProjectNum      int         NOT NULL, -- user-friendly Project number
 	Title           varchar(50) NOT NULL, -- Project Name
 	Abstract        varchar(200),         -- Project description
-	AverageRanking  int,                  -- average ranking of the Project from the Judges who have judged it
 
-	CourseNetworkID int,          -- no clue what this is but whatever
-	Year            year NOT NULL, -- the year the project was presented
+	Year            year default 0, -- the year the project was presented
 
 	UNIQUE (ProjectNum, year),
 	UNIQUE (Title, year),
@@ -30,14 +28,6 @@ create table Project (
 
 show warnings;
 
--- test
-insert into
-	Project (BoothID, CategoryID, ProjectNum,  Title, Abstract, AverageRanking,            Year)
-	values  (      1,          2,          1, "Test", "Test",                1, YEAR(CURDATE()))
-;
-
-select * from Project;
-
 -- year insertion
 drop trigger if exists ProjectYear;
 
@@ -47,11 +37,22 @@ create trigger ProjectYear before insert on Project
 for each row
 begin
 
-	set new.Year = YEAR(CURDATE());
+	if new.Year = 0 then
+		set new.Year = YEAR(CURDATE());
+	end if;
 
 end;
 //
 delimiter ;
+
+-- test
+insert into
+	Project (BoothID, CategoryID, ProjectNum,  Title, Abstract)
+	values  (      1,          1,          1, "Test",   "Test"),
+	        (      2,          2,          2,  "New",    "New")
+;
+
+select * from Project;
 
 -- booth modification
 drop procedure if exists UpdateProjectBooth;

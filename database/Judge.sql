@@ -13,7 +13,7 @@ create table Judge (
 	MiddleName varchar(50),
 	LastName   varchar(50)  NOT NULL,
 	Title      varchar(50), -- e.g. Dr, Professor, etc.
-	Degree     int          NOT NULL, #highest degree earned
+	Degree     int          NOT NULL, -- highest degree earned
 	Employer   varchar(50),
 
 	Email      varchar(50) NOT NULL,
@@ -28,15 +28,15 @@ create table Judge (
 	CatPref2 int,
 	CatPref3 int,
 
-	LowerGradePref int NOT NULL, #lowest grade level the judge would prefer to judge
-	UpperGradePref int NOT NULL, #highest grade level the judge would prefer to judge
+	LowerGradePref int NOT NULL, -- lowest grade level the judge would prefer to judge
+	UpperGradePref int NOT NULL, -- highest grade level the judge would prefer to judge
 
-	#make sure no category preferences are identical within one judge record
+	-- make sure no category preferences are identical within one judge record
 	CHECK (CatPref2 != CatPref1),
 	CHECK (CatPref3 != CatPref1 AND CatPref3 != CatPref2),
 
-	UNIQUE (   Email, Year), #no two judges should have the same email the same year
-	UNIQUE (Username, Year), #no two judges should have the same username the same year
+	UNIQUE (   Email, Year), -- no two judges should have the same email the same year
+	UNIQUE (Username, Year), -- no two judges should have the same username the same year
 
 	PRIMARY KEY (JudgeID),
 
@@ -52,11 +52,12 @@ create table Judge (
 
 show warnings;
 
-#test
+-- test
 insert into
 	Judge  (FirstName, MiddleName, LastName,    Title,    Degree,   Employer,        Email, Username, Password, year, CatPref1, LowerGradePref, UpperGradePref, Active)
 	values ( "Tfirst",  "Tmiddle",  "Tlast", "Ttitle",         4, "Test Emp", "test@t.com",   "user",   "pass", 2020,        1,              9,             12, 0),
-	       (  "judge",    "judge",  "judge",  "judge",         4,    "judge",      "judge",  "judge",  "judge", 2020,        1,              9,             12, 0)
+	       ( "judge1",   "judge1", "judge1", "judge1",         4,   "judge1",     "judge1", "judge1", "judge1", 2020,        1,              9,             12, 0),
+	       ( "judge2",   "judge2", "judge2", "judge2",         4,   "judge2",     "judge2", "judge2", "judge2", 2020,        1,              9,             12, 0)
 ;
 
 select * from Judge;

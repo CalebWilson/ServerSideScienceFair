@@ -3,7 +3,7 @@ use ScienceFair;
 
 drop table if exists Administrator;
 
-drop table if exists Schedule;
+drop table if exists Judging;
 drop table if exists Session;
 drop table if exists Judge;
 drop table if exists Degree;
@@ -44,19 +44,7 @@ show warnings;
 source Judge.sql;
 show warnings;
 
-source Session.sql;
-show warnings;
-
-source Schedule.sql;
-show warnings;
-
-source FullSchedule_vw.sql;
-show warnings;
-
-source Ranking_vw.sql
-show warnings;
-
-source ScoreProject_proc.sql;
+source Judging.sql;
 show warnings;
 
 source Administrator.sql;
