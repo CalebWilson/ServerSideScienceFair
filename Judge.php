@@ -12,7 +12,7 @@
 		require_once "header.php";
 
 		//display the file associated with the chosen action
-		include "full_schedule.php";
+		include "score.php";
 	}
 
 	//if the judge is not logged in yet, make them log in

@@ -198,8 +198,6 @@ class Project extends AutofillNumberEntity
 	{
 		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
 
-		$this->print_assoc ($this->fields);
-
 		$query = $this->connection->prepare
 		("
 			insert into
@@ -257,7 +255,7 @@ class Project extends AutofillNumberEntity
 
 	} //end function confirm_edit()
 
-	//set fields array to columns and values of target record from database
+	//set fields to current database values of the record to be edited
 	protected function prefill ($target)
 	{
 		$record_set = $this->connection->query
@@ -271,3 +269,5 @@ class Project extends AutofillNumberEntity
 	} //end function prefill()
 
 } //end class Project
+
+?>

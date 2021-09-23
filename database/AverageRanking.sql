@@ -1,5 +1,6 @@
-select
-	ProjectID, avg(Ranking) as AvgRanking
+create or replace view AverageRanking
+as
+	select ProjectID, avg(Ranking) as AvgRank
 	from
 	(
 		select
@@ -11,6 +12,3 @@ select
 
 	group by ProjectID
 ;
-
-
--- select ProjectID, JudgeID, avg(Score)

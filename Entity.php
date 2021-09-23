@@ -171,7 +171,7 @@ abstract class Entity
 		$field: the name of the identifier that the dropdown will give its value to
 		$label: the user-facing label for $field
 		$options: an array of dropdown options
-		$option_label: the index of the user-facing label for dropdown options
+		$option_label: the index of the user-facing label for each dropdown option
 	*/
 	protected function display_dropdown ($field, $label, $options, $option_label)
 	{
@@ -515,8 +515,13 @@ abstract class Entity
 
 	} //end function is_not_unique()
 
-	//set the error message for any blank field in the $labels array
-	//return false if any of the fields are blank; return true otherwise
+	/*
+		Set the error message for any blank field in the $labels array. Return false
+		if any of the fields are blank; return true otherwise.
+
+		$labels must be an associative array mapping field identifiers to their
+		user-facing labels.
+	*/
 	protected function invalidate_blanks ($labels)
 	{
 		$valid = true;
@@ -537,11 +542,13 @@ abstract class Entity
 	/*
 		select identifying data from records
 
-		Must return an associative array of length 2 mapping column => value, with
-		the first column being the primary key of the concrete Entity's table,
-		selected as 'ID', and the second column being a representative string to
-		display, selected as 'selection'. The code in view.php depends upon this
-		format.
+		Must return an array of associative arrays, each of the form:
+		(
+			"ID"        => [concrete Entity's primary key],
+			"selection" => [a string to display that represents a record]
+		).
+
+		The code in view.php depends upon this format.
 	*/
 	abstract public function display_data();
 	
@@ -573,7 +580,7 @@ abstract class Entity
 	//confirm an edit operation
 	abstract protected function confirm_edit();
 
-	//return an array of fields and values of the target record from the database
+	//set fields to current database values of the record to be edited
 	abstract protected function prefill ($target);
 
 } //end class Entity

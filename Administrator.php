@@ -38,7 +38,7 @@ class Administrator extends Entity
 	//select identifying data from records
 	public function display_data()
 	{
-		//get records
+		//get administrators
 		$record_set = $this->connection->query
 		("
 			select
@@ -53,7 +53,6 @@ class Administrator extends Entity
 		$records = $record_set->fetchAll();
 		$record_set->closeCursor();
 
-		//return records
 		return $records;
 
 	} //end function display_data();
