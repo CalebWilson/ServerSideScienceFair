@@ -2,16 +2,16 @@
 
 	County.php
 
-	County is a class that inherits from Entity, overriding abstract methods to
-	achieve polymorphic behavior.
+	County is a class that inherits from AdminEntity, overriding abstract methods
+	to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "Entity.php";
+include "AdminEntity.php";
 
-class County extends Entity
+class County extends AdminEntity
 {
 	//constructor
 	function __construct ($connection)

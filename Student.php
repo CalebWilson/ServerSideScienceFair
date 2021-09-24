@@ -2,16 +2,16 @@
 
 	Student.php
 
-	Student is a class that inherits from Entity, overriding abstract methods to
-	achieve polymorphic behavior.
+	Student is a class that inherits from AdminEntity, overriding abstract methods
+	to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "Entity.php";
+include "AdminEntity.php";
 
-class Student extends Entity
+class Student extends AdminEntity
 {
 	//constructor
 	function __construct ($connection)

@@ -38,7 +38,8 @@
 		print($entity->upload_button());
 	?>
 
-	<form action="Admin.php?view=<?php print ($_GET['view']) ?>" method="post">
+	<?php print($entity->display_data_header()) ?>
+
 		<div class="data-box">
 		
 			<script>
@@ -89,10 +90,6 @@
 		</div>
 		<?php
 			print($entity->buttons());
-/*
-			if ($show_buttons)
-			{
-*/
 				if ($_GET['view'] == 'judge')
 					print
 					('
@@ -104,9 +101,8 @@
 	?>
 	</form>
 
-	<form action="Admin.php?view=actions" method="get" class="back-btn">
-		<button type="submit">Back</button>
-	</form>
+	<?php print ($entity->back_button()) ?>
+
 </div>
 </div>
 </div>

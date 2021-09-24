@@ -2,16 +2,16 @@
 
 	School.php
 
-	School is a class that inherits from Entity, overriding abstract methods to
-	achieve polymorphic behavior.
+	School is a class that inherits from AdminEntity, overriding abstract methods
+	to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "Entity.php";
+include "AdminEntity.php";
 
-class School extends Entity
+class School extends AdminEntity
 {
 	//constructor
 	function __construct ($connection)

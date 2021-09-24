@@ -2,16 +2,16 @@
 
 	Administrator.php
 
-	Administrator is a class that inherits from Entity, overriding abstract methods
-	to achieve polymorphic behavior.
+	Administrator is a class that inherits from AdminEntity, overriding abstract
+	methods to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "Entity.php";
+include "AdminEntity.php";
 
-class Administrator extends Entity
+class Administrator extends AdminEntity
 {
 	//constructor
 	function __construct ($connection)

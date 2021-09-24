@@ -2,16 +2,16 @@
 
 	Category.php
 
-	Category is a class that inherits from Entity, overriding abstract methods to
-	achieve polymorphic behavior.
+	Category is a class that inherits from AdminEntity, overriding abstract methods
+	to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "Entity.php";
+include "AdminEntity.php";
 
-class Category extends Entity
+class Category extends AdminEntity
 {
 	//constructor
 	function __construct ($connection)

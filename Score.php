@@ -9,15 +9,13 @@ class Score extends Entity
 	{
 		parent::__construct ($connection);
 
+		$this->title = "Project Scores";
+
 		$this->fields = array("ProjectID" => "", "Score" => "");
 
+		print($this->form);
+
 	} //end constructor
-
-	public function buttons()
-	{
-		
-
-	} //end function buttons
 
 	/* Override abstract methods */
 	//display projects to score
@@ -26,9 +24,18 @@ class Score extends Entity
 		//get projects from the current year
 		$record_set = $this->connection->query
 		("
-			select Judging.JudgingID as ID,
-			concat ('Booth ', Booth.BoothNum, ': ', Project.Title) as selection
+			select
+				Judging.JudgingID as ID,
+				concat
+				(
+					'Booth ', Booth.BoothNum, ': ',
+					Project.Title, ' - ',
+					Judging.Score
+
+				) as selection
+
 			from Judging, Project, Booth
+
 			where
 				Judging.ProjectID = Project.ProjectID         and
 				Project.BoothID   = Booth.BoothID             and
@@ -42,6 +49,10 @@ class Score extends Entity
 		return $records;
 
 	} //end function display_data
+
+	//Score page has no back button
+	public function back_button()
+	{}
 
 	//display the body of the form for adding or editing an Administrator
 	protected function display_form_body ($action)
@@ -118,13 +129,12 @@ class Score extends Entity
 	private function insert_or_update()
 	{
 		//determine whether the project has been scored by this judge yet
-		$record_set = $this->connection->prepare
+		$query = $this->connection->prepare
 		("
 			select count(*) as count
 			from Judging
 			where JudgeID = ? and ProjectID = ?
 		");
-		$query_params = 
 
 		$query->execute (array ($_SESSION['Judge'], $this->fields['ProjectID']));
 		$scored = $query->fetch (PDO::FETCH_ASSOC)['count'] > 0;

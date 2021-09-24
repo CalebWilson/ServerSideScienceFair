@@ -14,8 +14,9 @@ abstract class Entity
 {
 	//names
 	protected $table; //table name
-	public  $title; //title of web page
+	public    $title; //title of web page
 	protected $view;  //name of view
+	protected $form;  //name of form entry point, e.g. "Admin" or "Judge"
 
 	//database connection
 	protected $connection;
@@ -36,6 +37,7 @@ abstract class Entity
 		$this->table = get_class($this);
 		$this->title = $this->table . 's';
 		$this->view  = strtolower ($this->table);
+		$this->form  = $_SESSION['user_type'];
 
 		//get database connection
 		$this->connection = $connection;
@@ -59,6 +61,21 @@ abstract class Entity
 		return "";
 	}
 
+	public function display_data_header()
+	{
+		$data_header =
+		'
+			<form
+				action="' . $this->form . '.php?' . 
+				'view=' . $this->view . '"
+				method="post"
+			>
+		';
+
+		return $data_header;
+
+	} //end function display_data_header
+
 	//show action buttons
 	public function buttons()
 	{
@@ -80,25 +97,29 @@ abstract class Entity
 
 	} //end function buttons();
 
-	//get admin's authority level
-	protected function get_authority()
+	//show back button
+	public function back_button()
 	{
-		$record_set = $this->connection->query
-		("
-			select AuthorityLevel
-			from Administrator
-			where AdministratorID = " . $_SESSION['Administrator']
-		);
+		$button = 
+		'
+			<form
+				action="' . $this->form . '.php?' .
+				'view=actions"
+				method="get"
+				class="back-btn"
+			>
+				<button type="submit">Back</button>
+			</form>
+		';
 
-		$admin = $record_set->fetch (PDO::FETCH_ASSOC);
+		return $button;
 
-		return $admin['AuthorityLevel'];
-	}
+	} //end function back_button
 
 	//display the beginning of the form
 	protected function display_form_header ($action)
 	{
-		include "admin_check.php";
+		include strtolower($this->form) . "_check.php";
 
 		print
 		('
@@ -108,7 +129,9 @@ abstract class Entity
 			<div class="main-f">
 				<h1><strong>' . $action . ' ' . $this->table . '</strong></h1>
 				<div class="form-s">
-					<form action="Admin.php?view=' . $this->view . '" method="post" >
+					<form ' .
+						'action="' . $this->form . '.php?' .  'view='   . $this->view . '" ' .  'method="post"
+					>
 		');
 
 	} //end function display_form_header()
@@ -125,17 +148,26 @@ abstract class Entity
 				$post['selected'][0] . '">'); 
 		}
 
-		//submit button and end of form
+		//submit button, back button, and end of form
 		print
 		('
-						<button type="submit" name="action"
-							value="' . $action . '" class="btn">Submit</button>
+						<button
+							type="submit"
+							name="action"
+							value="' . $action . '" 
+							class="btn"
+						>Submit</button>
 
 					</form>
 				</div>
 
-				<form action="Admin.php?view=' . $this->view . '" method="post" class="back-btn">
-					<button type="submit">Back</button>
+				<form
+					action="' . $this->form . '.php?' .
+					'view='   . $this->view . '"
+					method="post"
+					class="back-btn"
+				>
+						<button type="submit">Back</button>
 				</form>
 
 			</div>
@@ -226,6 +258,9 @@ abstract class Entity
 	//display the page for adding a new record to the table
 	public function add ($post)
 	{
+		//TODO remove
+		$this->print_assoc ($this->fields);
+
 		//main message
 		$msg  = "";
 
@@ -299,9 +334,13 @@ abstract class Entity
 		//count == 0
 		if (count($selected) === 0)
 		{
-			$msg = "Please select a"
-				. (($this->view == "administrator") ? "n " : " ")
-				. $this->view . " to view/edit."
+			$msg = "Please select a" .
+			(
+				in_array ($this->view[0], array ('a', 'e', 'i', 'o', 'u'))
+				?
+					"n " : " "
+			) .
+				$this->view . " to view/edit."
 			;
 		}
 
@@ -322,7 +361,7 @@ abstract class Entity
 				//validate input in edit mode
 				if ($this->validate ($post['selected'][0]))
 				{
-					//append ID to admin
+					//append ID
 					$this->fields["ID"] = $post['selected'][0];
 
 					//update database

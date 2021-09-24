@@ -2,16 +2,17 @@
 
 	Ranking.php
 
-	Ranking is a class that inherits from Entity. All abstract methods are left
-	blank except for display_data(), as rankings are read-only and not detailed.
+	Ranking is a class that inherits from AdminEntity. All abstract methods are
+	left blank except for display_data(), as rankings are read-only and not
+	detailed.
 
 -->
 
 <?php
 
-include "Entity.php";
+include "AdminEntity.php";
 
-class Ranking extends Entity
+class Ranking extends AdminEntity
 {
 	//constructor
 	function __construct ($connection)

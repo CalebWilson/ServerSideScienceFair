@@ -2,25 +2,29 @@
 
 	Project.php
 
-	Project is a class that inherits from Entity, overriding abstract methods
+	Project is a class that inherits from AdminEntity, overriding abstract methods
 	to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "AutofillNumberEntity.php";
+include "AdminEntity.php";
+include "AutofillNumber.php";
 
-class Project extends AutofillNumberEntity
+class Project extends AdminEntity
 {
 	//id of project for use in autofill_ProjectNum
 	private $project_id;
+
+	private $autofiller;
 
 	//constructor
 	function __construct ($connection)
 	{
 		//initialize $table, $title, $view, and $connection
 		parent::__construct ($connection);
+
 
 		//entity dependent on Project
 		$this->dependent = "student";
@@ -34,6 +38,8 @@ class Project extends AutofillNumberEntity
 			"Title"      => "",
 			"Abstract"   => ""
 		);
+
+		$this->autofiller = new AutofillNumber ($connection);
 
 	} //end constructor
 
@@ -110,6 +116,15 @@ class Project extends AutofillNumberEntity
 		');
 
 	} //end function display_form_body()
+
+	//override edit for autofilling
+	public function edit ($post)
+	{
+		$this->autofiller->set_id ($post);
+
+		parent::edit($post);
+
+	} //end function edit
 	
 	//check whether data has been submitted
 	protected function submitted ($post)
@@ -193,10 +208,23 @@ class Project extends AutofillNumberEntity
 
 	} //end function get_options()
 
+	//autofill number
+	private function autofill()
+	{
+		$this->autofiller->autofill_number
+		(
+			$this->fields,
+			"Project",
+			"ProjectNum",
+			"Year = YEAR(CURDATE())"
+		);
+
+	} //end function autofill
+
 	//insert data from fields array into database
 	protected function insert()
 	{
-		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
+		$this->autofill();
 
 		$query = $this->connection->prepare
 		("
@@ -212,7 +240,7 @@ class Project extends AutofillNumberEntity
 	//update database with data from fields array
 	protected function update()
 	{
-		$this->autofill_number ("ProjectNum", "Year = YEAR(CURDATE())");
+		$this->autofill();
 
 		$this->print_assoc ($this->fields);
 
