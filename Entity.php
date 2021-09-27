@@ -258,19 +258,22 @@ abstract class Entity
 	//display the page for adding a new record to the table
 	public function add ($post)
 	{
-		//TODO remove
-		$this->print_assoc ($this->fields);
-
 		//main message
 		$msg  = "";
 
 		//if data has been submitted, prefill
 		if ($this->submitted($post))
 		{
+			//initialize error message array
+			$this->msgs = array_fill_keys(array_keys($this->fields), "");
+
 			//copy POST data
 			$this->fields = $post;
 			unset ($this->fields['action']);
 			unset ($this->fields['selected']);
+
+			//TODO remove
+			$this->print_assoc ($this->fields);
 
 			//validate input in add mode
 			if ($this->validate())

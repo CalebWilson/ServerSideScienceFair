@@ -9,11 +9,10 @@ class Score extends Entity
 	{
 		parent::__construct ($connection);
 
+		$this->table = "Judging";
 		$this->title = "Project Scores";
 
 		$this->fields = array("ProjectID" => "", "Score" => "");
-
-		print($this->form);
 
 	} //end constructor
 
@@ -39,7 +38,7 @@ class Score extends Entity
 			where
 				Judging.ProjectID = Project.ProjectID         and
 				Project.BoothID   = Booth.BoothID             and
-				Judging.JudgingID = " . $_SESSION['Judge'] . " and
+				Judging.JudgeID   = " . $_SESSION['Judge'] . " and
 				Year = YEAR(CURDATE())
 		");
 
@@ -98,7 +97,7 @@ class Score extends Entity
 	//validate score
 	protected function validate ($original = "NULL")
 	{
-		$this->invalidate_blanks
+		$valid = $this->invalidate_blanks
 		(
 			array
 			(
@@ -110,7 +109,11 @@ class Score extends Entity
 		if ($this->fields['Score'] < 0 || 100 < $this->fields['Score'])
 		{
 			$this->msgs['Score'] = "Score must be between 0 and 100.";
+
+			$valid = false;
 		}
+
+		return $valid;
 
 	} //end function validate
 
@@ -128,6 +131,8 @@ class Score extends Entity
 	//score a project
 	private function insert_or_update()
 	{
+		print ("JudgeID: " . $_SESSION['Judge'] . "<br>");
+
 		//determine whether the project has been scored by this judge yet
 		$query = $this->connection->prepare
 		("
@@ -138,6 +143,8 @@ class Score extends Entity
 
 		$query->execute (array ($_SESSION['Judge'], $this->fields['ProjectID']));
 		$scored = $query->fetch (PDO::FETCH_ASSOC)['count'] > 0;
+
+		print("Scored: " . $scored);
 
 		//query to be executed
 		$query_string = "";
@@ -191,11 +198,7 @@ class Score extends Entity
 
 	protected function confirm_edit()
 	{
-		return
-			'<font color="green">' .
-				'Project successfully scored.' .
-			'</font><br>'
-		;
+		return $this->confirm_add();
 
 	} //end confirmation functions
 
