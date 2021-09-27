@@ -125,7 +125,7 @@ abstract class ReadOnlyEntity
 
 	protected function display_data_footer()
 	{
-		return '</div></form>' . $this->back_button() . '</div></div></div>';
+		return '</div></form><br/>' . $this->back_button() . '</div></div></div>';
 
 	} //end function display_data_footer
 

@@ -1,14 +1,22 @@
 create or replace view AverageRanking
 as
-	select ProjectID, avg(Ranking) as AvgRank
+	select
+		Project.ProjectID,
+		Project.ProjectNum,
+		Project.Title,
+		avg(rankings.Ranking) as AvgRank
+
 	from
-	(
-		select
-			ProjectID, JudgeID, Score,
-			ROW_NUMBER() OVER(partition by JudgeID order by Score desc) as Ranking
-		from Judging
+		Project,
+		(
+			select
+				ProjectID, JudgeID, Score,
+				ROW_NUMBER() OVER(partition by JudgeID order by Score desc) as Ranking
+			from Judging
 
-	) as Rankings
+		) as rankings
+	
+	where rankings.ProjectID = Project.ProjectID
 
-	group by ProjectID
+	group by Project.ProjectID
 ;

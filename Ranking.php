@@ -32,10 +32,10 @@ class Ranking extends ReadOnlyEntity
 		$record_set = $this->connection->query
 		("
 			select
-				RankingID as ID,
-				CONCAT (ProjectNum, ' ', Title, ' ', AvgRank) as selection
-			from Ranking
-			order by RankingID
+				CONCAT ('Project ', ProjectNum, ': ', Title, ' - ', AvgRank)
+					as selection
+			from AverageRanking
+			order by ProjectNum
 		");
 		$records = $record_set->fetchAll();
 		$record_set->closeCursor();
