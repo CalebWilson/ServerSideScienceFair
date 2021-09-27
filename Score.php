@@ -7,7 +7,7 @@ class Score extends Entity
 	//constructor
 	function __construct ($connection)
 	{
-		parent::__construct ($connection);
+		parent::__construct ($connection, $_SESSION['user_type']);
 
 		$this->table = "Judging";
 		$this->title = "Project Scores";
@@ -18,7 +18,7 @@ class Score extends Entity
 
 	/* Override abstract methods */
 	//display projects to score
-	public function display_data()
+	public function get_data()
 	{
 		//get projects from the current year
 		$record_set = $this->connection->query
@@ -47,7 +47,7 @@ class Score extends Entity
 
 		return $records;
 
-	} //end function display_data
+	} //end function get_data
 
 	//Score page has no back button
 	public function back_button()

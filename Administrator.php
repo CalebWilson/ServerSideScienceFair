@@ -2,16 +2,16 @@
 
 	Administrator.php
 
-	Administrator is a class that inherits from AdminEntity, overriding abstract
+	Administrator is a class that inherits from Entity, overriding abstract
 	methods to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "AdminEntity.php";
+include "Entity.php";
 
-class Administrator extends AdminEntity
+class Administrator extends Entity
 {
 	//constructor
 	function __construct ($connection)
@@ -36,7 +36,7 @@ class Administrator extends AdminEntity
 
 	/* Override abstract methods */
 	//select identifying data from records
-	public function display_data()
+	public function get_data()
 	{
 		//get administrators
 		$record_set = $this->connection->query
@@ -55,7 +55,7 @@ class Administrator extends AdminEntity
 
 		return $records;
 
-	} //end function display_data();
+	} //end function get_data();
 
 	//display the body of the form for adding or editing an Administrator
 	protected function display_form_body ($action)
@@ -96,9 +96,20 @@ class Administrator extends AdminEntity
 	//only show action buttons if the administrator has sufficient authority
 	public function buttons()
 	{
+		$record_set = $this->connection->query
+		("
+			select AuthorityLevel
+			from Administrator
+			where AdministratorID = " . $_SESSION['Administrator']
+		);
+
+		$admin = $record_set->fetch (PDO::FETCH_ASSOC);
+
 		//if authority level is 1, show buttons
-		if ($this->get_authority() === '1')
+		if ($admin['AuthorityLevel'] === '1')
+		{
 			return parent::buttons();
+		}
 
 		//insufficient authority
 		else

@@ -2,16 +2,16 @@
 
 	Grade.php
 
-	Grade is a class that inherits from AdminEntity, overriding abstract methods to
+	Grade is a class that inherits from Entity, overriding abstract methods to
 	achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "AdminEntity.php";
+include "Entity.php";
 
-class Grade extends AdminEntity
+class Grade extends Entity
 {
 	//constructor
 	function __construct ($connection)
@@ -29,7 +29,7 @@ class Grade extends AdminEntity
 
 	/* Override abstract methods */
 	//select identifying data from records
-	public function display_data()
+	public function get_data()
 	{
 		//get records
 		$record_set = $this->connection->query
@@ -43,7 +43,7 @@ class Grade extends AdminEntity
 		//return records
 		return $records;
 
-	} //end function display_data();
+	} //end function get_data();
 
 	//display the body of the form for adding or editing a Grade
 	protected function display_form_body ($action)

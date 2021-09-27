@@ -2,17 +2,17 @@
 
 	Project.php
 
-	Project is a class that inherits from AdminEntity, overriding abstract methods
+	Project is a class that inherits from Entity, overriding abstract methods
 	to achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "AdminEntity.php";
+include "Entity.php";
 include "AutofillNumber.php";
 
-class Project extends AdminEntity
+class Project extends Entity
 {
 	//id of project for use in autofill_ProjectNum
 	private $project_id;
@@ -45,7 +45,7 @@ class Project extends AdminEntity
 
 	/* Override abstract methods */
 	//select identifying data from records
-	public function display_data()
+	public function get_data()
 	{
 		//get records
 		$record_set = $this->connection->query
@@ -60,7 +60,7 @@ class Project extends AdminEntity
 		//return records
 		return $records;
 
-	} //end function display_data();
+	} //end function get_data();
 
 	//display the body of the form for adding or editing a Project
 	protected function display_form_body ($action)

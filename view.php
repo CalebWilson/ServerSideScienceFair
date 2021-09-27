@@ -1,44 +1,23 @@
 <?php
 
-	if ($_SESSION['user_type'] == "Judge")
-		include "judge_check.php";
-
-	else include "admin_check.php";
-
 	//initialize concrete Entity
 	$classname = ucfirst($_GET['view']);
 	include $classname . ".php";
 	$entity = new $classname ($connection);
 
-	//initialize potential error message
-	$msg = "";
-
-	//if submitted
-	if (isset($_POST['action']))
-	{
-		//do the desired action on the desired records of the entity
-		$action = $_POST['action'];
-		$msg = $entity->$action($_POST);
-
-	} //end if submitted
-
-	//get records
-	$records = $entity->display_data();
+	$records = $entity->display ($_POST);
 
 ?>
 
+<!--
 <div class="wrapper">
 
 <div class="main-f">
-	<h1><strong><?php print ($entity->title) ?></strong></h1>
-	<?php print("<p>". $msg . "</p>") ?>
+	<h1><strong><?php //print ($entity->title) ?></strong></h1>
+	<?php //print("<p>". $msg . "</p>") ?>
 	<div class="form-s">
-	<?php
-		//show buttons to upload csv
-		print($entity->upload_button());
-	?>
 
-	<?php print($entity->display_data_header()) ?>
+	<?php //print($entity->display_data_header()) ?>
 
 		<div class="data-box">
 		
@@ -56,6 +35,7 @@
 			//show records
 			//e.g. <input type="checkbox" name="selected" value=1 checked>Caleb Wilson</input><br>
 
+				/*
 				foreach ($records as $record)
 				{
 					print
@@ -84,25 +64,20 @@
 							$record['selection'] . '
 						</input></label></><br>
 					');
-				}	
+				}
+				*/
 			?>
 
 		</div>
+
 		<?php
-			print($entity->buttons());
-				if ($_GET['view'] == 'judge')
-					print
-					('
-					<div class="view-b">
-						<button type="submit" name="action" value="Checkin" class="btn">Check in</button>
-						<button type="submit" name="action" value="Checkout" class="btn">Check out</button>
-					</div>
-					');
+//			print($entity->buttons());
 	?>
 	</form>
 
-	<?php print ($entity->back_button()) ?>
+	<?php //print ($entity->back_button()) ?>
 
 </div>
 </div>
 </div>
+-->

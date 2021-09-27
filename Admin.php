@@ -25,21 +25,11 @@
 		{
 			if ($_GET ['view'] == "actions")
 				include "actions.php";
-			elseif ($_GET ['view'] == "checkin")
-				include "checkin.php";
-			elseif ($_GET ['view'] == "schedule")
-				include "full_schedule.php";
 			else
 				include "view.php";
 		}
 		else
 			include "actions.php";
-
-/*
-		//display the file associated with the chosen action
-		$filename = $_GET ['view'] . ".php";
-		include $filename;
-*/
 	}
 
 	//if the admin is not logged in yet, make them log in

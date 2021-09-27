@@ -2,16 +2,16 @@
 
 	Booth.php
 
-	Booth is a class that inherits from AdminEntity, overriding methods to
+	Booth is a class that inherits from Entity, overriding methods to
 	achieve polymorphic behavior.
 
 -->
 
 <?php
 
-include "AdminEntity.php";
+include "Entity.php";
 
-class Booth extends AdminEntity
+class Booth extends Entity
 {
 	//constructor
 	function __construct ($connection)
@@ -26,7 +26,7 @@ class Booth extends AdminEntity
 
 	/* Override abstract methods */
 	//select identifying data from records
-	public function display_data()
+	public function get_data()
 	{
 		//get records
 		$record_set = $this->connection->query
@@ -42,7 +42,7 @@ class Booth extends AdminEntity
 		//return records
 		return $records;
 
-	} //end function display_data();
+	} //end function get_data();
 
 	//display the body of the form for adding or editing a Booth
 	protected function display_form_body ($action)

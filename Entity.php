@@ -3,47 +3,37 @@
 	Entity.php
 
 	Entity is an abstract class designed to be a prototype for any entity whose
-	data will need to be viewed on the website. There will be default definitions
-	for most methods, but some methods will be up to the concretions to define.
+	data will need to be edited on the website. It inherits the functions to
+	display data, one of which remains abstract.
 
 -->
 
 <?php
 
-abstract class Entity
+include "ReadOnlyEntity.php";
+
+abstract class Entity extends ReadOnlyEntity
 {
-	//names
-	protected $table; //table name
-	public    $title; //title of web page
-	protected $view;  //name of view
-	protected $form;  //name of form entry point, e.g. "Admin" or "Judge"
-
-	//database connection
-	protected $connection;
-
 	//name of entity that is dependent on this
 	protected $dependent;
 
 	//associative array of fields and values
 	protected $fields;
 	
-	//associative array of fields and error messages
+	//main message, associative array of fields and error messages
+	protected $msg;
 	protected $msgs;
 
 	//constructor
-	protected function __construct ($connection)
+	protected function __construct ($connection, $form = "Admin")
 	{
-		//get name attributes from class name
-		$this->table = get_class($this);
-		$this->title = $this->table . 's';
-		$this->view  = strtolower ($this->table);
-		$this->form  = $_SESSION['user_type'];
-
-		//get database connection
-		$this->connection = $connection;
+		parent::__construct ($connection, $form);
 
 		//dependents
 		$this->dependents = "other entity";
+
+		//main error message
+		$this->msg = "";
 
 	} //end function __construct()
 
@@ -54,27 +44,6 @@ abstract class Entity
 			print ($field . " => " . $value . "<br>");
 		}
 	}
-
-	//show upload buttons if necessary
-	public function upload_button()
-	{
-		return "";
-	}
-
-	public function display_data_header()
-	{
-		$data_header =
-		'
-			<form
-				action="' . $this->form . '.php?' . 
-				'view=' . $this->view . '"
-				method="post"
-			>
-		';
-
-		return $data_header;
-
-	} //end function display_data_header
 
 	//show action buttons
 	public function buttons()
@@ -97,24 +66,104 @@ abstract class Entity
 
 	} //end function buttons();
 
-	//show back button
-	public function back_button()
+	//do the desired action if there is one, or display the data otherwise
+	public function display ($post)
 	{
-		$button = 
-		'
-			<form
-				action="' . $this->form . '.php?' .
-				'view=actions"
-				method="get"
-				class="back-btn"
-			>
-				<button type="submit">Back</button>
-			</form>
-		';
+		//if submitted
+		if (isset($post['action']))
+		{
+			//do the desired action on the desired records of the entity
+			$action = $post['action'];
+			$this->msg = $this->$action($post);
 
-		return $button;
+		} //end if submitted
 
-	} //end function back_button
+		parent::display($post);
+
+	} //end function display
+
+	protected function display_data_header()
+	{
+		$header = "<p>". $this->msg . "</p>";
+		$header = $header . parent::display_data_header();
+		
+		$header = $header .
+		"
+			<script>
+
+				function isChecked(elem)
+				{
+					elem.parentNode.style.background =
+						(elem.checked) ? '#ffa500' : 'none';
+				}
+
+			</script>
+
+		";
+
+		return $header;
+	}
+
+	protected function display_data_body ($post, $data)
+	{
+		$body = '';
+
+		//for each record
+		foreach ($data as $record)
+		{
+			$body = $body .
+			'
+				<label id="data">
+				<input 
+					 id="change"
+					type="checkbox"
+					name="selected[]"
+					class="check-d";
+					onchange="isChecked(this)"
+					value=' . $record['ID']
+			;
+
+			//preserve checkedness
+			if (isset ($post['selected']))
+			{
+				if (in_array($record['ID'], $post['selected']))
+					$body = $body . " checked";
+			}
+
+			$body = $body .
+			'
+				>  ' .
+					$record['selection'] . '
+				</input></label></><br>
+			';
+
+		} // end for each record
+
+		return $body;
+
+	} //end function display_data_body
+
+	protected function display_data_footer()
+	{
+		$footer = '</div>' . $this->buttons() . '</form>' . $this->back_button();
+		$footer = $footer . '</div></div></div>';
+
+		return $footer;
+
+	} //end function display_form_footer
+
+	//display the form in its entirety
+	protected function display_form ($action, $msg, $post)
+	{
+		$this->display_form_header ($action);
+
+		print($msg);
+
+		$this->display_form_body ($action);
+
+		$this->display_form_footer ($action, $post);
+
+	} //end function display_form()
 
 	//display the beginning of the form
 	protected function display_form_header ($action)
@@ -175,19 +224,6 @@ abstract class Entity
 		');
 
 	} //end function display_form_footer()
-
-	//display the form in its entirety
-	protected function display_form ($action, $msg, $post)
-	{
-		$this->display_form_header ($action);
-
-		print($msg);
-
-		$this->display_form_body ($action);
-
-		$this->display_form_footer ($action, $post);
-
-	} //end function display_form()
 
 	//display the error message for a field
 	private function display_input_error ($field)
@@ -407,6 +443,7 @@ abstract class Entity
 			exit();
 
 			return "";
+
 		} //end count === 1
 
 		//count > 1
@@ -581,19 +618,6 @@ abstract class Entity
 
 	} //end function invalidate_blanks()
 
-	/*
-		select identifying data from records
-
-		Must return an array of associative arrays, each of the form:
-		(
-			"ID"        => [concrete Entity's primary key],
-			"selection" => [a string to display that represents a record]
-		).
-
-		The code in view.php depends upon this format.
-	*/
-	abstract public function display_data();
-	
 	abstract protected function display_form_body ($action);
 
 	//check whether data has been submitted
