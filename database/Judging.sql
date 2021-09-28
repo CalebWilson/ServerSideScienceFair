@@ -21,8 +21,8 @@ create table Judging
 
 	PRIMARY KEY (JudgingID),
 
-	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID),
-	FOREIGN KEY (  JudgeID) REFERENCES Judge   (  JudgeID)
+	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID) on delete cascade,
+	FOREIGN KEY (  JudgeID) REFERENCES Judge   (  JudgeID) on delete cascade
 );
 
 show warnings;

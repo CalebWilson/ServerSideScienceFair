@@ -328,6 +328,8 @@ abstract class Entity extends ReadOnlyEntity
 
 				//copy POST data
 				$this->fields = $post;
+
+
 				unset ($this->fields['action']);
 				unset ($this->fields['selected']);
 
@@ -367,6 +369,9 @@ abstract class Entity extends ReadOnlyEntity
 
 			//prefill fields from database if first edit attempt
 			else $this->prefill ($selected[0]);
+
+				//TODO remove
+				$this->print_assoc ($this->fields);
 
 			//get necessary options from database
 			$options = $this->get_options();

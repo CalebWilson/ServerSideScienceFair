@@ -26,7 +26,19 @@ class AutofillNumber
 
 	} //end constructor
 
-	//override Entity::edit to save ID for autofill()
+	/*
+		Check whether an ID has been set. Returns true if $this->id has a value, and
+		returns false otherwise.
+	*/
+	public function has_id()
+	{
+		return isset($this->id);
+	}
+
+	/*
+		If there is a single 'selected' record in the post array, set $this->ID to
+		its ID.
+	*/
 	public function set_id ($post)
 	{
 		//capture ID
@@ -36,6 +48,12 @@ class AutofillNumber
 		}
 
 	} //end function set_id
+
+	//return ID
+	public function get_id()
+	{
+		return $this->id;
+	}
 
 	//if the user did not provide a value for $field, automatically generate one
 	public function autofill_number (&$fields, $table, $field, $condition = "1")

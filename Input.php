@@ -64,7 +64,7 @@ abstract class Input
 			print ("<option value=" . $option_value);
 
 				//maintain selection
-				if ($option_value === $value)
+				if ($option_value == $value)
 					print (" selected");
 
 			print(">" . $option_label . "</option>");
@@ -74,7 +74,7 @@ abstract class Input
 		print('</select><br>');
 
 		//error message
-		Input::display_input_error ($field);
+		Input::display_input_error ($msgs, $field);
 
 	} //end function display_dropdown
 

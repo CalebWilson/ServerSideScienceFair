@@ -10,14 +10,12 @@
 <?php
 
 include "Entity.php";
-include "AutofillNumber.php";
 include "Input.php";
+include "AutofillNumber.php";
 
 class Project extends Entity
 {
-	//id of project for use in autofill_ProjectNum
-	private $project_id;
-
+	//autofill project number
 	private $autofiller;
 
 	//constructor
@@ -25,7 +23,6 @@ class Project extends Entity
 	{
 		//initialize $table, $title, $view, and $connection
 		parent::__construct ($connection);
-
 
 		//entity dependent on Project
 		$this->dependent = "student";
@@ -40,6 +37,7 @@ class Project extends Entity
 			"Abstract"   => ""
 		);
 
+		//instantiate AutofillNumber
 		$this->autofiller = new AutofillNumber ($connection);
 
 	} //end constructor
@@ -51,8 +49,9 @@ class Project extends Entity
 		//get records
 		$record_set = $this->connection->query
 		("
-			select ProjectID as ID,
-			Title as selection
+			select
+				ProjectID as ID,
+				concat ('Project ', ProjectNum, ': ', Title) as selection
 			from Project
 		");
 		$records = $record_set->fetchAll();
@@ -94,7 +93,7 @@ class Project extends Entity
 			"number",
 			"ProjectNum",
 			$this->fields['ProjectNum'],
-			"Project Number"
+			"Project Number",
 			$this->msgs
 		);
 		print ("Leave this field blank to auto-generate a new project number.<br>");
@@ -108,11 +107,14 @@ class Project extends Entity
 			$options['booths'],
 			$this->msgs
 		);
-		print
-		(
-			"Selecting a Booth already in use will cause the Project using it to " .
-			"swap Booths with this Project.<br>"
-		);
+		if ($action == "edit")
+		{
+			print
+			(
+				"Selecting a Booth already in use will cause the Project using it " .
+				"to swap Booths with this Project.<br>"
+			);
+		}
 
 		//Abstract
 		print
@@ -135,7 +137,7 @@ class Project extends Entity
 		parent::edit($post);
 
 	} //end function edit
-	
+
 	//check whether data has been submitted
 	protected function submitted ($post)
 	{
@@ -181,7 +183,7 @@ class Project extends Entity
 		}
 
 		//Booth
-		if (!isset ($this->id))
+		if (!$this->autofiller->has_id())
 		{
 			if
 			(
@@ -256,7 +258,7 @@ class Project extends Entity
 
 		foreach ($categories as $category)
 		{
-			$options['categories'][$category['CategoryID'] =
+			$options['categories'][$category['CategoryID']] =
 				$category['CategoryName'];
 		}
 

@@ -10,9 +10,14 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
+include "AutofillNumber.php";
 
 class Grade extends Entity
 {
+	//autofill grade number
+	private $autofiller;
+
 	//constructor
 	function __construct ($connection)
 	{
@@ -24,6 +29,9 @@ class Grade extends Entity
 
 		//empty fields
 		$this->fields = array ("GradeNum" => "");
+
+		//instantiate AutofillNumber
+		$this->autofiller = new AutofillNumber ($connection);
 	
 	} //end constructor
 
@@ -57,8 +65,18 @@ class Grade extends Entity
 			"Grade Level",
 			$this->msgs
 		);
+		print ("Leave this field blank to auto-generate a new grade level.<br>");
 
 	} //end function display_form_body()
+
+	//override edit for autofilling
+	public function edit ($post)
+	{
+		$this->autofiller->set_id ($post);
+
+		parent::edit($post);
+
+	} //end function edit
 
 	//check whether data has been submitted
 	protected function submitted ($post)
@@ -69,16 +87,8 @@ class Grade extends Entity
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
-		//invalidate blank GradeNum
-		if
-		(
-			Input::invalidate_blanks
-			(
-				$this->fields,
-				array ("GradeNum" => "Grade Level"),
-				$this->msgs
-			)
-		)
+		//return false if Grade is non-blank and duplicate
+		if ($this->fields['GradeNum'] != "")
 		{
 			if
 			(
@@ -97,11 +107,10 @@ class Grade extends Entity
 				return false;
 			}
 
-			return true;
+		} //end if Grade is non-blank and duplicate
 
-		} //end uniqueness
-
-		return false;
+		//return true otherwise
+		return true;
 
 	} //end function validate()
 
@@ -109,9 +118,23 @@ class Grade extends Entity
 	protected function get_options()
 	{}
 
+	//autofill number
+	private function autofill()
+	{
+		$this->autofiller->autofill_number
+		(
+			$this->fields,
+			"Grade",
+			"GradeNum"
+		);
+
+	} //end function autofill
+
 	//insert data from fields array into database
 	protected function insert()
 	{
+		$this->autofill();
+
 		$query = $this->connection->prepare
 		("
 			insert into
@@ -127,6 +150,8 @@ class Grade extends Entity
 	//update database with data from fields array
 	protected function update()
 	{
+		$this->autofill();
+
 		$query = $this->connection->prepare
 		("
 			update Grade
