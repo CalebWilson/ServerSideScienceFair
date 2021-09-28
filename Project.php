@@ -11,6 +11,7 @@
 
 include "Entity.php";
 include "AutofillNumber.php";
+include "Input.php";
 
 class Project extends Entity
 {
@@ -68,41 +69,50 @@ class Project extends Entity
 		$options = $this->get_options();
 
 		//Project Title
-		$this->display_input ("text", "Title", "Title");
+		Input::display_input
+		(
+			"text",
+			"Title",
+			$this->fields['Title'],
+			"Title",
+			$this->msgs
+		);
 
 		//Category
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"CategoryID",
+			$this->fields['CategoryID'],
 			"Category",
 			$options['categories'],
-			"CategoryName"
+			$this->msgs
 		);
 
 		//ProjectNum
-		$this->display_input ("number", "ProjectNum", "Project Number");
+		Input::display_input
+		(
+			"number",
+			"ProjectNum",
+			$this->fields['ProjectNum'],
+			"Project Number"
+			$this->msgs
+		);
 		print ("Leave this field blank to auto-generate a new project number.<br>");
 
 		//Booth
-		foreach ($options['booths'] as &$booth)
-		{
-			if ($booth['HasProject'])
-			{
-				$booth['BoothNum'] =
-					'<font color="red">' . $booth['BoothNum'] . '</font><br>';
-			}
-
-			unset ($booth['HasProject']);
-		}
-
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"BoothID",
+			$this->fields['BoothID'],
 			"Booth",
 			$options['booths'],
-			"BoothNum"
+			$this->msgs
 		);
-		print ("Selecting a Booth already in use will cause the Project using it to swap Booths with this Project.<br>");
+		print
+		(
+			"Selecting a Booth already in use will cause the Project using it to " .
+			"swap Booths with this Project.<br>"
+		);
 
 		//Abstract
 		print
@@ -135,21 +145,33 @@ class Project extends Entity
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
-		$valid = $this->invalidate_blanks
+		$valid = Input::invalidate_blanks
 		(
+			$this->fields,
 			array
 			(
 				"BoothID"    => "Booth",
 				"CategoryID" => "Category",
 				"Title"      => "Title"
-			)
+			),
+			$this->msgs
 		);
 
 		/* uniqueness */
 		$year_condition = "Year = YEAR(CURDATE())";
 
 		//Title
-		if ($this->is_not_unique ("Title", $original, $year_condition))
+		if
+		(
+			Input::is_duplicate
+			(
+				$this->table,
+				"Title",
+				$this->fields['Title'],
+				$original,
+				$year_condition
+			)
+		)
 		{
 			$valid = false;
 
@@ -160,7 +182,17 @@ class Project extends Entity
 		//Booth
 		if (!isset ($this->id))
 		{
-			if ($this->is_not_unique ("BoothID", $original, $year_condition))
+			if
+			(
+				Input::is_duplicate
+				(
+					$this->table,
+					"BoothID",
+					$this->fields['BoothID'],
+					$original,
+					$year_condition
+				)
+			)
 			{
 				$valid = false;
 
@@ -170,7 +202,17 @@ class Project extends Entity
 		}
 
 		//Project Number
-		if ($this->is_not_unique ("ProjectNum", $original, $year_condition))
+		if
+		(
+			Input::is_duplicate
+			(
+				$this->table,
+				"ProjectNum",
+				$this->fields,
+				$original,
+				$year_condition
+			)
+		)
 		{
 			$valid = false;
 
@@ -197,12 +239,23 @@ class Project extends Entity
 					Booth left join
 					Project on Project.BoothID = Booth.BoothID
 		");
-		$options['booths'] = $record_set->fetchAll();
+		$booths = $record_set->fetchAll();
+		$options['booths'] = array();
+
+		foreach ($booths as $booth)
+			$options['booths'][$booth['BoothID']] = $booth['BoothNum']; //oh boy
 
 		//Categories
 		$record_set = $this->connection->query
 			("select CategoryID, CategoryName from Category");
-		$options['categories'] = $record_set->fetchAll();
+		$categories = $record_set->fetchAll();
+		$options['categories'] = array();
+
+		foreach ($categories as $category)
+		{
+			$options['categories'][$category['CategoryID'] =
+				$category['CategoryName'];
+		}
 
 		return $options;
 

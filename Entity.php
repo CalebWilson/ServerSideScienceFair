@@ -225,72 +225,6 @@ abstract class Entity extends ReadOnlyEntity
 
 	} //end function display_form_footer()
 
-	//display the error message for a field
-	private function display_input_error ($field)
-	{
-		if (isset ($this->msgs[$field]))
-			print ($this->msgs[$field]);
-
-	} //end display_input_error()
-
-	/*
-		display a dropdown menu
-
-		$field: the name of the identifier that the dropdown will give its value to
-		$label: the user-facing label for $field
-		$options: an array of dropdown options
-		$option_label: the index of the user-facing label for each dropdown option
-	*/
-	protected function display_dropdown ($field, $label, $options, $option_label)
-	{
-		//begin dropdown
-		print
-		('
-			<label for="' . $field . '">' . $label . ':</label>
-			<select name="' . $field . '" id="' . $field . '">
-		');
-
-		//blank option
-		print ('<option value=""</option>');
-
-		//actual options
-		foreach ($options as $option)
-		{
-			print ("<option value=" . $option[$field]);
-
-				//maintain selection
-				if ($option[$field] === $this->fields[$field])
-					print (" selected");
-
-			print(">" . $option[$option_label] . "</option>");
-		}
-
-		//end dropdown
-		print('</select><br>');
-
-		//error message
-		$this->display_input_error ($field);
-
-	} //end function display_dropdown
-
-	//display a text input
-	protected function display_input ($type, $field, $label)
-	{
-		print
-		('
-			<label for="' . $field . '">' . $label . ':</label>
-			<input
-				type="' . $type . '"
-				name="' . $field . '"
-				value="' . $this->fields[$field] . '"
-			><br>
-		');
-
-		//error message
-		$this->display_input_error ($field);
-
-	} //end function display_text_input()
-
 	//display the page for adding a new record to the table
 	public function add ($post)
 	{
@@ -558,65 +492,6 @@ abstract class Entity extends ReadOnlyEntity
 		}
 
 	} //end function delete()
-
-	/*
-		Returns false if there exists a record other than $original with the same
-		value for $field where $condition, or if $this->fields[$field] is blank, and
-		returns true otherwise
-
-		$field: the field whose uniqueness is to be checked
-
-		$original: the ID of the record being edited, or NULL if adding new record
-
-		$condition: additional condition for when a field only needs to be unique
-		when another field is not; e.g. Schools must have different names if they
-		are in the same County
-	*/
-	protected function is_not_unique ($field, $original, $condition = "1")
-	{
-		if ($this->fields[$field] == "")
-			return false;
-
-		$query = $this->connection->prepare
-		("
-			select count(*) as 'count'
-			from " . $this->table . "
-			where
-				" . $field . " = ? AND
-				" . $condition . " AND
-				NOT " . $this->table . "ID <=> " . $original //NULL-safe equals
-		);
-		
-		$query->execute (array ($this->fields[$field]));
-		$count = $query->fetch(PDO::FETCH_ASSOC)['count'];
-
-		return $count !== "0";
-
-	} //end function is_not_unique()
-
-	/*
-		Set the error message for any blank field in the $labels array. Return false
-		if any of the fields are blank; return true otherwise.
-
-		$labels must be an associative array mapping field identifiers to their
-		user-facing labels.
-	*/
-	protected function invalidate_blanks ($labels)
-	{
-		$valid = true;
-
-		foreach ($labels as $field => $label)
-		{
-			if ($this->fields[$field] == "")
-			{
-				$valid = false;
-				$this->msgs[$field] = $label . " cannot be blank.";
-			}
-		}
-
-		return $valid;
-
-	} //end function invalidate_blanks()
 
 	abstract protected function display_form_body ($action);
 

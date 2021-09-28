@@ -10,6 +10,7 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class Category extends Entity
 {
@@ -51,7 +52,14 @@ class Category extends Entity
 	protected function display_form_body ($action)
 	{
 		//Category Name
-		$this->display_input ("text", "CategoryName", "Category Name");
+		Input::display_input
+		(
+			"text",
+			"CategoryName",
+			$this->fields['CategoryName'],
+			"Category Name",
+			$this->msgs
+		);
 
 	} //end function display_form_body()
 
@@ -65,10 +73,27 @@ class Category extends Entity
 	protected function validate ($original = "NULL")
 	{
 		//invalidate blank category name
-		if ($this->invalidate_blanks (array ("CategoryName" => "Category name")))
+		if
+		(
+			Input::invalidate_blanks
+			(
+				$this->fields,
+				array ("CategoryName" => "Category name"),
+				$this->msgs
+			)
+		)
 		{
 			//category name uniqnuess
-			if ($this->is_not_unique ("CategoryName", $original))
+			if
+			(
+				Input::is_duplicate
+				(
+					$this->table,
+					"CategoryName",
+					$this->fields['CategoryName'],
+					$original
+				)
+			)
 			{
 				$this->msgs['CategoryName'] =
 					"There is already a Category with this name.";

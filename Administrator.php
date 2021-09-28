@@ -10,6 +10,7 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class Administrator extends Entity
 {
@@ -80,13 +81,13 @@ class Administrator extends Entity
 		$this->display_input ("password", "pass_conf", "Confirm " . $password_label);
 
 		//AuthorityLevel
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"AuthorityLevel",
 			"Authority Level",
 			[
-				["name" => "Normal Admin", "AuthorityLevel" => 2],
-				["name" =>  "Super Admin", "AuthorityLevel" => 1]
+				["1" => "Super Admin"],
+				["2" => "Normal Admin"]
 			],
 			"name"
 		);
@@ -151,7 +152,7 @@ class Administrator extends Entity
 		}
 
 		//invalidate blank fields
-		$valid = $this->invalidate_blanks ($labels);
+		$valid = Input::invalidate_blanks ($this->fields, $labels, $this->msgs);
 
 		if ($this->fields['Email'] != "")
 		{
@@ -164,7 +165,16 @@ class Administrator extends Entity
 			}
 
 			//email uniqueness
-			elseif ($this->is_not_unique ("Email", $original))
+			elseif
+			(
+				Input::is_duplicate
+				(
+					$this->table,
+					"Email",
+					$this->fields['Email'],
+					$original
+				)
+			)
 			{
 				$valid = false;
 
@@ -174,7 +184,13 @@ class Administrator extends Entity
 
 		}
 
-		if ($this->is_not_unique ("Username", $original))
+		if (Input::is_duplicate
+		(
+			$this->table,
+			"Username",
+			$this->fields['Username'],
+			$original
+		)
 		{
 			$valid = false;
 

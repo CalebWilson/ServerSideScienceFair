@@ -70,41 +70,69 @@ class Student extends Entity
 		$this->display_dropdown
 		(
 			"SchoolID",
+			$this->fields['SchoolID'],
 			"School",
 			$options['schools'],
-			"SchoolName"
+			$this->msgs
 		);
 
-		//Name
-		$this->display_input ("text", "FirstName", "First Name");
-		$this->display_input ("text", "MiddleName", "Middle Name");
-		$this->display_input ("text", "LastName", "Last Name");
+		//First Name
+		Input::display_input
+		(
+			"text",
+			"FirstName",
+			$this->fields['FirstName'],
+			"First Name",
+			$this->msgs
+		);
+
+		//Middle Name
+		Input::display_input
+		(
+			"text",
+			"MiddleName",
+			$this->fields['MiddleName'],
+			"Middle Name"
+		);
+
+		//Last Name
+		Input::display_input
+		(
+			"text",
+			"LastName",
+			$this->fields['LastName'],
+			"Last Name"
+			$this->msgs
+		);
 
 		//Gender
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"Gender",
+			$this->fields['Gender'],
 			"Gender",
-			[["Gender" => "Male"], ["Gender" => "Female"], ["Gender" => "Other"]],
-			"Gender"
+			[["Male" => "Male"], ["Female" => "Female"], ["Other" => "Other"]],
+			$this->msgs
 		);
 
 		//Project
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"ProjectID",
+			$this->fields['ProjectID'],
 			"Project",
 			$options['projects'],
-			"Title"
+			$this->msgs
 		);
 
 		//Grade
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"GradeID",
+			$this->fields['GradeID'],
 			"Grade",
 			$options['grades'],
-			"GradeNum"
+			$this->msgs
 		);
 
 	} //end function display_form_body()
@@ -118,18 +146,17 @@ class Student extends Entity
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
-		return $this->invalidate_blanks
+		$labels = array
 		(
-			array
-			(
-				"SchoolID"  => "School",
-				"FirstName" => "First name",
-				"LastName"  => "Last name",
-				"Gender"    => "Gender",
-				"ProjectID" => "Project",
-				"GradeID"   => "Grade"
-			)
+			"SchoolID"  => "School",
+			"FirstName" => "First name",
+			"LastName"  => "Last name",
+			"Gender"    => "Gender",
+			"ProjectID" => "Project",
+			"GradeID"   => "Grade"
 		);
+
+		return Input::invalidate_blanks ($this->fields, $labels, $this->msgs);
 
 	} //end function validate()
 
@@ -141,21 +168,33 @@ class Student extends Entity
 		//School
 		$record_set = $this->connection->query
 			("select SchoolID, SchoolName from School");
-		$options['schools'] = $record_set->fetchAll();
+		$schools = $record_set->fetchAll();
+		$options['schools'] = array();
+
+		foreach ($schools as $school)
+			$options['schools'][$school['SchoolID']] = $school['SchoolName'];
 
 		//Project
 		$record_set = $this->connection->query
 		(
 			"select ProjectID, Title from Project"
 		);
-		$options['projects'] = $record_set->fetchAll();
+		$projects = $record_set->fetchAll();
+		$options['projects'] = array()
+
+		foreach ($projects as $project)
+			$options['projects'][$project['ProjectID']] = $project['Title'];
 
 		//Grade
 		$record_set = $this->connection->query
 		(
 			"select GradeID, GradeNum from Grade"
 		);
-		$options['grades'] = $record_set->fetchAll();
+		$grades = $record_set->fetchAll();
+		$options['grades'] = array();
+
+		foreach ($grades as $grade)
+			$options['grades'][$grade['GradeID']] = $grade['GradeNum'];
 
 		return $options;
 

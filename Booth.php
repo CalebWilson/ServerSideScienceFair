@@ -10,6 +10,7 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class Booth extends Entity
 {
@@ -61,9 +62,26 @@ class Booth extends Entity
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
-		if ($this->invalidate_blanks (array ("BoothNum" => "Booth number")))
+		if
+		(
+			Input::invalidate_blanks
+			(
+				$this->fields,
+				array ("BoothNum" => "Booth number"),
+				$this->msgs
+			)
+		)
 		{
-			if ($this->is_not_unique ("BoothNum", $original))
+			if
+			(
+				Input::is_duplicate
+				(
+					$this->table,
+					"BoothNum",
+					$this->fields['BoothNum'],
+					$original
+				)
+			)
 			{
 				$this->msgs['BoothNum'] =
 					"There is already a booth with this number.";

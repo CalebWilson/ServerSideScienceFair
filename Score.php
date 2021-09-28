@@ -1,6 +1,7 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class Score extends Entity
 {
@@ -56,19 +57,25 @@ class Score extends Entity
 	//display the body of the form for adding or editing an Administrator
 	protected function display_form_body ($action)
 	{
-		$projects = $this->get_options();
-
 		//Project
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"ProjectID",
+			$this->fields['ProjectID'],
 			"Project to Score",
-			$projects,
-			"ProjectInfo"
+			$this->get_options(),
+			&$msgs
 		);
 
 		//Score
-		$this->display_input ("number", "Score", "Score (0 - 100)");
+		Input::display_input
+		(
+			"number",
+			"Score",
+			$this->fields['Score'],
+			"Score (0 - 100)",
+			$this->msgs
+		);
 
 	} //end function display_form_body
 
@@ -84,7 +91,13 @@ class Score extends Entity
 			where Project.BoothID = Booth.BoothID
 		");
 
-		return $record_set->fetchAll();
+		$projects = $record_set->fetchAll();
+		$options = array()
+
+		foreach ($projects as $project)
+			$options[$project['ProjectID']] = $project['ProjectInfo'];
+
+		return $options;
 
 	} //end function get_options
 

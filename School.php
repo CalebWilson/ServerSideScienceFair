@@ -10,6 +10,7 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class School extends Entity
 {
@@ -52,15 +53,23 @@ class School extends Entity
 	protected function display_form_body ($action)
 	{
 		//School Name
-		$this->display_input ("text", "SchoolName", "School Name");
+		Input::display_input
+		(
+			"text",
+			"SchoolName",
+			$this->fields['SchoolName'],
+			"School Name",
+			$this->msgs
+		);
 
 		//County
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"CountyID",
+			$this->fields['CountyID'],
 			"County",
 			$this->get_options(),
-			"CountyName"
+			$this->msgs
 		);
 
 	} //end function display_form_body()
@@ -77,18 +86,21 @@ class School extends Entity
 	{
 		//invalidate blank fields
 		$labels = array ("CountyID" => "County", "SchoolName" => "School name");
-		if ($this->invalidate_blanks ($labels))
+		if (Input::invalidate_blanks ($this->fields, $labels, $this->msgs))
 		{
-/*
-			//set empty original to NULL if adding
-			if ($original == false)
-				$original = "NULL";
-*/
-
 			//school uniqueness
-			if ($this->is_not_unique ("SchoolName", $original,
-				"CountyID = " . $this->fields["CountyID"])
-			){
+			if
+			(
+				Input::is_duplicate
+				(
+					$this->table,
+					"SchoolName",
+					$this->fields['SchoolName'],
+					$original,
+					"CountyID = " . $this->fields["CountyID"]
+				)
+			)
+			{
 				$this->msgs['SchoolName'] =
 					"There is already a school with this name in the selected county.";
 				
@@ -114,7 +126,13 @@ class School extends Entity
 			"select CountyID, CountyName from County"
 		);
 
-		return $record_set->fetchAll();
+		$counties = $record_set->fetchAll();
+		$options = array();
+
+		foreach ($counties as $county)
+			$options[$county['CountyID']] = $county['CountyName'];
+
+		return $options;
 	}
 
 	//insert data from fields array into database

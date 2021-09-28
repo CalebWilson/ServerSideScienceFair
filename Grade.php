@@ -49,7 +49,14 @@ class Grade extends Entity
 	protected function display_form_body ($action)
 	{
 		//Grade Level
-		$this->display_input ("number", "GradeNum", "Grade Level");
+		Input::display_input
+		(
+			"number",
+			"GradeNum",
+			$this->fields['GradeNum'],
+			"Grade Level",
+			$this->msgs
+		);
 
 	} //end function display_form_body()
 
@@ -63,9 +70,26 @@ class Grade extends Entity
 	protected function validate ($original = "NULL")
 	{
 		//invalidate blank GradeNum
-		if ($this->invalidate_blanks (array ("GradeNum" => "Grade Level")))
+		if
+		(
+			Input::invalidate_blanks
+			(
+				$this->fields,
+				array ("GradeNum" => "Grade Level"),
+				$this->msgs
+			)
+		)
 		{
-			if ($this->is_not_unique ("GradeNum", $original))
+			if
+			(
+				Input::is_duplicate
+				(
+					$this->table,
+					"GradeNum",
+					$this->fields['GradeNum'],
+					$original
+				)
+			)
 			{
 				$this->msgs['GradeNum'] = "This grade level has already been added.";
 

@@ -10,6 +10,7 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class County extends Entity
 {
@@ -49,7 +50,14 @@ class County extends Entity
 	protected function display_form_body ($action)
 	{
 		//County Name
-		$this->display_input ("text", "CountyName", "County Name");
+		Input::display_input
+		(
+			"text",
+			"CountyName",
+			$this->fields['CountyName'],
+			"County Name",
+			$this->msgs
+		);
 
 	} //end function display_form_body()
 
@@ -63,11 +71,28 @@ class County extends Entity
 	protected function validate ($original = "NULL")
 	{
 		//invalidate blank county name
-		if ($this->invalidate_blanks (array ("CountyName" => "County name")))
+		if
+		(
+			Input::invalidate_blanks
+			(
+				$this->fields,
+				array ("CountyName" => "County name"),
+				$this->msgs
+			)
+		)
 
 		//if not blank, check uniqueness
 		{
-			if ($this->is_not_unique ("CountyName", $original))
+			if
+			(
+				Input::is_duplicate
+				(
+					$this->table,
+					"CountyName",
+					$this->fields['CountyName'],
+					$original
+				)
+			)
 			{
 				$this->msgs['CountyName'] =
 					"There is already a County with this name.";
@@ -86,17 +111,9 @@ class County extends Entity
 
 	} //end function validate()
 
-	//return an array of option arrays for the form to use
+	//Counties has no dropdown options
 	protected function get_options()
-	{
-		//get counties from database
-		$record_set = $this->connection->query
-		(
-			"select CountyID, CountyName from County"
-		);
-
-		return $record_set->fetchAll();
-	}
+	{}
 
 	//insert data from fields array into database
 	protected function insert()
