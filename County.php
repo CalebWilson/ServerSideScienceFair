@@ -112,10 +112,6 @@ class County extends Entity
 
 	} //end function validate()
 
-	//Counties has no dropdown options
-	protected function get_options()
-	{}
-
 	//insert data from fields array into database
 	protected function insert()
 	{

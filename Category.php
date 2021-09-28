@@ -109,18 +109,6 @@ class Category extends Entity
 
 	} //end function validate()
 
-	//return an array of option arrays for the form to use
-	protected function get_options()
-	{
-		//get counties from database
-		$record_set = $this->connection->query
-		(
-			"select CategoryID, CategoryName from Category"
-		);
-
-		return $record_set->fetchAll();
-	}
-
 	//insert data from fields array into database
 	protected function insert()
 	{

@@ -80,7 +80,7 @@ class Score extends Entity
 	} //end function display_form_body
 
 	//get projects
-	protected function get_options()
+	private function get_options()
 	{
 		$record_set = $this->connection->query
 		("

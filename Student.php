@@ -161,7 +161,7 @@ class Student extends Entity
 	} //end function validate()
 
 	//get options from database
-	protected function get_options()
+	private function get_options()
 	{
 		$options = array();
 

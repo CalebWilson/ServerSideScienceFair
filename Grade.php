@@ -114,10 +114,6 @@ class Grade extends Entity
 
 	} //end function validate()
 
-	//Grade has no dropdown options
-	protected function get_options()
-	{}
-
 	//autofill number
 	private function autofill()
 	{

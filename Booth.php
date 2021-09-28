@@ -101,11 +101,6 @@ class Booth extends Entity
 
 	} //end validate()
 
-
-	//Booth has no option lists
-	protected function get_options()
-	{}
-
 	//insert data from fields array into database
 	protected function insert()
 	{

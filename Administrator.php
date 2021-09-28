@@ -210,10 +210,6 @@ class Administrator extends Entity
 	
 	} //end function validate()
 
-	//Administrator has no dropdown options
-	protected function get_options()
-	{}
-
 	//insert data from fields array into database
 	protected function insert()
 	{

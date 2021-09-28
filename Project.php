@@ -230,7 +230,7 @@ class Project extends Entity
 	} //end function validate()
 
 	//return an array of option arrays for the form to use
-	protected function get_options()
+	private function get_options()
 	{
 		$options = array();
 

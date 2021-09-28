@@ -119,7 +119,7 @@ class School extends Entity
 	} //end function validate()
 
 	//return an array of option arrays for the form to use
-	protected function get_options()
+	private function get_options()
 	{
 		//get counties from database
 		$record_set = $this->connection->query
@@ -134,7 +134,8 @@ class School extends Entity
 			$options[$county['CountyID']] = $county['CountyName'];
 
 		return $options;
-	}
+
+	} //end function get_options
 
 	//insert data from fields array into database
 	protected function insert()

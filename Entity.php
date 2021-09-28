@@ -242,9 +242,6 @@ abstract class Entity extends ReadOnlyEntity
 			unset ($this->fields['action']);
 			unset ($this->fields['selected']);
 
-			//TODO remove
-			$this->print_assoc ($this->fields);
-
 			//validate input in add mode
 			if ($this->validate())
 			{
@@ -369,12 +366,6 @@ abstract class Entity extends ReadOnlyEntity
 
 			//prefill fields from database if first edit attempt
 			else $this->prefill ($selected[0]);
-
-				//TODO remove
-				$this->print_assoc ($this->fields);
-
-			//get necessary options from database
-			$options = $this->get_options();
 
 			//display form
 			$this->display_form ("edit", $msg, $post);
@@ -510,9 +501,6 @@ abstract class Entity extends ReadOnlyEntity
 		edited, and omitted when validating an add.
 	*/
 	abstract protected function validate ($original = "NULL");
-
-	//return an array of option arrays for the form to use
-	abstract protected function get_options();
 
 	//insert data from fields array into database
 	abstract protected function insert();
