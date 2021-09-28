@@ -78,16 +78,19 @@ class AutofillNumber
 			{
 				$query_string = 
 				"
-					select MAX(" . $field . ") + 1 as " . $field . "
+					select min(" . $field . ") + 1 as missing
 					from " . $table . "
-					where " . $condition
+					where
+						" . $field . " + 1 not in
+							(select " . $field . " from Grade) and " .
+						$condition
 				;
 			}
 
 			$record_set = $this->connection->query ($query_string);
 
 			$fields[$field] =
-				$record_set->fetch(PDO::FETCH_ASSOC)[$field];
+				$record_set->fetch(PDO::FETCH_ASSOC)["missing"];
 		}
 
 	} //end function autofill_number
