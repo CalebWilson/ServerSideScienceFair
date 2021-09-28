@@ -54,16 +54,27 @@ class Score extends Entity
 	public function back_button()
 	{}
 
-	//display the body of the form for adding or editing an Administrator
+	//display the body of the form for adding or editing
 	protected function display_form_body ($action)
 	{
 		//Project
+		$projects = Input::get_dropdown_options
+		(
+			$this->connection,
+
+			"select
+				Project.ProjectID as ID
+				concat ('Booth ', Booth.BoothNum, ': ', Project.Title) as Name
+			from Project, Booth
+			where Project.BoothID = Booth.BoothID"
+		);
+
 		Input::display_dropdown
 		(
 			"ProjectID",
 			$this->fields['ProjectID'],
 			"Project to Score",
-			$this->get_options(),
+			$projects,
 			&$msgs
 		);
 
@@ -78,28 +89,6 @@ class Score extends Entity
 		);
 
 	} //end function display_form_body
-
-	//get projects
-	private function get_options()
-	{
-		$record_set = $this->connection->query
-		("
-			select
-				Project.ProjectID,
-				concat ('Booth ', Booth.BoothNum, ': ', Project.Title) as ProjectInfo
-			from Project, Booth
-			where Project.BoothID = Booth.BoothID
-		");
-
-		$projects = $record_set->fetchAll();
-		$options = array()
-
-		foreach ($projects as $project)
-			$options[$project['ProjectID']] = $project['ProjectInfo'];
-
-		return $options;
-
-	} //end function get_options
 
 	//check if score submitted
 	protected function submitted ($post)

@@ -63,12 +63,18 @@ class School extends Entity
 		);
 
 		//County
+		$counties = $this->get_dropdown_options 
+		(
+			$this->connection,
+			"select CountyID as ID, CountyName as Name from County"
+		);
+
 		Input::display_dropdown
 		(
 			"CountyID",
 			$this->fields['CountyID'],
 			"County",
-			$this->get_options(),
+			$counties,
 			$this->msgs
 		);
 
@@ -117,25 +123,6 @@ class School extends Entity
 		return false;
 
 	} //end function validate()
-
-	//return an array of option arrays for the form to use
-	private function get_options()
-	{
-		//get counties from database
-		$record_set = $this->connection->query
-		(
-			"select CountyID, CountyName from County"
-		);
-
-		$counties = $record_set->fetchAll();
-		$options = array();
-
-		foreach ($counties as $county)
-			$options[$county['CountyID']] = $county['CountyName'];
-
-		return $options;
-
-	} //end function get_options
 
 	//insert data from fields array into database
 	protected function insert()

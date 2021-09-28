@@ -43,22 +43,8 @@
 			$id = $row->$id_name;
 			$_SESSION[$_SESSION['user_type']] = $id;
 
-			//if administrator, update their status to active
-			if ($_SESSION['user_type'] == "Administrator")
-			{
-				$query = $connection->prepare
-				("
-					update Administrator
-					set Active = 1
-					where AdministratorID = ?
-				");
-				$query->execute (array ($id));
-			}
-
 			//don't display login page after they're already logged in
-			if ($_SESSION['user_type'] == "Administrator")
-				include "Admin.php";
-			else include $_SESSION['user_type'] . ".php";
+			include strtolower($_SESSION['user_type']) . ".php";
 			exit();
 		}
 		//if not a match, tell them
@@ -87,25 +73,22 @@
 	<h1><strong><?php print($_SESSION['user_type']) ?> Login</strong></h1>
 	<?php print($msg) ?>
 	<div class="form-s">
-		<form action="
-			<?php
-				if ($_SESSION['user_type'] == 'Administrator')
-					print ('Admin');
-				else print($_SESSION['user_type']);
-			?>.php"
-		method = "post">
+		<form
+			action="<?php print(strtolower($_SESSION['user_type'])) ?>.php"
+			method="post"
+		>
 
 			<div class="label">
-				<label for = "username">Username </label>
-				<input type = "text" name = "username"><br>
+				<label for="username">Username </label>
+				<input type="text" name="username"><br>
 			</div>
 
 			<div class="label">
-				<label for = "password">Password </label>
-				<input type = "password" name = "password"><br>
+				<label for="password">Password </label>
+				<input type="password" name="password"><br>
 			</div>
 
-			<input type="hidden" name = "<?php print($_SESSION['user_type']) ?>" value = true>
+			<input type="hidden" name="<?php print($_SESSION['user_type']) ?>" value=true>
 
 			<input type="submit" class="btn" value="Submit"/><br>
 

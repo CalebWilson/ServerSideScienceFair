@@ -1,6 +1,6 @@
-<!-- included by Admin.php -->
+<!-- included by administrator.php -->
 
-<?php include "admin_check.php" ?>
+<?php include "administrator_check.php" ?>
 
 <title>Administrative Actions</title>
 <div class="wrapper">
@@ -20,9 +20,6 @@
 					"project"       => "Projects",
 					"category"      => "Project Categories",
 					"booth"         => "Booths",
-					"judge"         => "Judges",
-					"session"       => "Judge Sessions",
-					"schedule"      => "Schedule",
 					"ranking"       => "Project Rankings"
 				);
 
@@ -32,7 +29,7 @@
 					('
 						<form
 							name="' . $view . '"
-							action="Admin.php"
+							action="administrator.php"
 							method="get"
 						>
 							<button

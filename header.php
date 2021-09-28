@@ -1,7 +1,11 @@
 <!-- This file is to be included at the top of the page -->
 
 <!-- connect to database -->
-<?php require_once "db_connect.php" ?>
+<?php
+	require_once "db_connect.php";
+
+	$domain = "http://127.0.0.1:8000/";
+?>
 
 <!doctype html>
 <html>
@@ -29,28 +33,18 @@
 			<nav>
 
 					<span>
-						<a href="http://127.0.0.1:8000/register.php">
+						<a href=<?php print($domain) ?>"register.php">
 							Register
 						</a>
 					</span>
 
 					<?php
 
-						if (isset($_SESSION ['Judge']))
-						{
-							echo
-							'<span>
-								<a href="http://127.0.0.1:8000/schedule.php">
-									Schedule
-								</a>
-							</span>';
-						}
-
-						else
+						if (!isset($_SESSION ['Judge']))
 						{ 
 							echo
 							'<span>
-								<a href="http://127.0.0.1:8000/Judge.php">
+								<a href="' . $domain . 'judge.php">
 									Judge Login
 								</a>
 							</span>';
@@ -60,8 +54,8 @@
 						{ 
 							echo
 							'<span>
-								<a href="http://127.0.0.1:8000/Admin.php">
-									Admin Login
+								<a href="' . $domain . 'administrator.php">
+									Administrator Login
 								</a>
 							</span>';
 						}

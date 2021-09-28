@@ -1,9 +1,8 @@
 <!--
 
-	Admin.php
+	administrator.php
 
-	Main administrator page. Previously Administrator.php before that name was used
-	for a file defining the class Administrator, which extends Entity.
+	Route administrators.
 
 -->
 

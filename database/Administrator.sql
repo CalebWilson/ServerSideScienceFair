@@ -14,7 +14,6 @@ create table Administrator (
 	Username        varchar(50) NOT NULL,
 	Password        varchar(50) NOT NULL,
 	AuthorityLevel  int         NOT NULL, #not sure how this will be used
-	Active          bool        NOT NULL,
 
 	UNIQUE (Email),
 	UNIQUE (Username),
@@ -26,9 +25,9 @@ show warnings;
 
 #test
 insert into
-	Administrator (FirstName, MiddleName, LastName,        Email, Username, Password, AuthorityLevel, Active)
-	values        ( "Tfirst",    "Tlast",  "Tlast", "test@t.com",  "Tuser",  "Tpass",              1,  false),
-	              (  "admin",    "admin",  "admin",      "admin",  "admin",  "admin",              1,  false)
+	Administrator (FirstName, MiddleName, LastName,        Email, Username, Password, AuthorityLevel)
+	values        ( "Tfirst",    "Tlast",  "Tlast", "test@t.com",  "Tuser",  "Tpass",              1),
+	              (  "admin",    "admin",  "admin",      "admin",  "admin",  "admin",              1)
 ;
 
 select * from Administrator;

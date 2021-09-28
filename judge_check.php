@@ -4,7 +4,7 @@
 	//check whether judge is logged in
 	if (!isset ($_SESSION ['Judge']))
 	{
-		header ("Location: Judge.php");
+		header ("Location: judge.php");
 		exit();
 	}
 ?>

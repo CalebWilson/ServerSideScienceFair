@@ -4,5 +4,5 @@
 	session_destroy();
 	unset($_SESSION['Judge']);
 	unset($_SESSION['Administrator']);
-	header("location: Admin.php");
+	header("location: admin.php");
 ?>

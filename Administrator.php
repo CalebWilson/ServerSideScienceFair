@@ -61,34 +61,90 @@ class Administrator extends Entity
 	//display the body of the form for adding or editing an Administrator
 	protected function display_form_body ($action)
 	{
-		//Name
-		$this->display_input ("text", "FirstName", "First Name");
-		$this->display_input ("text", "MiddleName", "Middle Name");
-		$this->display_input ("text", "LastName", "Last Name");
+		//First Name
+		Input::display_input
+		(
+			"text",
+			"FirstName",
+			$this->fields['FirstName'],
+			"First Name",
+			$this->msgs
+		);
+
+		//Middle Name
+		Input::display_input
+		(
+			"text",
+			"MiddleName",
+			$this->fields['MiddleName'],
+			"Middle Name"
+		);
+
+		//Last Name
+		Input::display_input
+		(
+			"text",
+			"LastName",
+			$this->fields['LastName'],
+			"Last Name"
+			$this->msgs
+		);
+
 
 		//Email
-		$this->display_input ("text", "Email", "Email");
+		Input::display_input
+		(
+			"text",
+			"Email",
+			$this->fields['Email'],
+			"Email"
+			$this->msgs
+		);
 
 		//Username
-		$this->display_input ("text", "Username", "Username");
+		Input::display_input
+		(
+			"text",
+			"Username",
+			$this->fields['Username'],
+			"Username"
+			$this->msgs
+		);
 
 		//Password
 		$password_label = "Password";
 		if ($action == "edit")
 			$password_label = "New Password";
 
-		$this->display_input ("password", "Password", $password_label);
-		$this->display_input ("password", "pass_conf", "Confirm " . $password_label);
+		Input::display_input
+		(
+			"password",
+			"Password",
+			$this->fields['Password'],
+			$password_label,
+			$this->msgs
+		);
+
+		Input::display_input
+		(
+			"password",
+			"pass_conf",
+			$this->fields['pass_conf'],
+			"Confirm " . $password_label,
+			$this->msgs
+		);
 
 		//AuthorityLevel
 		Input::display_dropdown
 		(
 			"AuthorityLevel",
 			"Authority Level",
+
 			[
 				["1" => "Super Admin"],
 				["2" => "Normal Admin"]
 			],
+
 			"name"
 		);
 
@@ -183,14 +239,18 @@ class Administrator extends Entity
 					"Another administrator is already using this email.";
 			}
 
-		}
+		} //end Email
 
-		if (Input::is_duplicate
+		//Username
+		if
 		(
-			$this->table,
-			"Username",
-			$this->fields['Username'],
-			$original
+			Input::is_duplicate
+			(
+				$this->table,
+				"Username",
+				$this->fields['Username'],
+				$original
+			)
 		)
 		{
 			$valid = false;
@@ -207,7 +267,7 @@ class Administrator extends Entity
 		}
 
 		return $valid;
-	
+
 	} //end function validate()
 
 	//insert data from fields array into database

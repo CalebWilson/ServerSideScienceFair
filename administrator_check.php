@@ -4,7 +4,7 @@
 	//check whether admin is logged in
 	if (!isset ($_SESSION ['Administrator']))
 	{
-		header ("Location: Administrator.php");
+		header ("Location: administrator.php");
 		exit();
 	}
 ?>

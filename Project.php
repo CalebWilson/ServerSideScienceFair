@@ -65,8 +65,6 @@ class Project extends Entity
 	//display the body of the form for adding or editing a Project
 	protected function display_form_body ($action)
 	{
-		$options = $this->get_options();
-
 		//Project Title
 		Input::display_input
 		(
@@ -78,12 +76,18 @@ class Project extends Entity
 		);
 
 		//Category
+		$categories = Input::get_dropdown_options
+		(
+			$this->connection,
+			"select CategoryID as ID, CategoryName as Name from Category"
+		);
+
 		Input::display_dropdown
 		(
 			"CategoryID",
 			$this->fields['CategoryID'],
 			"Category",
-			$options['categories'],
+			$categories,
 			$this->msgs
 		);
 
@@ -99,12 +103,18 @@ class Project extends Entity
 		print ("Leave this field blank to auto-generate a new project number.<br>");
 
 		//Booth
+		$booths = Input::get_dropdown_options
+		(
+			$this->connection,
+			"select BoothID as ID, BoothNum as Name from Booth"
+		);
+
 		Input::display_dropdown
 		(
 			"BoothID",
 			$this->fields['BoothID'],
 			"Booth",
-			$options['booths'],
+			$booths,
 			$this->msgs
 		);
 		if ($action == "edit")
@@ -228,43 +238,6 @@ class Project extends Entity
 		return $valid;
 
 	} //end function validate()
-
-	//return an array of option arrays for the form to use
-	private function get_options()
-	{
-		$options = array();
-
-		//BoothNums
-		$record_set = $this->connection->query
-		("
-			select
-				Booth.BoothID, Booth.BoothNum,
-				ProjectID is not null as HasProject
-				from
-					Booth left join
-					Project on Project.BoothID = Booth.BoothID
-		");
-		$booths = $record_set->fetchAll();
-		$options['booths'] = array();
-
-		foreach ($booths as $booth)
-			$options['booths'][$booth['BoothID']] = $booth['BoothNum']; //oh boy
-
-		//Categories
-		$record_set = $this->connection->query
-			("select CategoryID, CategoryName from Category");
-		$categories = $record_set->fetchAll();
-		$options['categories'] = array();
-
-		foreach ($categories as $category)
-		{
-			$options['categories'][$category['CategoryID']] =
-				$category['CategoryName'];
-		}
-
-		return $options;
-
-	} //end function get_options()
 
 	//autofill number
 	private function autofill()

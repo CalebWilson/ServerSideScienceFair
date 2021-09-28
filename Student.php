@@ -67,12 +67,18 @@ class Student extends Entity
 		$options = $this->get_options();
 
 		//School
+		$schools = Input::get_dropdown_options
+		(
+			$this->connection,
+			"select SchoolID as ID, SchoolName as Name from School"
+		);
+
 		$this->display_dropdown
 		(
 			"SchoolID",
 			$this->fields['SchoolID'],
 			"School",
-			$options['schools'],
+			$schools,
 			$this->msgs
 		);
 
@@ -116,22 +122,37 @@ class Student extends Entity
 		);
 
 		//Project
+		$projects = Input::get_dropdown_options
+		(
+			$this->connection,
+
+			"select
+				ProjectID as ID
+				concat ('Project ', ProjectNumber, ': ', Title) as Name"
+		);
+
 		Input::display_dropdown
 		(
 			"ProjectID",
 			$this->fields['ProjectID'],
 			"Project",
-			$options['projects'],
+			$projects,
 			$this->msgs
 		);
 
 		//Grade
+		$grades = Input::get_dropdown_options
+		(
+			$this->connection,
+			"select GradeID as ID, GradeNum as Name from Grade"
+		);
+
 		Input::display_dropdown
 		(
 			"GradeID",
 			$this->fields['GradeID'],
-			"Grade",
-			$options['grades'],
+			"Grade Level",
+			$grades,
 			$this->msgs
 		);
 

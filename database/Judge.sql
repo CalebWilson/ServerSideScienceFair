@@ -20,8 +20,6 @@ create table Judge (
 	Username   varchar(50) NOT NULL,
 	Password   varchar(50) NOT NULL,
 	Year       year        NOT NULL, -- what year this person judged. If the same human judges on two different years, two different judge records are created.
-	Active     bool        NOT NULL,
-
 
 	-- first, second, and third category preferences
 	CatPref1 int,
@@ -52,12 +50,153 @@ create table Judge (
 
 show warnings;
 
+-- default values
+drop trigger if exists JudgeInsert;
+
+delimiter //
+
+create trigger JudgeInsert before insert on Judge
+for each row
+begin
+
+	-- Year
+	if new.Year is null
+	then
+		set new.Year = year(curdate());
+	end if;
+
+	-- Degree
+	if new.Degree is null
+	then
+		set new.Degree =
+		(
+			select DegreeID
+			from Degree
+			where DegreeLevel = (select min(DegreeLevel) from Degree)
+		);
+	end if;
+
+	-- UpperGradePref
+	if new.UpperGradePref is null
+	then
+		set new.UpperGradePref =
+		(
+			select GradeID
+			from Grade
+			where GradeNum= (select max(GradeNum) from Grade)
+		);
+	end if;
+
+	-- LowerGradePref
+	if new.LowerGradePref is null
+	then
+		set new.LowerGradePref =
+		(
+			select GradeID
+			from Grade
+			where GradeNum = (select min(GradeNum) from Grade)
+		);
+	end if;
+
+	-- CatPrefs
+	if new.CatPref1 is null and new.CatPref2 is not null
+	then
+		set new.CatPref1 = new.CatPref2;
+		set new.CatPref2 = null;
+	end if;
+
+	if new.CatPref2 is null and new.CatPref3 is not null
+	then
+		set new.CatPref2 = new.CatPref3;
+		set new.CatPref3 = null;
+	end if;
+
+	if new.CatPref1 is null and new.CatPref2 is not null
+	then
+		set new.CatPref1 = new.CatPref2;
+		set new.CatPref2 = null;
+	end if;
+
+end;
+//
+delimiter ;
+
+drop trigger if exists JudgeUpdate;
+
+delimiter //
+
+create trigger JudgeUpdate before update on Judge
+for each row
+begin
+
+	-- Year
+	if new.Year is null
+	then
+		set new.Year = year(curdate());
+	end if;
+
+	-- Degree
+	if new.Degree is null
+	then
+		set new.Degree =
+		(
+			select DegreeID
+			from Degree
+			where DegreeLevel = (select min(DegreeLevel) from Degree)
+		);
+	end if;
+
+	-- UpperGradePref
+	if new.UpperGradePref is null
+	then
+		set new.UpperGradePref =
+		(
+			select GradeID
+			from Grade
+			where GradeNum= (select max(GradeNum) from Grade)
+		);
+	end if;
+
+	-- LowerGradePref
+	if new.LowerGradePref is null
+	then
+		set new.LowerGradePref =
+		(
+			select GradeID
+			from Grade
+			where GradeNum = (select min(GradeNum) from Grade)
+		);
+	end if;
+
+	-- CatPrefs
+	if new.CatPref1 is null and new.CatPref2 is not null
+	then
+		set new.CatPref1 = new.CatPref2;
+		set new.CatPref2 = null;
+	end if;
+
+	if new.CatPref2 is null and new.CatPref3 is not null
+	then
+		set new.CatPref2 = new.CatPref3;
+		set new.CatPref3 = null;
+	end if;
+
+	if new.CatPref1 is null and new.CatPref2 is not null
+	then
+		set new.CatPref1 = new.CatPref2;
+		set new.CatPref2 = null;
+	end if;
+
+end;
+//
+delimiter ;
+
 -- test
 insert into
-	Judge  (FirstName, MiddleName, LastName,    Title,    Degree,   Employer,        Email, Username, Password, year, CatPref1, LowerGradePref, UpperGradePref, Active)
-	values ( "Tfirst",  "Tmiddle",  "Tlast", "Ttitle",         4, "Test Emp", "test@t.com",   "user",   "pass", 2020,        1,              9,             12, 0),
-	       ( "judge1",   "judge1", "judge1", "judge1",         4,   "judge1",     "judge1", "judge1", "judge1", 2020,        1,              9,             12, 0),
-	       ( "judge2",   "judge2", "judge2", "judge2",         4,   "judge2",     "judge2", "judge2", "judge2", 2020,        1,              9,             12, 0)
+	Judge  (FirstName, MiddleName, LastName,    Title,    Degree,   Employer,        Email, Username, Password, year, CatPref1, LowerGradePref, UpperGradePref)
+	values ( "Tfirst",  "Tmiddle",  "Tlast", "Ttitle",         4, "Test Emp", "test@t.com",   "user",   "pass", 2020,        1,              9,             12),
+	       ( "judge1",   "judge1", "judge1", "judge1",         4,   "judge1",     "judge1", "judge1", "judge1", 2020,        1,              9,             12),
+	       ( "judge2",   "judge2", "judge2", "judge2",         4,   "judge2",     "judge2", "judge2", "judge2", 2020,        1,              9,             12)
 ;
 
 select * from Judge;

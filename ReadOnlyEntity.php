@@ -15,19 +15,19 @@ abstract class ReadOnlyEntity
 	protected $table; //table name
 	public    $title; //title of web page
 	protected $view;  //name of view
-	protected $form;  //name of form entry point, e.g. "Admin" or "Judge"
+	protected $form;  //name of form entry point, e.g. "administrator" or "judge"
 
 	//database connection
 	protected $connection;
 
 	//constructor
-	protected function __construct ($connection, $form = "Admin")
+	protected function __construct ($connection)
 	{
 		//get name attributes from class name
 		$this->table = get_class($this);
 		$this->title = $this->table . 's';
 		$this->view  = strtolower ($this->table);
-		$this->form  = $form;
+		$this->form  = strtolower ($_SESSION['user_type']);
 
 		//get database connection
 		$this->connection = $connection;

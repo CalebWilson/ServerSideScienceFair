@@ -46,7 +46,10 @@ abstract class Input
 		$options: associative array of dropdown options mapping value => label
 		$msgs:    associative array of error messages mapping $field => $msg
 	*/
-	public static function display_dropdown ($field, $value, $label, $options, &$msgs)
+	public static function display_dropdown
+	(
+		$field, $value, $label, $options, &$msgs
+	)
 	{
 		//begin dropdown
 		print
@@ -77,6 +80,27 @@ abstract class Input
 		Input::display_input_error ($msgs, $field);
 
 	} //end function display_dropdown
+
+	/*
+		Retrieve dropdown options from the database, and return an associative array
+		mapping option ID value => option name.
+
+		$connection: connection to the database
+		$query_string: a valid SQL query that selects a column aliased as 'ID' and a
+			column aliased as 'Name'
+	*/
+	public static function get_dropdown_options ($connection, $query_string)
+	{
+		$record_set = $connection->query ($query_string);
+		$records = $record_set->fetchAll();
+
+		$options = array();
+		foreach ($records as $record)
+			$options[$record['ID']] = $record['Name'];
+
+		return $options;
+
+	} //end function get_dropdown_options
 
 	//display the error message for a field
 	public static function display_input_error (&$msgs, $field)

@@ -25,9 +25,9 @@ abstract class Entity extends ReadOnlyEntity
 	protected $msgs;
 
 	//constructor
-	protected function __construct ($connection, $form = "Admin")
+	protected function __construct ($connection)
 	{
-		parent::__construct ($connection, $form);
+		parent::__construct ($connection);
 
 		//dependents
 		$this->dependents = "other entity";
@@ -489,6 +489,7 @@ abstract class Entity extends ReadOnlyEntity
 
 	} //end function delete()
 
+	//display the body of the form
 	abstract protected function display_form_body ($action);
 
 	//check whether data has been submitted
