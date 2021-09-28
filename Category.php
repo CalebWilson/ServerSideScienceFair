@@ -88,6 +88,7 @@ class Category extends Entity
 			(
 				Input::is_duplicate
 				(
+					$this->connection,
 					$this->table,
 					"CategoryName",
 					$this->fields['CategoryName'],

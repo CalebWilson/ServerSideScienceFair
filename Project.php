@@ -165,6 +165,7 @@ class Project extends Entity
 		(
 			Input::is_duplicate
 			(
+				$this->connection,
 				$this->table,
 				"Title",
 				$this->fields['Title'],
@@ -186,6 +187,7 @@ class Project extends Entity
 			(
 				Input::is_duplicate
 				(
+					$this->connection,
 					$this->table,
 					"BoothID",
 					$this->fields['BoothID'],
@@ -206,6 +208,7 @@ class Project extends Entity
 		(
 			Input::is_duplicate
 			(
+				$this->connection,
 				$this->table,
 				"ProjectNum",
 				$this->fields,

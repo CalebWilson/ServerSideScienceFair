@@ -84,6 +84,7 @@ class Grade extends Entity
 			(
 				Input::is_duplicate
 				(
+					$this->connection,
 					$this->table,
 					"GradeNum",
 					$this->fields['GradeNum'],

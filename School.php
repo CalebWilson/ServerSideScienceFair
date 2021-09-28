@@ -93,6 +93,7 @@ class School extends Entity
 			(
 				Input::is_duplicate
 				(
+					$this->connection,
 					$this->table,
 					"SchoolName",
 					$this->fields['SchoolName'],

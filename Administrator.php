@@ -169,6 +169,7 @@ class Administrator extends Entity
 			(
 				Input::is_duplicate
 				(
+					$this->connection,
 					$this->table,
 					"Email",
 					$this->fields['Email'],

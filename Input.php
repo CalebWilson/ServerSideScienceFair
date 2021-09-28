@@ -33,7 +33,7 @@ abstract class Input
 		');
 
 		//error message
-		$this->display_input_error ($msgs, $field);
+		Input::display_input_error ($msgs, $field);
 
 	} //end function display_text_input()
 
@@ -74,7 +74,7 @@ abstract class Input
 		print('</select><br>');
 
 		//error message
-		$this->display_input_error ($field);
+		Input::display_input_error ($field);
 
 	} //end function display_dropdown
 
@@ -100,10 +100,10 @@ abstract class Input
 
 		foreach ($labels as $field => $label)
 		{
-			if ($this->fields[$field] == "")
+			if ($fields[$field] == "")
 			{
 				$valid = false;
-				$this->msgs[$field] = $label . " cannot be blank.";
+				$msgs[$field] = $label . " cannot be blank.";
 			}
 		}
 
@@ -113,8 +113,8 @@ abstract class Input
 
 	/*
 		Returns false if there exists a record other than $original with the same
-		value for $field where $condition, or if $this->fields[$field] is blank, and
-		returns true otherwise
+		value for $field where $condition, or if $field is blank, and returns true
+		otherwise.
 
 		$table:     table to check for $value
 		$field:     field whose uniqueness is to be checked
@@ -127,13 +127,13 @@ abstract class Input
 	*/
 	public static function is_duplicate
 	(
-		$table, $field, $value, $original, $condition = "1"
+		$connection, $table, $field, $value, $original, $condition = "1"
 	)
 	{
 		if ($value == "")
 			return false;
 
-		$query = $this->connection->prepare
+		$query = $connection->prepare
 		("
 			select count(*) as 'count'
 			from " . $table . "

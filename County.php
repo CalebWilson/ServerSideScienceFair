@@ -87,6 +87,7 @@ class County extends Entity
 			(
 				Input::is_duplicate
 				(
+					$this->connection,
 					$this->table,
 					"CountyName",
 					$this->fields['CountyName'],
