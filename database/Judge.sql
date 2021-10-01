@@ -13,7 +13,7 @@ create table Judge (
 	MiddleName varchar(50),
 	LastName   varchar(50)  NOT NULL,
 	Title      varchar(50), -- e.g. Dr, Professor, etc.
-	Degree     int          NOT NULL, -- highest degree earned
+	DegreeID   int          NOT NULL, -- highest degree earned
 	Employer   varchar(50),
 
 	Email      varchar(50) NOT NULL,
@@ -38,7 +38,7 @@ create table Judge (
 
 	PRIMARY KEY (JudgeID),
 
-	FOREIGN KEY (  Degree) REFERENCES Degree     (DegreeID),
+	FOREIGN KEY (DegreeID) REFERENCES Degree     (DegreeID),
 
 	FOREIGN KEY (CatPref1) REFERENCES Category (CategoryID),
 	FOREIGN KEY (CatPref2) REFERENCES Category (CategoryID),
@@ -66,9 +66,9 @@ begin
 	end if;
 
 	-- Degree
-	if new.Degree is null
+	if new.DegreeID is null
 	then
-		set new.Degree =
+		set new.DegreeID =
 		(
 			select DegreeID
 			from Degree
@@ -136,9 +136,9 @@ begin
 	end if;
 
 	-- Degree
-	if new.Degree is null
+	if new.DegreeID is null
 	then
-		set new.Degree =
+		set new.DegreeID =
 		(
 			select DegreeID
 			from Degree
@@ -193,10 +193,10 @@ delimiter ;
 
 -- test
 insert into
-	Judge  (FirstName, MiddleName, LastName,    Title,    Degree,   Employer,        Email, Username, Password, year, CatPref1, LowerGradePref, UpperGradePref)
-	values ( "Tfirst",  "Tmiddle",  "Tlast", "Ttitle",         4, "Test Emp", "test@t.com",   "user",   "pass", 2020,        1,              9,             12),
-	       ( "judge1",   "judge1", "judge1", "judge1",         4,   "judge1",     "judge1", "judge1", "judge1", 2020,        1,              9,             12),
-	       ( "judge2",   "judge2", "judge2", "judge2",         4,   "judge2",     "judge2", "judge2", "judge2", 2020,        1,              9,             12)
+	Judge  (FirstName, MiddleName, LastName,    Title,    DegreeID,   Employer,        Email, Username, Password, year, CatPref1, LowerGradePref, UpperGradePref)
+	values ( "Tfirst",  "Tmiddle",  "Tlast", "Ttitle",           4, "Test Emp", "test@t.com",   "user",   "pass", 2020,        1,              9,             12),
+	       ( "judge1",   "judge1", "judge1", "judge1",           4,   "judge1",     "judge1", "judge1", "judge1", 2020,        1,              9,             12),
+	       ( "judge2",   "judge2", "judge2", "judge2",           4,   "judge2",     "judge2", "judge2", "judge2", 2020,        1,              9,             12)
 ;
 
 select * from Judge;

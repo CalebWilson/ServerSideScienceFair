@@ -20,6 +20,7 @@
 					"project"       => "Projects",
 					"category"      => "Project Categories",
 					"booth"         => "Booths",
+					"judge"         => "Judges",
 					"ranking"       => "Project Rankings"
 				);
 

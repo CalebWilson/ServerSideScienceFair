@@ -131,14 +131,7 @@ class Grade extends Entity
 	{
 		$this->autofill();
 
-		$query = $this->connection->prepare
-		("
-			insert into
-			Grade (GradeNum)
-			values (?)
-		");
-
-		$query->execute (array_values ($this->fields));
+		parent::insert();
 
 	} //end function insert()
 

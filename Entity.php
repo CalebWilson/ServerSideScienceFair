@@ -504,7 +504,49 @@ abstract class Entity extends ReadOnlyEntity
 	abstract protected function validate ($original = "NULL");
 
 	//insert data from fields array into database
-	abstract protected function insert();
+	protected function insert()
+	{
+		//make a copy of $this->fields to be modified
+		$fields = $this->fields;
+
+		//build field list and value list
+		$field_list = array_keys($this->fields)[0]; //field list string
+		$value_list = "?";                          //value list string
+
+
+		//for each column
+		foreach (array_slice ($this->fields, 1) as $field => $value)
+		{
+			if ($value !== "") //exclude blanks
+			{
+				$field_list .= ", " . $field;
+			   $value_list .= ", ?";
+			}
+
+			else unset ($fields[$field]);
+
+		} //end for each column
+
+		$this->print_assoc ($fields);
+		print ($field_list . "<br>");
+
+		//execute the insert
+		$query_string =
+		"
+			insert into " .
+				$this->table . " (" . $field_list . ")
+				values           (" . $value_list . ")
+		";
+
+		$query = $this->connection->prepare($query_string);
+
+		print ($query_string . "<br>");
+
+		if ($query->execute (array_values ($fields)))
+			print ("Good");
+		else $this->print_assoc($query->errorInfo());
+
+	} //end function insert
 
 	//update database with data from fields array
 	abstract protected function update();

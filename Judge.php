@@ -1,12 +1,13 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class Judge extends Entity
 {
 	public function __construct ($connection)
 	{
-		parent::__construct($connection)
+		parent::__construct($connection);
 
 		//empty fields
 		$this->fields = array
@@ -20,6 +21,7 @@ class Judge extends Entity
 			"Email"          => "",
 			"Username"       => "",
 			"Password"       => "",
+			"pass_conf"      => "",
 			"CatPref1"       => "",
 			"CatPref2"       => "",
 			"CatPref3"       => "",
@@ -28,6 +30,24 @@ class Judge extends Entity
 		);
 
 	} //end constructor
+
+	//retrieve judges from database
+	public function get_data()
+	{
+		$record_set = $this->connection->query
+		("
+			select
+				JudgeID as ID,
+				concat (Title, ' ', FirstName, ' ', LastName) as selection
+			from Judge
+		");
+
+		$records = $record_set->fetchAll();
+		$record_set->closeCursor();
+
+		return $records;
+
+	} //end function get_data
 
 	//display the body of the form
 	protected function display_form_body ($action)
@@ -48,7 +68,8 @@ class Judge extends Entity
 			"text",
 			"MiddleName",
 			$this->fields['MiddleName'],
-			"Middle Name"
+			"Middle Name",
+			$this->msgs
 		);
 
 		//Last Name
@@ -57,7 +78,7 @@ class Judge extends Entity
 			"text",
 			"LastName",
 			$this->fields['LastName'],
-			"Last Name"
+			"Last Name",
 			$this->msgs
 		);
 
@@ -80,10 +101,10 @@ class Judge extends Entity
 
 		Input::display_dropdown
 		(
-			"Degree",
-			$this->fields['Degree'],
+			"DegreeID",
+			$this->fields['DegreeID'],
 			"Highest Degree Earned",
-			$this->get_degrees(),
+			$degrees,
 			$this->msgs
 		);
 
@@ -103,7 +124,7 @@ class Judge extends Entity
 			"text",
 			"Email",
 			$this->fields['Email'],
-			"Email"
+			"Email",
 			$this->msgs
 		);
 
@@ -113,7 +134,7 @@ class Judge extends Entity
 			"text",
 			"Username",
 			$this->fields['Username'],
-			"Username"
+			"Username",
 			$this->msgs
 		);
 
@@ -194,7 +215,7 @@ class Judge extends Entity
 
 		Input::display_dropdown
 		(
-			"GradeID",
+			"LowerGradePref",
 			$this->fields['LowerGradePref'],
 			"Lowest Grade Level Preference",
 			$grades,
@@ -205,14 +226,14 @@ class Judge extends Entity
 	} //end function display_form_body
 
 	//check whether data has been submitted
-	abstract protected function submitted ($post)
+	protected function submitted ($post)
 	{
 		return isset ($post['FirstName']);
 
 	} //end function submitted
 
 	//validate field entries and update msgs array
-	abstract protected function validate ($original = "NULL")
+	protected function validate ($original = "NULL")
 	{
 		$labels = array
 		(
@@ -225,7 +246,8 @@ class Judge extends Entity
 		//require password if adding
 		if ($original == "NULL")
 		{
-			$labels['Password'] = "Password";
+			$labels['Password']  = "Password";
+			$labels['pass_conf'] = "Password confirmation";
 		}
 
 		//invalidate blank fields
@@ -264,12 +286,16 @@ class Judge extends Entity
 		} //end Email
 
 		//Username
-		if (Input::is_duplicate
+		if
 		(
-			$this->table,
-			"Username",
-			$this->fields['Username'],
-			$original
+			Input::is_duplicate
+			(
+				$this->connection,
+				$this->table,
+				"Username",
+				$this->fields['Username'],
+				$original
+			)
 		)
 		{
 			$valid = false;
@@ -328,34 +354,18 @@ class Judge extends Entity
 	} //end function validate
 
 	//insert data from fields array into database
-	abstract protected function insert()
+	protected function insert()
 	{
-		$query = $this->connection->prepare
-		("
-			insert into Judge
-			(
-				FirstName, MiddleName, LastName,
-				Title, DegreeID, Employer,
-				Email, Username, Password,
-				CatPref1, CatPref2, CatPref3,
-				LowerGradePref, UpperGradePref
-			)
+		unset ($this->fields['pass_conf']);
 
-			values
-			(
-				?, ?, ?,
-				?, ?, ?,
-				?, ?, ?,
-				?, ?
-			)
-		");
+		parent::insert();
 
-		$query->execute (array_values($this->fields));
+		$this->fields['pass_conf'] = "";
 
 	} //end function insert
 
 	//update database with data from fields array
-	abstract protected function update()
+	protected function update()
 	{
 		$query = $this->connection->prepare
 		("
@@ -382,7 +392,7 @@ class Judge extends Entity
 	} //end function update
 
 	//confirm an add operation
-	abstract protected function confirm_add()
+	protected function confirm_add()
 	{
 		$msg =
 			"Successfully added "      .
@@ -397,7 +407,7 @@ class Judge extends Entity
 	} //end function confirm_add
 
 	//confirm an edit operation
-	abstract protected function confirm_edit()
+	protected function confirm_edit()
 	{
 		$msg =
 			$this->fields['Title']     . " " .
@@ -412,7 +422,7 @@ class Judge extends Entity
 	} //end function confirm_edit
 
 	//set fields to current database values of the record to be edited
-	abstract protected function prefill ($target)
+	protected function prefill ($target)
 	{
 		$record_set = $this->connection->query
 		("

@@ -4,7 +4,6 @@ drop table if exists Administrator;
 
 show warnings;
 
-#honestly feel a little shaky about this one lol
 create table Administrator (
 	AdministratorID int         NOT NULL AUTO_INCREMENT,
 	FirstName       varchar(50) NOT NULL,
@@ -23,7 +22,7 @@ create table Administrator (
 
 show warnings;
 
-#test
+-- test
 insert into
 	Administrator (FirstName, MiddleName, LastName,        Email, Username, Password, AuthorityLevel)
 	values        ( "Tfirst",    "Tlast",  "Tlast", "test@t.com",  "Tuser",  "Tpass",              1),

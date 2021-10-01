@@ -276,14 +276,9 @@ class Administrator extends Entity
 		//pass_conf is redundant
 		unset ($this->fields['pass_conf']);
 
-		$query = $this->connection->prepare
-		("
-			insert into
-				Administrator (FirstName, MiddleName, LastName, Email, Username, Password, AuthorityLevel)
-				values        (        ?,          ?,        ?,     ?,        ?,        ?,              ?)
-		");
+		parent::insert();
 
-		$query->execute (array_values($this->fields));
+		$this->fields['pass_conf'] = "";
 
 	} //end function insert
 

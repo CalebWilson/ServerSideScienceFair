@@ -30,10 +30,10 @@ class Project extends Entity
 		//empty fields
 		$this->fields = array
 		(
-			"BoothID"    => "",
+			"Title"      => "",
 			"CategoryID" => "",
 			"ProjectNum" => "",
-			"Title"      => "",
+			"BoothID"    => "",
 			"Abstract"   => ""
 		);
 
@@ -257,14 +257,7 @@ class Project extends Entity
 	{
 		$this->autofill();
 
-		$query = $this->connection->prepare
-		("
-			insert into
-				Project (Title, CategoryID, ProjectNum, BoothID, Abstract)
-				values  (    ?,          ?,          ?,       ?,        ?)
-		");
-
-		$query->execute (array_values($this->fields));
+		parent::insert();
 
 	} //end function insert()
 
