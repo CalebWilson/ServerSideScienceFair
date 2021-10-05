@@ -101,21 +101,6 @@ class Booth extends Entity
 
 	} //end validate()
 
-	//update database with data from fields array
-	protected function update()
-	{
-		//append ID to fields
-		$query = $this->connection->prepare
-		("
-			update Booth
-			set BoothNum = ?
-			where BoothID = ?
-		");
-
-		$query->execute(array_values($this->fields));
-
-	} //end function update()
-
 	//confirm an add operation
 	protected function confirm_add()
 	{

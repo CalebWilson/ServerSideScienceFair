@@ -266,26 +266,13 @@ class Project extends Entity
 	{
 		$this->autofill();
 
-		$this->print_assoc ($this->fields);
-
 		$query = $this->connection->prepare ("call UpdateProjectBooth (?, ?)");
 		$query->execute ([$this->fields['ID'], $this->fields['BoothID']]);
 
 		$booth = $this->fields['BoothID'];
 		unset ($this->fields['BoothID']);
 
-		$query = $this->connection->prepare
-		("
-			update Project
-			set
-				Title      = ?,
-				CategoryID = ?,
-				ProjectNum = ?,
-				Abstract   = ?
-			where ProjectID = ?
-		");
-
-		$query->execute (array_values($this->fields));
+		parent::update();
 
 		$this->fields['BoothID'] = $booth;
 

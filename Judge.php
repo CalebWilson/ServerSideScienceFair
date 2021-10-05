@@ -1,9 +1,9 @@
 <?php
 
-include "Entity.php";
+include "PasswordEntity.php";
 include "Input.php";
 
-class Judge extends Entity
+class Judge extends PasswordEntity
 {
 	public function __construct ($connection)
 	{
@@ -358,53 +358,17 @@ class Judge extends Entity
 
 	} //end function validate
 
-	//insert data from fields array into database
-	protected function insert()
-	{
-		unset ($this->fields['pass_conf']);
-
-		parent::insert();
-
-		$this->fields['pass_conf'] = "";
-
-	} //end function insert
-
-	//update database with data from fields array
-	protected function update()
-	{
-		$query = $this->connection->prepare
-		("
-			update Judge set
-				FirstName      = ?,
-				MiddleName     = ?,
-				LastName       = ?,
-				Title          = ?,
-				DegreeID       = ?,
-				Employer       = ?,
-				Email          = ?,
-				Username       = ?,
-				Password       = ?,
-				CatPref1       = ?,
-				CatPref2       = ?,
-				CatPref3       = ?,
-				LowerGradePref = ?,
-				UpperGradePref = ?
-			where JudgeID = ?
-		");
-
-		$query->execute (array_values($this->fields));
-
-	} //end function update
-
 	//confirm an add operation
 	protected function confirm_add()
 	{
-		$msg =
-			"Successfully added "      .
-			$this->fields['Title']     . " " .
+		$msg = "Successfully added ";
+
+		if ($this->fields['Title'] !== "")
+			$msg .= $this->fields['Title'] . " ";
+
+		$msg .=
 			$this->fields['FirstName'] . " " .
-			$this->fields['LastName']  .
-			" as Judge"
+			$this->fields['LastName']  . " as Judge."
 		;
 
 		return '<font color="green">' . $msg . '</font><br>';
@@ -414,11 +378,15 @@ class Judge extends Entity
 	//confirm an edit operation
 	protected function confirm_edit()
 	{
-		$msg =
-			$this->fields['Title']     . " " .
+		$msg = "Successfully modified ";
+
+		if ($this->fields['Title'] !== "")
+			$msg .= $this->fields['Title'] . " ";
+
+		$msg .=
 			$this->fields['FirstName'] . " " .
 			$this->fields['LastName']  .
-			" as Judge"
+			" as Judge."
 		;
 
 		return '<font color="green">' . $msg . '</font><br>';

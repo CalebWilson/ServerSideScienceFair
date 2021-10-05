@@ -124,22 +124,6 @@ class School extends Entity
 
 	} //end function validate()
 
-	//update database with data from fields array
-	protected function update()
-	{
-		$query = $this->connection->prepare
-		("
-			update School
-			set
-				SchoolName = ?,
-				CountyID   = ?
-			where SchoolID = ?
-		");
-
-		$query->execute (array_values($this->fields));
-
-	} //end function update()
-
 	//confirm an add operation
 	protected function confirm_add()
 	{

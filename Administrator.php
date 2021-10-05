@@ -9,7 +9,7 @@
 
 <?php
 
-include "Entity.php";
+include "PasswordEntity.php";
 include "Input.php";
 
 class Administrator extends Entity
@@ -77,7 +77,8 @@ class Administrator extends Entity
 			"text",
 			"MiddleName",
 			$this->fields['MiddleName'],
-			"Middle Name"
+			"Middle Name",
+			$this->msgs
 		);
 
 		//Last Name
@@ -86,7 +87,7 @@ class Administrator extends Entity
 			"text",
 			"LastName",
 			$this->fields['LastName'],
-			"Last Name"
+			"Last Name",
 			$this->msgs
 		);
 
@@ -97,7 +98,7 @@ class Administrator extends Entity
 			"text",
 			"Email",
 			$this->fields['Email'],
-			"Email"
+			"Email",
 			$this->msgs
 		);
 
@@ -107,7 +108,7 @@ class Administrator extends Entity
 			"text",
 			"Username",
 			$this->fields['Username'],
-			"Username"
+			"Username",
 			$this->msgs
 		);
 
@@ -138,14 +139,16 @@ class Administrator extends Entity
 		Input::display_dropdown
 		(
 			"AuthorityLevel",
+			$this->fields['AuthorityLevel'],
 			"Authority Level",
 
-			[
-				["1" => "Super Admin"],
-				["2" => "Normal Admin"]
-			],
+			array
+			(
+				"1" => "Super Admin",
+				"2" => "Normal Admin"
+			),
 
-			"name"
+			$this->msgs
 		);
 
 	} //end function display_form_body
@@ -226,8 +229,7 @@ class Administrator extends Entity
 				Input::is_duplicate
 				(
 					$this->connection,
-					$this->table,
-					"Email",
+					$this->table, "Email",
 					$this->fields['Email'],
 					$original
 				)
@@ -246,6 +248,7 @@ class Administrator extends Entity
 		(
 			Input::is_duplicate
 			(
+				$this->connection,
 				$this->table,
 				"Username",
 				$this->fields['Username'],
@@ -269,61 +272,6 @@ class Administrator extends Entity
 		return $valid;
 
 	} //end function validate()
-
-	//insert data from fields array into database
-	protected function insert()
-	{
-		//pass_conf is redundant
-		unset ($this->fields['pass_conf']);
-
-		parent::insert();
-
-		$this->fields['pass_conf'] = "";
-
-	} //end function insert
-
-	//update database with data from fields array
-	protected function update()
-	{
-		//password confirmation is redundant
-		unset ($this->fields['pass_conf']);
-
-		//begin building query
-		$query_text =
-		"
-			update Administrator
-			set
-				FirstName = ?,
-				MiddleName = ?,
-				LastName = ?,
-				Email = ?,
-				Username = ?,
-		";
-
-		//if password is empty, ignore it
-		if ($this->fields['Password'] == "")
-			unset ($this->fields ['Password']);
-
-		//if password not empty, include it
-		else
-		{
-			$query_text .=
-			"
-				Password = ?,
-			";
-		}
-
-		//finish building query
-		$query_text .=
-		"
-				AuthorityLevel = ?
-			where AdministratorID = ?
-		";
-
-		$query = $this->connection->prepare($query_text);
-		$query->execute (array_values($this->fields));
-
-	} //end function update()
 
 	//confirm an add operation
 	protected function confirm_add()

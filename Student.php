@@ -221,27 +221,6 @@ class Student extends Entity
 
 	} //end function get_options()
 
-	//update database with data from fields array
-	protected function update()
-	{
-		$query = $this->connection->prepare
-		("
-			update Student
-			set
-				SchoolID = ?,
-				FirstName = ?,
-				MiddleName = ?,
-				LastName = ?,
-				Gender = ?,
-				ProjectID = ?,
-				GradeID = ?
-			where StudentID = ?
-		");
-
-		$query->execute (array_values($this->fields));
-
-	} //end function update()
-
 	//confirm an add operation
 	protected function confirm_add()
 	{

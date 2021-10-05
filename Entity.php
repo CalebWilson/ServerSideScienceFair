@@ -337,10 +337,10 @@ abstract class Entity extends ReadOnlyEntity
 					$this->fields["ID"] = $post['selected'][0];
 
 					//update database
-					$this->update();
+					$msg = $this->update();
 
 					//confirmation message
-					$msg = $this->confirm_edit();
+					$msg .= $this->confirm_edit();
 
 				} //end if valid input
 
@@ -506,36 +506,47 @@ abstract class Entity extends ReadOnlyEntity
 	//insert data from fields array into database
 	protected function insert()
 	{
-		//make a copy of $this->fields to be modified
+		//ignore blank fields
 		$fields = $this->fields;
+		foreach ($this->fields as $field => $value)
+		{
+			if ($value === "")
+				unset ($fields[$field]);
+		}
+
+		//don't do anything if all fields are blank
+		if (count($fields) === 0)
+			return;
 
 		//build field list and value list
-		$field_list = array_keys($this->fields)[0]; //field list string
-		$value_list = "?";                          //value list string
+		$field_list = array_keys($fields)[0]; //field list string
+		$value_list = "?";                    //value list string
 
-		//for each column
-		foreach (array_slice ($this->fields, 1) as $field => $value)
+		//append to field list and value list
+		foreach (array_slice ($fields, 1) as $field => $value)
 		{
-			if ($value !== "") //exclude blanks
-			{
-				$field_list .= ", " . $field;
-			   $value_list .= ", ?";
-			}
+			$field_list .= ", " . $field;
+			$value_list .= ", ?";
 
-			else unset ($fields[$field]);
-
-		} //end for each column
+		}
 
 		$this->print_assoc ($fields);
 		print ($field_list . "<br>");
 
-		//execute the insert
-		$this->connection->prepare
-		("
+		$query_string =
+		"
 			insert into " .
 				$this->table . " (" . $field_list . ")
 				values           (" . $value_list . ")
-		");
+		";
+
+		print ($query_string);
+
+		//execute the insert
+		$query = $this->connection->prepare
+		($query_string);
+
+		$query->execute (array_values($fields));
 
 	} //end function insert
 
@@ -543,14 +554,42 @@ abstract class Entity extends ReadOnlyEntity
 	protected function update()
 	{
 		$fields = $this->fields;
+		unset ($this->fields['ID']); //don't include ID in field list
 
 		$query_string = "update " . $this->table . " set ";
 
-		foreach ($fields as $field => $value)
+		//for each column, build that part of the query string
+		foreach ($this->fields as $field => $value)
 		{
-			if ($value !== "")
+			$query_string .= $field . " = ";
+
+			//if blank, set null
+			if ($value === "")
 			{
-				$query_string .= $field . " = ?, "
+				$query_string .= "null, ";
+				unset ($fields[$field]);
+			}
+
+			//otherwise, prepare to execute from field values
+			else
+			{
+				$query_string .= "?, ";
+			}
+
+		} //end for each column
+
+		//remove trailing comma and space
+		$query_string = substr ($query_string, 0, -2);
+
+		//where clause
+		$query_string .= " where " . $this->table . "ID = ?";
+
+		//prepare and execute query
+		$query = $this->connection->prepare ($query_string);
+		$query->execute (array_values($fields));
+
+		//reset ID
+		$this->fields['ID'] = $fields['ID'];
 
 	} //end function update
 

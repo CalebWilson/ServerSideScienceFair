@@ -135,20 +135,12 @@ class Grade extends Entity
 
 	} //end function insert()
 
-
 	//update database with data from fields array
 	protected function update()
 	{
 		$this->autofill();
 
-		$query = $this->connection->prepare
-		("
-			update Grade
-			set GradeLevel = ?
-			where GradeID = ?
-		");
-
-		$query->execute (array_values ($this->fields));
+		parent::update();
 
 	} //end function update()
 

@@ -109,20 +109,6 @@ class Category extends Entity
 
 	} //end function validate()
 
-	//update database with data from fields array
-	protected function update()
-	{
-		$query = $this->connection->prepare
-		("
-        update Category
-        set CategoryName = ?
-        where CategoryID = ?
-	  ");
-
-		$query->execute (array_values($this->fields));
-
-	} //end function update()
-
 	//confirm an add operation
 	protected function confirm_add()
 	{
