@@ -52,7 +52,6 @@ class Administrator extends Entity
 				from Administrator
 		");
 		$records = $record_set->fetchAll();
-		$record_set->closeCursor();
 
 		return $records;
 
@@ -165,7 +164,7 @@ class Administrator extends Entity
 
 		$admin = $record_set->fetch (PDO::FETCH_ASSOC);
 
-		//if authority level is 1, show buttons
+		//sufficient authority
 		if ($admin['AuthorityLevel'] === '1')
 		{
 			return parent::buttons();
@@ -186,12 +185,6 @@ class Administrator extends Entity
 		} //end insufficient authority
 	
 	} //end function buttons()
-
-	//check whether data has been submitted
-	protected function submitted ($post)
-	{
-		return isset ($post["FirstName"]);
-	}
 
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")

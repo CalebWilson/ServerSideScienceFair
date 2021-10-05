@@ -63,7 +63,7 @@ class School extends Entity
 		);
 
 		//County
-		$counties = $this->get_dropdown_options 
+		$counties = Input::get_dropdown_options 
 		(
 			$this->connection,
 			"select CountyID as ID, CountyName as Name from County"

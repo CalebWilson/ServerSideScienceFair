@@ -90,12 +90,6 @@ class Score extends Entity
 
 	} //end function display_form_body
 
-	//check if score submitted
-	protected function submitted ($post)
-	{
-		return isset ($post['Score']);
-	}
-
 	//validate score
 	protected function validate ($original = "NULL")
 	{

@@ -484,11 +484,17 @@ abstract class Entity extends ReadOnlyEntity
 
 	} //end function delete()
 
+	//check whether data has been submitted
+	private function submitted ($post)
+	{
+		$input = array_diff (array_keys ($post), array ("action", "selected"));
+
+		return count($input) > 0;
+
+	} //end function submitted
+
 	//display the body of the form
 	abstract protected function display_form_body ($action);
-
-	//check whether data has been submitted
-	abstract protected function submitted ($post);
 
 	/*
 		validate field entries and update msgs array
@@ -525,17 +531,12 @@ abstract class Entity extends ReadOnlyEntity
 
 		}
 
-		$this->print_assoc ($fields);
-		print ($field_list . "<br>");
-
 		$query_string =
 		"
 			insert into " .
 				$this->table . " (" . $field_list . ")
 				values           (" . $value_list . ")
 		";
-
-		print ($query_string);
 
 		//execute the insert
 		$query = $this->connection->prepare

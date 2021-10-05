@@ -53,26 +53,18 @@ begin
 	set CategoryID = other
 	where CategoryID = old.CategoryID;
 
-	-- shuffle Judge.CatPref
-	-- if deleted was CatPref3
+	-- Judge Category Preferences
+	update Judge
+	set CatPref1 = null
+	where CatPref1 = old.CategoryID;
+
+	update Judge
+	set CatPref2 = null
+	where CatPref2 = old.CategoryID;
+
 	update Judge
 	set CatPref3 = null
 	where CatPref3 = old.CategoryID;
-
-	-- if deleted was CatPref2
-	update Judge
-	set
-		CatPref2 = CatPref3,
-		CatPref3 = null
-	where CatPref2 = old.CategoryID;
-
-	-- if deleted was CatPref1
-	update Judge
-	set
-		CatPref1 = catpref2,
-		CatPref2 = CatPref3,
-		CatPref3 = null
-	where CatPref1 = old.CategoryID;
 
 end;
 // 

@@ -158,12 +158,6 @@ class Student extends Entity
 
 	} //end function display_form_body()
 
-	//check whether data has been submitted
-	protected function submitted ($post)
-	{
-		return isset ($post["FirstName"]);
-	}
-
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{

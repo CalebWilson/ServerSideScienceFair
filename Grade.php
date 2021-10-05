@@ -78,12 +78,6 @@ class Grade extends Entity
 
 	} //end function edit
 
-	//check whether data has been submitted
-	protected function submitted ($post)
-	{
-		return isset ($post['GradeNum']);
-	}
-
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{

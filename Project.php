@@ -103,10 +103,32 @@ class Project extends Entity
 		print ("Leave this field blank to auto-generate a new project number.<br>");
 
 		//Booth
+		$booth_msg   = "";
+		$booth_query =
+		"
+			select
+				BoothID as ID,
+				concat ('Booth ', BoothNum) as Name
+			from Booth
+		";
+
+		if ($action == "edit")
+		{
+			$booth_msg = 
+				"Selecting a Booth already in use will cause the Project using it " .
+				"to swap Booths with this Project.<br>"
+			;
+		}
+
+		else
+		{
+			$booth_query .= "where BoothID not in (select BoothID from Project)";
+		}
+
 		$booths = Input::get_dropdown_options
 		(
 			$this->connection,
-			"select BoothID as ID, BoothNum as Name from Booth"
+			$booth_query
 		);
 
 		Input::display_dropdown
@@ -117,14 +139,9 @@ class Project extends Entity
 			$booths,
 			$this->msgs
 		);
-		if ($action == "edit")
-		{
-			print
-			(
-				"Selecting a Booth already in use will cause the Project using it " .
-				"to swap Booths with this Project.<br>"
-			);
-		}
+
+		print ($booth_msg);
+
 
 		//Abstract
 		print
@@ -147,12 +164,6 @@ class Project extends Entity
 		parent::edit($post);
 
 	} //end function edit
-
-	//check whether data has been submitted
-	protected function submitted ($post)
-	{
-		return isset ($post["Title"]);
-	}
 
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
