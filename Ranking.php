@@ -45,4 +45,18 @@ class Ranking extends ReadOnlyEntity
 
 	} //end function get_data();
 
+	//attempt to explain to the user what this represents
+	protected function display_data_header()
+	{
+		$msg =
+			"<p>
+				The rank each project achieved in comparison to other projects " .
+				"scored by the same Judge, averaged over all the Judges that "   .
+				"scored it." .
+			"</p><br>";
+
+		return $msg . parent::display_data_header();
+
+	} //end function display_data_header()
+
 } //end class Ranking
