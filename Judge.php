@@ -48,7 +48,6 @@ class Judge extends PasswordEntity
 		");
 
 		$records = $record_set->fetchAll();
-		$record_set->closeCursor();
 
 		return $records;
 
@@ -408,8 +407,25 @@ class Judge extends PasswordEntity
 		$this->fields ['Password'] = "";
 		$this->fields ['pass_conf'] = "";
 
-	} //end function prefill
+		//default grade preferences
+		$record_set = $this->connection->query
+		("
+			select
+				minGrade.GradeID as min,
+				maxGrade.GradeID as max
+			from
+				Grade as minGrade,
+				Grade as maxGrade
+			where
+				minGrade.GradeNum = (select min(GradeNum) from Grade) and
+				maxGrade.GradeNum = (select max(GradeNum) from Grade)
+		");
+		$grades = $record_set->fetch (PDO::FETCH_ASSOC);
 
+		$this->fields['LowerGradePref'] = $grades['min'];
+		$this->fields['UpperGradePref'] = $grades['max'];
+
+	} //end function prefill
 
 } //end class Judge
 
