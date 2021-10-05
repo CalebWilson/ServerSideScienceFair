@@ -7,12 +7,12 @@ show warnings;
 -- booths that a project can be displayed at
 -- referenced by Project
 create table Booth (
-	BoothID     int  NOT NULL AUTO_INCREMENT,
-	BoothNum    int  NOT NULL, -- user-friendly Booth number
+	BoothID     int  not null auto_increment,
+	BoothNum    int  not null, -- user-friendly Booth number
 
-	UNIQUE (BoothNum),
+	unique (BoothNum),
 
-	PRIMARY KEY (BoothID)
+	primary key (BoothID)
 );
 
 show warnings;

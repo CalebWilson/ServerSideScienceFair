@@ -7,12 +7,12 @@ show warnings;
 -- genre of the project
 -- referenced by Project, Judge
 create table Category (
-	CategoryID   int         NOT NULL AUTO_INCREMENT,
-	CategoryName varchar(50) NOT NULL,
+	CategoryID   int         not null auto_increment,
+	CategoryName varchar(50) not null,
 
-	UNIQUE (CategoryName),
+	unique (CategoryName),
 
-	PRIMARY KEY (CategoryID)
+	primary key (CategoryID)
 );
 
 show warnings;

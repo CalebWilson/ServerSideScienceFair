@@ -163,6 +163,8 @@ abstract class Entity extends ReadOnlyEntity
 
 		$this->display_form_footer ($action, $post);
 
+		include "footer.php";
+
 	} //end function display_form()
 
 	//display the beginning of the form
@@ -281,12 +283,7 @@ abstract class Entity extends ReadOnlyEntity
 
 		$this->display_form ("add", $msg, $post);
 
-		include "footer.php";
-
-		//I don't know if this will work correctly, but we'll see
 		exit();
-
-		return "";
 
 	} //end function add()
 
@@ -371,8 +368,6 @@ abstract class Entity extends ReadOnlyEntity
 			$this->display_form ("edit", $msg, $post);
 
 			exit();
-
-			return "";
 
 		} //end count === 1
 

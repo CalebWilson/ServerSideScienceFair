@@ -6,24 +6,24 @@ show warnings;
 
 -- referenced by Student, Schedule
 create table Project (
-	ProjectID       int         NOT NULL AUTO_INCREMENT,
+	ProjectID       int         not null auto_increment,
 	BoothID         int,                  -- booth where the project is shown
-	CategoryID      int         NOT NULL, -- genre of the project
+	CategoryID      int         not null, -- genre of the project
 
-	ProjectNum      int         NOT NULL, -- user-friendly Project number
-	Title           varchar(50) NOT NULL, -- Project Name
+	ProjectNum      int         not null, -- user-friendly Project number
+	Title           varchar(50) not null, -- Project Name
 	Abstract        varchar(200),         -- Project description
 
 	Year            year default 0, -- the year the project was presented
 
-	UNIQUE (ProjectNum, year),
-	UNIQUE (Title, year),
-	UNIQUE (BoothID, year),
+	unique (ProjectNum, year),
+	unique (Title, year),
+	unique (BoothID, year),
 
-	PRIMARY KEY (ProjectID),
-	FOREIGN KEY (BoothID)    REFERENCES Booth (BoothID)
+	primary key (ProjectID),
+	foreign key (BoothID)    references Booth (BoothID)
 		on delete set null,
-	FOREIGN KEY (CategoryID) REFERENCES Category (CategoryID)
+	foreign key (CategoryID) references Category (CategoryID)
 );
 
 show warnings;

@@ -7,12 +7,12 @@ show warnings;
 -- Grade level
 -- referenced by Student, Judge
 create table Grade (
-	GradeID  int NOT NULL AUTO_INCREMENT,
-	GradeNum int NOT NULL,
+	GradeID  int not null auto_increment,
+	GradeNum int not null,
 
-	UNIQUE (GradeNum),
+	unique (GradeNum),
 
-	PRIMARY KEY (GradeID)
+	primary key (GradeID)
 );
 
 show warnings;
@@ -45,7 +45,7 @@ begin
 
 	if dependents > 0
 	then
-		set grade_name = CONCAT("Grade ", old.GradeNum);
+		set grade_name = concat("Grade ", old.GradeNum);
 		signal sqlstate '45000'
 		set message_text = grade_name;
 	end if;

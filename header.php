@@ -5,6 +5,7 @@
 	require_once "db_connect.php";
 
 	$domain = "http://127.0.0.1:8000/";
+	$user_types = array ("Administrator", "Judge");
 ?>
 
 <!doctype html>
@@ -27,49 +28,41 @@
 	<header>
 		<div class="width">
 
-				<!--
-				<img src="image.png" alt="Image temporarily removed for debugging purposes :)" class="img-nav">
-				-->
+			<img
+				src="image.png"
+				alt="Image temporarily removed for debugging purposes :)"
+				class="img-nav"
+			>
+
 			<nav>
 
-					<span>
-						<a href=<?php print($domain) ?>"register.php">
-							Register
-						</a>
-					</span>
+				<?php
 
-					<?php
+					//for each user type
+					foreach ($user_types as $user_type)
+					{
+						if (isset ($_SESSION[$user_type]))
+							$logged_in = true;
 
-						if (!isset($_SESSION ['Judge']))
+						else
 						{ 
-							echo
-							'<span>
-								<a href="' . $domain . 'judge.php">
-									Judge Login
-								</a>
-							</span>';
+							print
+							('
+								<span>
+									<a href="' . $domain . strtolower($user_type) . '.php">
+										' . $user_type . ' Login
+									</a>
+								</span>
+							');
 						}
 
-						if (!isset($_SESSION ['Administrator']))
-						{ 
-							echo
-							'<span>
-								<a href="' . $domain . 'administrator.php">
-									Administrator Login
-								</a>
-							</span>';
-						}
+					} //end for each user type
 
-					?>
+					//display logout
+					if ($logged_in)
+						print('<span><a href="logout.php">Logout</a></span>');
+				?>
 
-					<?php
-
-						if (isset($_SESSION ['Judge']) ||
-							isset($_SESSION ['Administrator']))
-						{ 
-							echo '<span><a href="logout.php">Logout</a></span>';
-						}
-					?>
 			</nav>
 		</div>
 

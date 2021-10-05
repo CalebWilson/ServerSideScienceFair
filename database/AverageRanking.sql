@@ -11,7 +11,7 @@ as
 		(
 			select
 				ProjectID, JudgeID, Score,
-				ROW_NUMBER() OVER(partition by JudgeID order by Score desc) as Ranking
+				row_number() over(partition by JudgeID order by Score desc) as Ranking
 			from Judging
 
 		) as rankings

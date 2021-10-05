@@ -75,7 +75,7 @@ class Score extends Entity
 			$this->fields['ProjectID'],
 			"Project to Score",
 			$projects,
-			&$msgs
+			$this->msgs
 		);
 
 		//Score

@@ -7,45 +7,45 @@ show warnings;
 -- Judges to judge projects
 -- referenced by Schedule
 create table Judge (
-	JudgeID int NOT NULL AUTO_INCREMENT,
+	JudgeID int not null auto_increment,
 
-	FirstName  varchar(50)  NOT NULL,
+	FirstName  varchar(50)  not null,
 	MiddleName varchar(50),
-	LastName   varchar(50)  NOT NULL,
+	LastName   varchar(50)  not null,
 	Title      varchar(50), -- e.g. Dr, Professor, etc.
-	DegreeID   int          NOT NULL, -- highest degree earned
+	DegreeID   int          not null, -- highest degree earned
 	Employer   varchar(50),
 
-	Email      varchar(50) NOT NULL,
-	Username   varchar(50) NOT NULL,
-	Password   varchar(50) NOT NULL,
-	Year       year        NOT NULL, -- what year this person judged. If the same human judges on two different years, two different judge records are created.
+	Email      varchar(50) not null,
+	Username   varchar(50) not null,
+	Password   varchar(50) not null,
+	Year       year        not null, -- what year this person judged. If the same human judges on two different years, two different judge records are created.
 
 	-- first, second, and third category preferences
 	CatPref1 int,
 	CatPref2 int,
 	CatPref3 int,
 
-	LowerGradePref int NOT NULL, -- lowest grade level the judge would prefer to judge
-	UpperGradePref int NOT NULL, -- highest grade level the judge would prefer to judge
+	LowerGradePref int not null, -- lowest grade level the judge would prefer to judge
+	UpperGradePref int not null, -- highest grade level the judge would prefer to judge
 
 	-- make sure no category preferences are identical within one judge record
 	CHECK (CatPref2 != CatPref1),
 	CHECK (CatPref3 != CatPref1 AND CatPref3 != CatPref2),
 
-	UNIQUE (   Email, Year), -- no two judges should have the same email the same year
-	UNIQUE (Username, Year), -- no two judges should have the same username the same year
+	unique (   Email, Year), -- no two judges should have the same email the same year
+	unique (Username, Year), -- no two judges should have the same username the same year
 
-	PRIMARY KEY (JudgeID),
+	primary key (JudgeID),
 
-	FOREIGN KEY (DegreeID) REFERENCES Degree     (DegreeID),
+	foreign key (DegreeID) references Degree     (DegreeID),
 
-	FOREIGN KEY (CatPref1) REFERENCES Category (CategoryID),
-	FOREIGN KEY (CatPref2) REFERENCES Category (CategoryID),
-	FOREIGN KEY (CatPref3) REFERENCES Category (CategoryID),
+	foreign key (CatPref1) references Category (CategoryID),
+	foreign key (CatPref2) references Category (CategoryID),
+	foreign key (CatPref3) references Category (CategoryID),
 
-	FOREIGN KEY (UpperGradePref) REFERENCES Grade (GradeID),
-	FOREIGN KEY (LowerGradePref) REFERENCES Grade (GradeID)
+	foreign key (UpperGradePref) references Grade (GradeID),
+	foreign key (LowerGradePref) references Grade (GradeID)
 );
 
 show warnings;

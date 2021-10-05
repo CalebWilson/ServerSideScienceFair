@@ -7,14 +7,14 @@ show warnings;
 -- Schools attended by Students
 -- Referenced by Student
 create table School (
-	SchoolID    int        NOT NULL AUTO_INCREMENT,
-	CountyID    int        NOT NULL, -- County in which the school is located
-	SchoolName varchar(50) NOT NULL,
+	SchoolID    int        not null auto_increment,
+	CountyID    int        not null, -- County in which the school is located
+	SchoolName varchar(50) not null,
 
-	UNIQUE (SchoolName, CountyID), #no County should have two Schools with the same name
+	unique (SchoolName, CountyID), #no County should have two Schools with the same name
 
-	PRIMARY KEY (SchoolID),
-	FOREIGN KEY (CountyID) REFERENCES County (CountyID)
+	primary key (SchoolID),
+	foreign key (CountyID) references County (CountyID)
 );
 
 show warnings;

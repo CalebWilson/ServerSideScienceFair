@@ -7,12 +7,12 @@ show warnings;
 -- counties in which schools are located
 -- referenced by School
 create table County (
-	CountyID           int NOT NULL AUTO_INCREMENT,
-	CountyName varchar(50) NOT NULL,
+	CountyID           int not null auto_increment,
+	CountyName varchar(50) not null,
 
-	UNIQUE (CountyName),
+	unique (CountyName),
 
-	PRIMARY KEY (CountyID)
+	primary key (CountyID)
 );
 
 show warnings;

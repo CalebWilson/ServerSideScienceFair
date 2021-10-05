@@ -5,19 +5,19 @@ drop table if exists Administrator;
 show warnings;
 
 create table Administrator (
-	AdministratorID int         NOT NULL AUTO_INCREMENT,
-	FirstName       varchar(50) NOT NULL,
+	AdministratorID int         not null auto_increment,
+	FirstName       varchar(50) not null,
 	MiddleName      varchar(50),
-	LastName        varchar(50) NOT NULL,
-	Email           varchar(50) NOT NULL,
-	Username        varchar(50) NOT NULL,
-	Password        varchar(50) NOT NULL,
-	AuthorityLevel  int         NOT NULL, #not sure how this will be used
+	LastName        varchar(50) not null,
+	Email           varchar(50) not null,
+	Username        varchar(50) not null,
+	Password        varchar(50) not null,
+	AuthorityLevel  int         not null,
 
-	UNIQUE (Email),
-	UNIQUE (Username),
+	unique (Email),
+	unique (Username),
 
-	PRIMARY KEY (AdministratorID)
+	primary key (AdministratorID)
 );
 
 show warnings;

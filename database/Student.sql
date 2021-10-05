@@ -7,20 +7,20 @@ show warnings;
 -- Students participating in the program
 -- A new record is added when a Student participates a second year
 create table Student (
-	StudentID  int          NOT NULL AUTO_INCREMENT,
-	SchoolID   int          NOT NULL, -- school attended by the Student
-	ProjectID  int          NOT NULL, -- project the Student worked on
-	FirstName  varchar(50)  NOT NULL,
+	StudentID  int          not null auto_increment,
+	SchoolID   int          not null, -- school attended by the Student
+	ProjectID  int          not null, -- project the Student worked on
+	FirstName  varchar(50)  not null,
 	MiddleName varchar(50),
-	LastName   varchar(50)  NOT NULL,
-	GradeID    int          NOT NULL, -- what grade the Student is in
-	Gender     varchar(50)  NOT NULL,
-	Year       year         NOT NULL, -- which year this Student is participating in
+	LastName   varchar(50)  not null,
+	GradeID    int          not null, -- what grade the Student is in
+	Gender     varchar(50)  not null,
+	Year       year         not null, -- which year this Student is participating in
 
-	PRIMARY KEY (StudentID),
-	FOREIGN KEY (SchoolID)  REFERENCES School   (SchoolID),
-	FOREIGN KEY (ProjectID) REFERENCES Project  (ProjectID),
-	FOREIGN KEY (GradeID)   REFERENCES Grade    (GradeID)
+	primary key (StudentID),
+	foreign key (SchoolID)  references School   (SchoolID),
+	foreign key (ProjectID) references Project  (ProjectID),
+	foreign key (GradeID)   references Grade    (GradeID)
 );
 
 show warnings;

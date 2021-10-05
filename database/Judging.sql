@@ -8,21 +8,21 @@ show warnings;
 -- each record in this table represents a specific judging of a specific project
 create table Judging
 (
-	JudgingID  int NOT NULL AUTO_INCREMENT,
+	JudgingID  int not null auto_increment,
 
-	JudgeID    int NOT NULL, -- the judge to judge the project
-	ProjectID  int NOT NULL, -- the project to be judged
+	JudgeID    int not null, -- the judge to judge the project
+	ProjectID  int not null, -- the project to be judged
 
 	-- Score out of 100
 	Score decimal (5, 2),
-		CHECK (Score >= 0 AND Score <= 100.00),
+		check (Score >= 0 AND Score <= 100.00),
 
-	UNIQUE (JudgeID, ProjectID),   -- a judge cannot judge the same project more than once
+	unique (JudgeID, ProjectID),   -- a judge cannot judge the same project more than once
 
 	PRIMARY KEY (JudgingID),
 
-	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID) on delete cascade,
-	FOREIGN KEY (  JudgeID) REFERENCES Judge   (  JudgeID) on delete cascade
+	foreign key (ProjectID) references Project (ProjectID) on delete cascade,
+	foreign key (  JudgeID) references Judge   (  JudgeID) on delete cascade
 );
 
 show warnings;

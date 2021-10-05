@@ -7,12 +7,12 @@ show warnings;
 -- degrees earned by judges
 -- referenced by Judge
 create table Degree (
-	DegreeID int NOT NULL AUTO_INCREMENT,
+	DegreeID int not null auto_increment,
 
-	DegreeName  varchar(100) NOT NULL,
-	DegreeLevel int          NOT NULL,
+	DegreeName  varchar(100) not null,
+	DegreeLevel int          not null,
 
-	PRIMARY KEY (DegreeID)
+	primary key (DegreeID)
 );
 
 show warnings;
