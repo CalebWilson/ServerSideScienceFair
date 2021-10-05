@@ -38,7 +38,12 @@ class Judge extends Entity
 		("
 			select
 				JudgeID as ID,
-				concat (Title, ' ', FirstName, ' ', LastName) as selection
+				concat
+				(
+					coalesce (concat (Title, ' '), ''),
+					FirstName, ' ',
+					LastName
+				) as selection
 			from Judge
 		");
 

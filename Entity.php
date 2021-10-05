@@ -513,7 +513,6 @@ abstract class Entity extends ReadOnlyEntity
 		$field_list = array_keys($this->fields)[0]; //field list string
 		$value_list = "?";                          //value list string
 
-
 		//for each column
 		foreach (array_slice ($this->fields, 1) as $field => $value)
 		{
@@ -531,25 +530,29 @@ abstract class Entity extends ReadOnlyEntity
 		print ($field_list . "<br>");
 
 		//execute the insert
-		$query_string =
-		"
+		$this->connection->prepare
+		("
 			insert into " .
 				$this->table . " (" . $field_list . ")
 				values           (" . $value_list . ")
-		";
-
-		$query = $this->connection->prepare($query_string);
-
-		print ($query_string . "<br>");
-
-		if ($query->execute (array_values ($fields)))
-			print ("Good");
-		else $this->print_assoc($query->errorInfo());
+		");
 
 	} //end function insert
 
 	//update database with data from fields array
-	abstract protected function update();
+	protected function update()
+	{
+		$fields = $this->fields;
+
+		$query_string = "update " . $this->table . " set ";
+
+		foreach ($fields as $field => $value)
+		{
+			if ($value !== "")
+			{
+				$query_string .= $field . " = ?, "
+
+	} //end function update
 
 	//confirm an add operation
 	abstract protected function confirm_add();
