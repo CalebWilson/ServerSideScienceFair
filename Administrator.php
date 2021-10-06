@@ -14,6 +14,10 @@ include "Input.php";
 
 class Administrator extends PasswordEntity
 {
+	private $admin_id;
+	private $authority;
+	private $authority_error = false;
+
 	//constructor
 	function __construct ($connection)
 	{
@@ -33,6 +37,18 @@ class Administrator extends PasswordEntity
 			"AuthorityLevel" => ""
 		);
 
+		//authority info
+		$record_set = $this->connection->query
+		("
+			select AdministratorID, AuthorityLevel
+			from Administrator
+			where AdministratorID = " . $_SESSION['Administrator']
+		);
+
+		$admin = $record_set->fetch (PDO::FETCH_ASSOC);
+		$this->admin_id  = $admin['AdministratorID'];
+		$this->authority = $admin['AuthorityLevel'];
+
 	} //end constructor
 
 	/* Override abstract methods */
@@ -43,13 +59,17 @@ class Administrator extends PasswordEntity
 		$record_set = $this->connection->query
 		("
 			select
-				AdministratorID as ID,
-				CONCAT (
-					LEFT (FirstName, 15), ' ',
-					LEFT (MiddleName, 1), '. ',
-					LEFT (LastName,  15)
-				) as selection
-				from Administrator
+				AdministratorID as ID, " .
+
+				$this->nullsafe_concat
+				(
+					"FirstName", "' '",
+					"concat(left(MiddleName, 1), '. ')",
+					"LastName", "' '",
+
+				) . " as selection
+
+			from Administrator
 		");
 		$records = $record_set->fetchAll();
 
@@ -89,7 +109,6 @@ class Administrator extends PasswordEntity
 			"Last Name",
 			$this->msgs
 		);
-
 
 		//Email
 		Input::display_input
@@ -150,25 +169,24 @@ class Administrator extends PasswordEntity
 			$this->msgs
 		);
 
+		if ($this->authority_error)
+		{
+			print
+			(
+				'<p><font color="red">' .
+					'You do not have the authority to modify other Administrators.' .
+				'</font></p>'
+			);
+		}
+
 	} //end function display_form_body
 
 	//only show action buttons if the administrator has sufficient authority
 	public function buttons()
 	{
-		$record_set = $this->connection->query
-		("
-			select AuthorityLevel
-			from Administrator
-			where AdministratorID = " . $_SESSION['Administrator']
-		);
-
-		$admin = $record_set->fetch (PDO::FETCH_ASSOC);
-
 		//sufficient authority
-		if ($admin['AuthorityLevel'] === '1')
-		{
+		if ($this->authority === '1')
 			return parent::buttons();
-		}
 
 		//insufficient authority
 		else
@@ -189,6 +207,12 @@ class Administrator extends PasswordEntity
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
+		if ($this->authority !== '1' && $this->admin_id !== $original)
+		{
+			$this->authority_error = true;
+			return false;
+		}
+
 		$labels = array
 		(
 			"FirstName"      => "First name",

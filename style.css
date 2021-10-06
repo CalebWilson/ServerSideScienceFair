@@ -279,6 +279,16 @@ button:hover {
   width: 9em;
   padding: 10px;
 }
+.welcome {
+	position: absolute;
+	left: 9%;
+	margin-left: 9em;
+	margin-top: 1.5em;
+
+	font-size: x-large;
+	font-weight: bold;
+	color: white;
+}
 .check-d {
   opacity: 0;
 }

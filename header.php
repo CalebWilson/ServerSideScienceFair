@@ -28,13 +28,21 @@
 	<header>
 		<div class="width">
 
-			<!--
 			<img
 				src="image.png"
 				alt="Image temporarily removed for debugging purposes :)"
 				class="img-nav"
 			>
-			-->
+
+			<?php
+				if (isset ($_SESSION['name']))
+				{
+					print
+					('
+						<span class="welcome">Welcome, ' . $_SESSION['name'] . '!</span>
+					');
+				}
+			?>
 
 			<nav>
 

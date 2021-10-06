@@ -150,7 +150,7 @@ abstract class Entity extends ReadOnlyEntity
 
 		return $footer;
 
-	} //end function display_form_footer
+	} //end function display_data_footer
 
 	//display the form in its entirety
 	protected function display_form ($action, $msg, $post)
@@ -334,7 +334,7 @@ abstract class Entity extends ReadOnlyEntity
 					$this->fields["ID"] = $post['selected'][0];
 
 					//update database
-					$msg = $this->update();
+					$this->update();
 
 					//confirmation message
 					$msg .= $this->confirm_edit();

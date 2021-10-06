@@ -28,20 +28,21 @@
 		//if match
 		if ($count === "1")
 		{
-			//save their id
+			//save their id and name
 			$query = $connection->prepare
 			("
-				select " . $_SESSION ['user_type'] . "ID
+				select " .
+					$_SESSION ['user_type'] . "ID as ID,
+					concat(FirstName, ' ', LastName) as Name
 				from " . $_SESSION ['user_type'] . "
 				where
 					Username = ? and
 					Password = ?
 			");
 			$query->execute (array ($username, $password));
-			$row = $query->fetch (PDO::FETCH_OBJ);
-			$id_name = $_SESSION['user_type'] . "ID";
-			$id = $row->$id_name;
-			$_SESSION[$_SESSION['user_type']] = $id;
+			$user = $query->fetch (PDO::FETCH_ASSOC);
+			$_SESSION[$_SESSION['user_type']] = $user['ID'];
+			$_SESSION['name'] = $user['Name'];
 
 			//don't display login page after they're already logged in
 			include strtolower($_SESSION['user_type']) . ".php";
@@ -50,7 +51,7 @@
 		//if not a match, tell them
 		else if ($count === "0")
 		{
-			$msg = '<p><font color="red">Incorrect username or password</font></p>';
+			$msg = '<p><font color="red">Incorrect username or password.</font></p>';
 		}
 		else
 		{
