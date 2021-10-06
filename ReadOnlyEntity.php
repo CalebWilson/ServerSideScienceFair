@@ -148,6 +148,40 @@ abstract class ReadOnlyEntity
 
 	} //end function back_button
 
+	/*
+		Return a query string fragment that will return the concatenation of the
+		values of $column_names.
+
+		$column_names: Column name strings to be injected into a query string.
+			Concatenation of literal SQL strings will therefore require extra
+			quotation marks, e.g. `nullsafe_concat ("FirstName", "' '", "LastName")`.
+
+		I would have integrated this into the database, but MySQL doesn't allow
+		stored functions to have a variable number of arguments, and there is
+		insufficient documentation regarding the addition of loadable functions.
+	*/
+	protected static function nullsafe_concat (...$column_names)
+	{
+		//concatenating nothing returns empty string
+		if (count ($column_names) === 0)
+			return "";
+
+		//build string fragment
+		$sql = "concat (";
+
+		//add each column name
+		foreach ($column_names as $column_name)
+		{
+			$sql .= "coalesce (" . $column_name . ", ''), ";
+		}
+
+		//replace trailing comma and space with closing parenthesis
+		$sql = substr ($sql, 0, -2) . ")";
+
+		return $sql;
+
+	} //end function concat
+
 } //end class ReadOnlyEntity
 
 ?>

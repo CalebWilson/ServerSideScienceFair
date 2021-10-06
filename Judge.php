@@ -37,13 +37,13 @@ class Judge extends PasswordEntity
 		$record_set = $this->connection->query
 		("
 			select
-				JudgeID as ID,
-				concat
+				JudgeID as ID, " .
+				ReadOnlyEntity::nullsafe_concat
 				(
-					coalesce (concat (Title, ' '), ''),
-					FirstName, ' ',
-					LastName
-				) as selection
+					"Title", "' '",
+					"FirstName", "' '",
+					"Lastname"
+				) . " as selection
 			from Judge
 		");
 

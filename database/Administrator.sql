@@ -26,7 +26,7 @@ show warnings;
 insert into
 	Administrator (FirstName, MiddleName, LastName,        Email, Username, Password, AuthorityLevel)
 	values        ( "Tfirst",    "Tlast",  "Tlast", "test@t.com",  "Tuser",  "Tpass",              1),
-	              (  "admin",    "admin",  "admin",      "admin",  "admin",  "admin",              1)
+	              (  "admin",    "admin",  "admin", "admin@a.ad",  "admin",  "admin",              1)
 ;
 
 select * from Administrator;

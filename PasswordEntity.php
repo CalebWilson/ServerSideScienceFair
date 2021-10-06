@@ -19,10 +19,9 @@ abstract class PasswordEntity extends Entity
 		parent::__construct ($connection);
 	}
 
-	//insert data from fields array into database
+	//remove password confirmation from $fields before inserting
 	protected function insert()
 	{
-		//pass_conf is redundant
 		unset ($this->fields['pass_conf']);
 
 		parent::insert();

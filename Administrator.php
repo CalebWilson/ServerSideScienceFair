@@ -12,7 +12,7 @@
 include "PasswordEntity.php";
 include "Input.php";
 
-class Administrator extends Entity
+class Administrator extends PasswordEntity
 {
 	//constructor
 	function __construct ($connection)
@@ -194,7 +194,8 @@ class Administrator extends Entity
 			"FirstName"      => "First name",
 			"LastName"       => "Last name",
 			"Email"          => "Email",
-			"Username"       => "Username"
+			"Username"       => "Username",
+			"AuthorityLevel" => "Authority Level"
 		);
 
 		//require password if adding
@@ -206,6 +207,7 @@ class Administrator extends Entity
 		//invalidate blank fields
 		$valid = Input::invalidate_blanks ($this->fields, $labels, $this->msgs);
 
+		//Email
 		if ($this->fields['Email'] != "")
 		{
 			//email validity
