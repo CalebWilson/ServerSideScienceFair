@@ -62,14 +62,14 @@ class AutofillNumber
 		{
 			$query_string = "";
 
-			//if project already has a number, get it
+			//if entity already has a number, get it
 			if (isset ($this->id))
 			{
 				$query_string =
 				"
-					select " . $field . "
-					from " . $this->table . "
-					where " . $this->table . "ID = " . $this->id
+					select " . $field . " as next
+					from "   . $table . "
+					where "  . $table . "ID = " . $this->id
 				;
 			}
 
@@ -78,7 +78,7 @@ class AutofillNumber
 			{
 				$query_string = 
 				"
-					select min(" . $field . ") + 1 as missing
+					select min(" . $field . ") + 1 as next
 					from " . $table . "
 					where
 						" . $field . " + 1 not in
@@ -90,7 +90,7 @@ class AutofillNumber
 			$record_set = $this->connection->query ($query_string);
 
 			$fields[$field] =
-				$record_set->fetch(PDO::FETCH_ASSOC)["missing"];
+				$record_set->fetch(PDO::FETCH_ASSOC)["next"];
 		}
 
 	} //end function autofill_number
