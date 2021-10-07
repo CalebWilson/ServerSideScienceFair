@@ -11,9 +11,13 @@
 
 include "Entity.php";
 include "Input.php";
+include "AutofillNumber.php";
 
 class Booth extends Entity
 {
+	//autofill booth number
+	private $autofiller;
+
 	//constructor
 	function __construct ($connection)
 	{
@@ -23,6 +27,9 @@ class Booth extends Entity
 		//empty fields
 		$this->fields = ["BoothNum" => ""];
 
+		//instantiate AutofillNumber
+		$this->autofiller = new AutofillNumber ($connection);
+	
 	} //end constructor
 
 	/* Override abstract methods */
@@ -49,22 +56,31 @@ class Booth extends Entity
 	protected function display_form_body ($action)
 	{
 		//BoothNum
-		$this->display_input ("number", "BoothNum", "Booth Number");
+		Input::display_input
+		(
+			"number",
+			"BoothNum",
+			$this->fields['BoothNum'],
+			"Booth Number",
+			$this->msgs
+		);
 
 	} //end function display_form_body()
+
+	//override edit for autofilling
+	public function edit ($post)
+	{
+		$this->autofiller->set_id ($post);
+
+		parent::edit($post);
+
+	} //end function edit
 
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
-		if
-		(
-			Input::invalidate_blanks
-			(
-				$this->fields,
-				array ("BoothNum" => "Booth number"),
-				$this->msgs
-			)
-		)
+		//return false if Booth is non-blank and duplicate
+		if ($this->fields['BoothNum'] != "")
 		{
 			if
 			(
@@ -85,15 +101,42 @@ class Booth extends Entity
 				return false;
 			}
 
-			//not blank and unique
-			return true;
+		} //end if Booth is non-blank and duplicate
 
-		} //end uniqueness
-
-		//blank
-		return false;
+		//return true otherwise
+		return true;
 
 	} //end validate()
+
+	//autofill number
+	private function autofill()
+	{
+		$this->autofiller->autofill_number
+		(
+			$this->fields,
+			"Booth",
+			"BoothNum"
+		);
+
+	} //end function autofill
+
+	//insert data from fields array into database
+	protected function insert()
+	{
+		$this->autofill();
+
+		parent::insert();
+
+	} //end function insert()
+
+	//update database with data from fields array
+	protected function update()
+	{
+		$this->autofill();
+
+		parent::update();
+
+	} //end function update()
 
 	//confirm an add operation
 	protected function confirm_add()

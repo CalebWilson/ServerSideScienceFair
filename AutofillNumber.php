@@ -78,11 +78,11 @@ class AutofillNumber
 			{
 				$query_string = 
 				"
-					select min(" . $field . ") + 1 as next
+					select coalesce(min(" . $field . "), 0) + 1 as next
 					from " . $table . "
 					where
 						" . $field . " + 1 not in
-							(select " . $field . " from Grade) and " .
+							(select " . $field . " from " . $table . ") and " .
 						$condition
 				;
 			}
