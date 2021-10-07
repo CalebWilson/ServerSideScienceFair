@@ -115,14 +115,15 @@ class Project extends Entity
 		if ($action == "edit")
 		{
 			$booth_msg = 
-				"Selecting a Booth already in use will cause the Project using it " .
-				"to swap Booths with this Project.<br>"
+				"Selecting a booth already in use will cause the project using it " .
+				"to swap booths with this project.<br>"
 			;
 		}
 
 		else
 		{
 			$booth_query .= "where BoothID not in (select BoothID from Project)";
+			$booth_msg = "If there are no booths left, you may need to add more.";
 		}
 
 		$booths = Input::get_dropdown_options
@@ -150,8 +151,8 @@ class Project extends Entity
 			<textarea
 				placeholder="Enter project description"
 				name="Abstract"
-				class="p-desc">' . $this->fields['Abstract'] . '
-			</textarea>
+				class="p-desc">' . $this->fields['Abstract'] .
+			'</textarea>
 		');
 
 	} //end function display_form_body()
@@ -203,29 +204,6 @@ class Project extends Entity
 				"There is already a project with that title this year.";
 		}
 
-		//Booth
-		if (!$this->autofiller->has_id())
-		{
-			if
-			(
-				Input::is_duplicate
-				(
-					$this->connection,
-					$this->table,
-					"BoothID",
-					$this->fields['BoothID'],
-					$original,
-					$year_condition
-				)
-			)
-			{
-				$valid = false;
-
-				$this->msgs['BoothID'] =
-					"There is already a project at that booth this year.";
-			}
-		}
-
 		//Project Number
 		if
 		(
@@ -234,7 +212,7 @@ class Project extends Entity
 				$this->connection,
 				$this->table,
 				"ProjectNum",
-				$this->fields,
+				$this->fields['ProjectNum'],
 				$original,
 				$year_condition
 			)
