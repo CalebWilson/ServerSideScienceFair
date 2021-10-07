@@ -10,6 +10,7 @@
 <?php
 
 include "Entity.php";
+include "Input.php";
 
 class Student extends Entity
 {
@@ -41,16 +42,19 @@ class Student extends Entity
 		$record_set = $this->connection->query
 		("
 			select
-				StudentID as ID,
-				CONCAT (
-					LEFT (LastName,  15), ', ',
-					LEFT (FirstName, 15), ' ',
-					LEFT (MiddleName, 1), '., (',
-					LEFT (SchoolName, 15), ')'
-				) as selection
-				from Student, School
-				where Student.SchoolID = School.SchoolID
-				order by LastName
+				StudentID as ID, " .
+				ReadOnlyEntity::nullsafe_concat
+				(
+					"LastName",  "', '",
+					"FirstName", "' '",
+					"concat (left(MiddleName, 1), '.')", "' ('",
+					"SchoolName", "')'"
+
+				) . " as selection
+
+			from Student, School
+			where Student.SchoolID = School.SchoolID
+			order by LastName
 		");
 		$records = $record_set->fetchAll();
 		$record_set->closeCursor();
@@ -63,9 +67,6 @@ class Student extends Entity
 	//display the body of the form for adding or editing a Student
 	protected function display_form_body ($action)
 	{
-		//get dropdown options from the database
-		$options = $this->get_options();
-
 		//School
 		$schools = Input::get_dropdown_options
 		(
@@ -73,7 +74,7 @@ class Student extends Entity
 			"select SchoolID as ID, SchoolName as Name from School"
 		);
 
-		$this->display_dropdown
+		Input::display_dropdown
 		(
 			"SchoolID",
 			$this->fields['SchoolID'],
@@ -98,7 +99,8 @@ class Student extends Entity
 			"text",
 			"MiddleName",
 			$this->fields['MiddleName'],
-			"Middle Name"
+			"Middle Name",
+			$this->msgs
 		);
 
 		//Last Name
@@ -107,7 +109,7 @@ class Student extends Entity
 			"text",
 			"LastName",
 			$this->fields['LastName'],
-			"Last Name"
+			"Last Name",
 			$this->msgs
 		);
 
@@ -117,7 +119,7 @@ class Student extends Entity
 			"Gender",
 			$this->fields['Gender'],
 			"Gender",
-			[["Male" => "Male"], ["Female" => "Female"], ["Other" => "Other"]],
+			array("Male" => "Male", "Female" => "Female", "Other" => "Other"),
 			$this->msgs
 		);
 
@@ -127,8 +129,9 @@ class Student extends Entity
 			$this->connection,
 
 			"select
-				ProjectID as ID
-				concat ('Project ', ProjectNumber, ': ', Title) as Name"
+				ProjectID as ID,
+				concat ('Project ', ProjectNum, ': ', Title) as Name
+			from Project"
 		);
 
 		Input::display_dropdown
@@ -174,46 +177,6 @@ class Student extends Entity
 		return Input::invalidate_blanks ($this->fields, $labels, $this->msgs);
 
 	} //end function validate()
-
-	//get options from database
-	private function get_options()
-	{
-		$options = array();
-
-		//School
-		$record_set = $this->connection->query
-			("select SchoolID, SchoolName from School");
-		$schools = $record_set->fetchAll();
-		$options['schools'] = array();
-
-		foreach ($schools as $school)
-			$options['schools'][$school['SchoolID']] = $school['SchoolName'];
-
-		//Project
-		$record_set = $this->connection->query
-		(
-			"select ProjectID, Title from Project"
-		);
-		$projects = $record_set->fetchAll();
-		$options['projects'] = array()
-
-		foreach ($projects as $project)
-			$options['projects'][$project['ProjectID']] = $project['Title'];
-
-		//Grade
-		$record_set = $this->connection->query
-		(
-			"select GradeID, GradeNum from Grade"
-		);
-		$grades = $record_set->fetchAll();
-		$options['grades'] = array();
-
-		foreach ($grades as $grade)
-			$options['grades'][$grade['GradeID']] = $grade['GradeNum'];
-
-		return $options;
-
-	} //end function get_options()
 
 	//confirm an add operation
 	protected function confirm_add()

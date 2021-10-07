@@ -15,7 +15,7 @@ create table Student (
 	LastName   varchar(50)  not null,
 	GradeID    int          not null, -- what grade the Student is in
 	Gender     varchar(50)  not null,
-	Year       year         not null, -- which year this Student is participating in
+	Year       year default 0,        -- which year this Student is participating
 
 	primary key (StudentID),
 	foreign key (SchoolID)  references School   (SchoolID),
@@ -25,10 +25,28 @@ create table Student (
 
 show warnings;
 
+-- year insertion
+drop trigger if exists StudentYear;
+
+delimiter //
+
+create trigger StudentYear before insert on Student
+for each row
+begin
+
+	if new.Year = 0 then
+		set new.Year = YEAR(CURDATE());
+	end if;
+
+end;
+//
+delimiter ;
+
+
 -- test
 insert into
-	Student (SchoolID, ProjectID, FirstName, MiddleName, LastName, GradeID,  Gender, Year)
-	values  (       1,         1,   "Tfirst",  "Tmiddle",  "Tlast",     12, "Gtest", 2020)
+	Student(SchoolID, ProjectID, FirstName, MiddleName, LastName, GradeID,  Gender)
+	values (       1,         1,   "Tfirst",  "Tmiddle",  "Tlast",     12, "Gtest")
 ;
 
 select * from Student;
