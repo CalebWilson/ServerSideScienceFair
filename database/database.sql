@@ -47,7 +47,7 @@ show warnings;
 source Judging.sql;
 show warnings;
 
-source AverageRanking.sql;
+source TotalRanking.sql;
 show warnings;
 
 source Administrator.sql;

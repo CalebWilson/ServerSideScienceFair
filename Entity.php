@@ -37,14 +37,6 @@ abstract class Entity extends ReadOnlyEntity
 
 	} //end function __construct()
 
-	protected function print_assoc ($arr)
-	{
-		foreach ($arr as $field => $value)
-		{
-			print ($field . " => " . $value . "<br>");
-		}
-	}
-
 	//show action buttons
 	public function buttons()
 	{
@@ -328,16 +320,19 @@ abstract class Entity extends ReadOnlyEntity
 				unset ($this->fields['selected']);
 
 				//validate input in edit mode
-				if ($this->validate ($post['selected'][0]))
+				if ($this->validate ($selected[0]))
 				{
 					//append ID
-					$this->fields["ID"] = $post['selected'][0];
+					$this->fields["ID"] = $selected[0];
 
 					//update database
 					$this->update();
 
 					//confirmation message
 					$msg .= $this->confirm_edit();
+
+					//refresh fields from database
+					$this->prefill ($selected[0]);
 
 				} //end if valid input
 
@@ -353,7 +348,10 @@ abstract class Entity extends ReadOnlyEntity
 
 					//color error messages red
 					foreach ($this->msgs as &$error)
-						$error = '<font color="red">' . $error . '</font><br>';
+					{
+						if ($error !== "")
+							$error = '<font color="red">' . $error . '</font><br>';
+					}
 
 					unset ($error);
 
@@ -373,7 +371,7 @@ abstract class Entity extends ReadOnlyEntity
 
 		//count > 1
 		else
-			$msg = "Please select only one " . $this->edit . " to view/edit.";
+			$msg = "Please select only one " . $this->view . " to view/edit.";
 
 		return '<font color="red">' . $msg . '</font>';
 
@@ -435,43 +433,10 @@ abstract class Entity extends ReadOnlyEntity
 			}
 
 			//compose the rest of the error message
-			//e.g. "Marion County could not be deleted because there is at least one school that depends on it.<br>"
 			if (isset($not_deleted[0]))
 			{
-				$msg .= '<font color="red">' . $not_deleted[0];
-
-				//if more than 1 not deleted, use 'and'
-				if (count($not_deleted) > 1)
-				{
-					//if more than 2 not deleted, use comma(s)
-					if (count($not_deleted) > 2)
-					{
-						$msg .= ", ";
-
-						for ($i = 1; $i < count($not_deleted) - 1; $i++)
-							$msg .= $not_deleted[$i] .	", ";
-					}
-					else
-						$msg .= " ";
-
-					$msg .= "and " . end($not_deleted);
-
-				} //end more than 1 not deleted
-
-				$msg .= " could not be deleted because there is at least one " .
-				$this->dependent . " that depends on ";
-
-				if (count($not_deleted) == 1)
-					$msg .= "it.";
-				else
-					$msg .= "them.";
-
-				$msg .= "</font><br>";
-
-			} //end not deleted
-
-			//return the error or confirmation message
-			return $msg;
+				$msg .= $this->dependency_deletion_error ($not_deleted);
+			}
 
 		} //end at least 1 record selected
 
@@ -482,7 +447,53 @@ abstract class Entity extends ReadOnlyEntity
 			return '<font color=red>' . $msg . '</font>';
 		}
 
-	} //end function delete()
+		return $msg;
+
+	} //end function delete
+
+	/*
+		Generate an error message when one or more records were not deleted due to
+		dependencies.
+
+		for example: "Marion County could not be deleted because there is at least
+			one school that depends on it.<br>"
+	*/
+	protected function dependency_deletion_error ($not_deleted)
+	{
+		$msg .= '<font color="red">' . $not_deleted[0];
+
+		//if more than 1 not deleted, use 'and'
+		if (count($not_deleted) > 1)
+		{
+			//if more than 2 not deleted, use comma(s)
+			if (count($not_deleted) > 2)
+			{
+				$msg .= ", ";
+
+				for ($i = 1; $i < count($not_deleted) - 1; $i++)
+					$msg .= $not_deleted[$i] .	", ";
+			}
+			else
+				$msg .= " ";
+
+			$msg .= "and " . end($not_deleted);
+
+		} //end more than 1 not deleted
+
+		$msg .= " could not be deleted because there is at least one " .
+		$this->dependent . " that depends on ";
+
+		if (count($not_deleted) == 1)
+			$msg .= "it.";
+		else
+			$msg .= "them.";
+
+		$msg .= "</font><br>";
+
+		//return the error or confirmation message
+		return $msg;
+
+	} //end function dependency_deletion_error
 
 	//check whether data has been submitted
 	private function submitted ($post)

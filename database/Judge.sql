@@ -30,8 +30,8 @@ create table Judge (
 	UpperGradePref int not null, -- highest grade level the judge would prefer to judge
 
 	-- make sure no category preferences are identical within one judge record
-	CHECK (CatPref2 != CatPref1),
-	CHECK (CatPref3 != CatPref1 AND CatPref3 != CatPref2),
+	check (CatPref2 != CatPref1),
+	check (CatPref3 != CatPref1 AND CatPref3 != CatPref2),
 
 	unique (   Email, Year), -- no two judges should have the same email the same year
 	unique (Username, Year), -- no two judges should have the same username the same year
@@ -194,9 +194,9 @@ delimiter ;
 -- test
 insert into
 	Judge  (FirstName, MiddleName, LastName,    Title,    DegreeID,   Employer,        Email, Username, Password, year, CatPref1, LowerGradePref, UpperGradePref)
-	values ( "Tfirst",  "Tmiddle",  "Tlast", "Ttitle",           4, "Test Emp", "test@t.com",   "user",   "pass", 2020,        1,              9,             12),
-	       ( "judge1",   "judge1", "judge1", "judge1",           4,   "judge1",     "judge1", "judge1", "judge1", 2020,        1,              9,             12),
-	       ( "judge2",   "judge2", "judge2", "judge2",           4,   "judge2",     "judge2", "judge2", "judge2", 2020,        1,              9,             12)
+	values ( "Tfirst",  "Tmiddle",  "Tlast", "Ttitle",           4, "Test Emp", "test@t.com",   "user",   "pass", 2020,        2,              9,             12),
+	       ( "judge1",   "judge1", "judge1", "judge1",           4,   "judge1", "judge1@j.j", "judge1", "judge1", 2020,        3,              9,             12),
+	       ( "judge2",   "judge2", "judge2", "judge2",           4,   "judge2", "judge2@j.j", "judge2", "judge2", 2020,        4,              9,             12)
 ;
 
 select * from Judge;

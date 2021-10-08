@@ -33,6 +33,14 @@ abstract class ReadOnlyEntity
 		$this->connection = $connection;
 
 	} //end function __construct()
+
+	protected function print_assoc ($arr)
+	{
+		foreach ($arr as $field => $value)
+		{
+			print ($field . " => " . $value . "<br>");
+		}
+	}
 	
 	protected function login_check()
 	{

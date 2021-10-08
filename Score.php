@@ -63,7 +63,7 @@ class Score extends Entity
 			$this->connection,
 
 			"select
-				Project.ProjectID as ID
+				Project.ProjectID as ID,
 				concat ('Booth ', Booth.BoothNum, ': ', Project.Title) as Name
 			from Project, Booth
 			where Project.BoothID = Booth.BoothID"
@@ -93,13 +93,17 @@ class Score extends Entity
 	//validate score
 	protected function validate ($original = "NULL")
 	{
-		$valid = $this->invalidate_blanks
+		$valid = Input::invalidate_blanks
 		(
+			$this->fields,
+
 			array
 			(
 				"ProjectID" => "Project",
 				"Score" => "Score"
-			)
+			),
+
+			$this->msgs
 		);
 
 		if ($this->fields['Score'] < 0 || 100 < $this->fields['Score'])
@@ -127,8 +131,6 @@ class Score extends Entity
 	//score a project
 	private function insert_or_update()
 	{
-		print ("JudgeID: " . $_SESSION['Judge'] . "<br>");
-
 		//determine whether the project has been scored by this judge yet
 		$query = $this->connection->prepare
 		("
@@ -139,8 +141,6 @@ class Score extends Entity
 
 		$query->execute (array ($_SESSION['Judge'], $this->fields['ProjectID']));
 		$scored = $query->fetch (PDO::FETCH_ASSOC)['count'] > 0;
-
-		print("Scored: " . $scored);
 
 		//query to be executed
 		$query_string = "";

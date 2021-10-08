@@ -63,6 +63,35 @@ class Category extends Entity
 
 	} //end function display_form_body()
 
+	public function edit ($post)
+	{
+		if (count($post['selected']) === 1)
+		{
+			$record_set = $this->connection->query
+			("
+				select CategoryID
+				from Category
+				where CategoryName = 'other'
+			");
+
+			$id = $record_set->fetch (PDO::FETCH_ASSOC)['CategoryID'];
+
+			if ($post['selected'][0] === $id)
+			{
+				$msg =
+					'<font color="red">' .
+						'The "Other" category is not meant to be edited.' .
+					'</font>'
+				;
+
+				return $msg;
+			}
+		}
+
+		return parent::edit ($post);
+
+	} //end function edit
+
 	//validate field entries and update msgs array
 	protected function validate ($original = "NULL")
 	{
@@ -77,7 +106,7 @@ class Category extends Entity
 			)
 		)
 		{
-			//category name uniqnuess
+			//category name uniqueness
 			if
 			(
 				Input::is_duplicate
@@ -91,17 +120,32 @@ class Category extends Entity
 			)
 			{
 				$this->msgs['CategoryName'] =
-					"There is already a Category with this name.";
+					"There is already a category with this name.";
 
+				//not blank but duplicate
 				return false;
 			}
 
+			//not blank or duplicate
 			return true;
 		}
 
+		//blank
 		return false;
 
 	} //end function validate()
+
+	//scold the user for trying to delete other
+	protected function dependency_deletion_error ($not_deleted)
+	{
+		$msg =
+			'<font color="red">' .
+				'The "Other" category is not meant to be deleted.' .
+			'</font>'
+		;
+
+		return $msg;
+	}
 
 	//confirm an add operation
 	protected function confirm_add()

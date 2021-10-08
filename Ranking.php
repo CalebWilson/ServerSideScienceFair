@@ -32,13 +32,11 @@ class Ranking extends ReadOnlyEntity
 		$record_set = $this->connection->query
 		("
 			select
-				CONCAT ('Project ', ProjectNum, ': ', Title, ' - ', AvgRank)
+				concat ('Project ', ProjectNum, ': ', Title, ' . . . . . ', TotalRank)
 					as selection
-			from AverageRanking
-			order by ProjectNum
+			from TotalRanking
 		");
 		$records = $record_set->fetchAll();
-		$record_set->closeCursor();
 
 		//return records
 		return $records;
@@ -49,10 +47,9 @@ class Ranking extends ReadOnlyEntity
 	protected function display_data_header()
 	{
 		$msg =
-			"<p>
-				The rank each project achieved in comparison to other projects " .
-				"scored by the same Judge, averaged over all the Judges that "   .
-				"scored it." .
+			"<p>" .
+				"How good each project was, compared with the other projects scored " .
+				"by the same judge. The higher the number, the better the project." .
 			"</p><br>";
 
 		return $msg . parent::display_data_header();

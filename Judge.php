@@ -56,6 +56,36 @@ class Judge extends PasswordEntity
 	//display the body of the form
 	protected function display_form_body ($action)
 	{
+		//default grade preferences
+		if
+		(
+				$this->fields['LowerGradePref'] === ""
+			||
+				$this->fields['UpperGradePref'] === "" 
+		)
+		{
+			//default grade preferences
+			$record_set = $this->connection->query
+			("
+				select
+					minGrade.GradeID as min,
+					maxGrade.GradeID as max
+				from
+					Grade as minGrade,
+					Grade as maxGrade
+				where
+					minGrade.GradeNum = (select min(GradeNum) from Grade) and
+					maxGrade.GradeNum = (select max(GradeNum) from Grade)
+			");
+			$grades = $record_set->fetch (PDO::FETCH_ASSOC);
+
+			if ($this->fields['LowerGradePref'] === "")
+				$this->fields['LowerGradePref'] = $grades['min'];
+
+			if ($this->fields['UpperGradePref'] === "")
+				$this->fields['UpperGradePref'] = $grades['max'];
+		}
+
 		//First Name
 		Input::display_input
 		(
@@ -100,7 +130,8 @@ class Judge extends PasswordEntity
 		$degrees = Input::get_dropdown_options
 		(
 			$this->connection,
-			"select DegreeID as ID, DegreeName as Name from Degree"
+			"
+				select DegreeID as ID, DegreeName as Name from Degree"
 		);
 
 		Input::display_dropdown
@@ -205,7 +236,13 @@ class Judge extends PasswordEntity
 		$grades = Input::get_dropdown_options
 		(
 			$this->connection,
-			"select GradeID as ID, GradeNum as Name from Grade"
+			"
+				select
+					GradeID as ID,
+					GradeNum as Name
+				from Grade
+				order by GradeNum desc
+			"
 		);
 
 		Input::display_dropdown
@@ -313,6 +350,7 @@ class Judge extends PasswordEntity
 		{
 			if ($this->fields['CatPref2'] == $this->fields['CatPref1'])
 			{
+				$valid = false;
 				$this->msgs['CatPref2'] =
 					"Secondary Category Preference must be different from Primary " .
 					"Category Preference."
@@ -329,7 +367,8 @@ class Judge extends PasswordEntity
 				$this->fields['CatPref3'] == $this->fields['CatPref2']
 			)
 			{
-				$this->msgs['CatPref2'] =
+				$valid = false;
+				$this->msgs['CatPref3'] =
 					"Tertiary Category Preference must be different from Primary " .
 					"and Secondary Category Preferences."
 				;
@@ -340,6 +379,7 @@ class Judge extends PasswordEntity
 		//Grade Preference
 		if ($this->fields['LowerGradePref'] > $this->fields['UpperGradePref'])
 		{
+			$valid = false;
 			$this->msgs['LowerGradePref'] =
 				"Lowest Grade Level Preference must be lower than Highest Grade " .
 				"Level Preference."
@@ -406,24 +446,6 @@ class Judge extends PasswordEntity
 		//clear password fields
 		$this->fields ['Password'] = "";
 		$this->fields ['pass_conf'] = "";
-
-		//default grade preferences
-		$record_set = $this->connection->query
-		("
-			select
-				minGrade.GradeID as min,
-				maxGrade.GradeID as max
-			from
-				Grade as minGrade,
-				Grade as maxGrade
-			where
-				minGrade.GradeNum = (select min(GradeNum) from Grade) and
-				maxGrade.GradeNum = (select max(GradeNum) from Grade)
-		");
-		$grades = $record_set->fetch (PDO::FETCH_ASSOC);
-
-		$this->fields['LowerGradePref'] = $grades['min'];
-		$this->fields['UpperGradePref'] = $grades['max'];
 
 	} //end function prefill
 
