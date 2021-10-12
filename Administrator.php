@@ -154,20 +154,34 @@ class Administrator extends PasswordEntity
 		);
 
 		//AuthorityLevel
-		Input::display_dropdown
+		$authority_options = array
 		(
-			"AuthorityLevel",
-			$this->fields['AuthorityLevel'],
-			"Authority Level",
-
-			array
-			(
-				"1" => "Super Admin",
-				"2" => "Normal Admin"
-			),
-
-			$this->msgs
+			"1" => "Super Admin",
+			"2" => "Normal Admin"
 		);
+
+		if ($this->authority === '1')
+		{
+			$available_authority_options = $authority_options;
+		}
+		else
+		{
+			$available_authority_options = array
+			(
+				$authority_options[$this->fields['AuthorityLevel']]
+			);
+		}
+
+
+			Input::display_dropdown
+			(
+				"AuthorityLevel",
+				$this->fields['AuthorityLevel'],
+				"Authority Level",
+				$available_authority_options,
+				$this->msgs,
+				false
+			);
 
 		if ($this->authority_error)
 		{

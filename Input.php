@@ -45,10 +45,11 @@ abstract class Input
 		$label:   user-facing label for $field
 		$options: associative array of dropdown options mapping value => label
 		$msgs:    associative array of error messages mapping $field => $msg
+		$blank:   whether there should be a blank first option
 	*/
 	public static function display_dropdown
 	(
-		$field, $value, $label, $options, &$msgs
+		$field, $value, $label, $options, &$msgs, $blank = true
 	)
 	{
 		//begin dropdown
@@ -59,7 +60,8 @@ abstract class Input
 		');
 
 		//blank option
-		print ('<option value=""</option>');
+		if ($blank)
+			print ('<option value=""</option>');
 
 		//actual options
 		foreach ($options as $option_value => $option_label)
