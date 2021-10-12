@@ -2,16 +2,17 @@
 	TotalRanking.sql
 
 	TotalRanking is a view designed to represent the general goodness of a Project
-	based on how it ranks among the other Projects scored by the same Judge. The higher
-	the number, the better the Project.
+	based on how it ranks among the other Projects scored by the same Judge.
+	The higher the number, the better the Project.
 
 	This metric is "mean-adjusted," meaning that for each Judge, the ranks of their
 	Projects have been centered around 0 (for instance, if a Judge scores three
-	Projects, their ranks will be -1, 0, and 1. If a Judge scores two Projects, their
-	ranks will be -0.5 and 0.5). This ensures that, for example, a low rank from a
-	Judge who has scored more Projects will have a bigger impact than a low rank from a
-	Judge who has scored fewer Projects.
+	Projects, their ranks will be -1, 0, and 1. If a Judge scores two Projects,
+	their ranks will be -0.5 and 0.5). This ensures that, for example, a low rank
+	from a Judge who has scored more Projects will have a bigger impact than a
+	low rank from a Judge who has scored fewer Projects.
 */
+
 create or replace view TotalRanking
 as
 	select
