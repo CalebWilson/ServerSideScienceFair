@@ -6,7 +6,7 @@ INTRODUCTION:
 	judges of a science fair. Administrators can add, read, update, and delete all
 	the following entities:
 
-		- Administrators* of the science fair
+		- Administrators of the science fair
 		- Judges, who score Projects
 		- Students, who have created Projects
 		- Grade levels that Students belong to
@@ -33,16 +33,16 @@ DATABASE DESIGN:
                                      Degree
                                         |
                                         ^
-                                      Judge
-                                        |
-                                        ^
-                                     Judging
-                                        v
-                                        |
-                       Booth -|---|- Project >---- Category
-                                        v
-                                        |
-                         Grade ----< Student
+                        ------------  Judge >------
+                       /                |          \
+                      /                 ^           \
+                     /               Judging         \
+                    /                   v             3
+                   /                    |             ^
+                   \  Booth -|---|- Project >---- Category
+                    \                   v
+                     \                  |
+                      2< Grade ----< Student
                                         v
                                         |
                                       School
@@ -142,6 +142,7 @@ RUNNING THE WEBSITE LOCALLY:
 
 
 CONCLUSION:
+
 	This started out as the final project in a class called "Server-Side
 	Programming for the Web," which I took the first semester of my senior year as
 	a Computer Science Student at IUPUI. At the beginning of this class, I had no
