@@ -14,7 +14,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" href="style.css" type="text/css" />
-	<script src="./menu.js"></script>
 
 	<meta
 		name="viewport"
@@ -47,6 +46,8 @@
 			<nav>
 
 				<?php
+
+					$logged_in = false;
 
 					//for each user type
 					foreach ($user_types as $user_type)

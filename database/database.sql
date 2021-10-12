@@ -4,7 +4,6 @@ use ScienceFair;
 drop table if exists Administrator;
 
 drop table if exists Judging;
-drop table if exists Session;
 drop table if exists Judge;
 drop table if exists Degree;
 
